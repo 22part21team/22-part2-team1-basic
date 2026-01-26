@@ -1,0 +1,100 @@
+/* ===========================
+  Home Styles
+=========================== */
+.header {
+  width: 100%;
+  height: 64px;
+  display: flex;
+  border-bottom: 1px solid #EDEDED;
+  margin-bottom: 60px;
+  border: 1px solid blue;
+}
+
+.header .inner {
+  width: 1207px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.headerLogoLink {
+  border-radius: 6px;
+  padding: 8px 16px;
+  border: 1px solid #CCCCCC;
+  font-family: Pretendard;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: -1%;
+  text-align: center;
+}
+
+.contents {
+  width: 1207px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.point {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 60px;
+  border-radius: 16px;
+  background: #F6F8FF;
+}
+
+.pointBadge span {
+  border-radius: 50px;
+  padding: 6px 12px;
+  color: #ffffff;
+  background: #9935FF;
+}
+
+
+.pointText {
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid red;
+}
+
+.fromCades {
+  display: flex;
+}
+
+.fromCade {
+  display: flex;
+  flex-wrap: wrap;
+  width: 205px;
+  height: 162px;
+  height: 162;
+  border-radius: 12px;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.08);
+}
+
+.fromCadeImg img {
+  width: 32px;
+  border-radius: 56px;
+}
+
+.fromCadeName {}
+
+.fromCadeBadge span {
+  width: 28.705421447753906;
+  height: 14px;
+  border-radius: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  font-size: 10px;
+  color: #00A2FE;
+  background: #E2F5FF;
+
+}
+
+
+.fromCadeText {}
