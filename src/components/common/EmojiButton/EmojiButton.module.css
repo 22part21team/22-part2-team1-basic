@@ -1,0 +1,22 @@
+.emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 12px;
+  background-color: rgb(0 0 0 / 54%);
+  border-radius: 9999px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+@media (width <= 767px) {
+  .emoji {
+    gap: 6px;
+    padding: 4px 8px;
+    font-size: 14px;
+    line-height: 1.48;
+  }
+}
