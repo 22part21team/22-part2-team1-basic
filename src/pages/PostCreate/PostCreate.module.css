@@ -1,0 +1,80 @@
+.container {
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 47px 24px 24px;
+}
+
+.content {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.backgroundSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #181818;
+  margin: 0;
+  line-height: 36px;
+}
+
+.sectionDescription {
+  font-size: 16px;
+  color: #555555;
+  margin: 0;
+  line-height: 26px;
+}
+
+.toggleWrapper {
+  display: flex;
+}
+
+.optionWrapper {
+  margin-top: 0;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* 태블릿 */
+@media (max-width: 1248px) {
+  .container {
+    padding: 40px 24px 24px;
+  }
+
+  .content {
+    gap: 40px;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px;
+  }
+
+  .content {
+    gap: 40px;
+  }
+
+  .sectionTitle {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  .sectionDescription {
+    font-size: 14px;
+    line-height: 22px;
+  }
+}
