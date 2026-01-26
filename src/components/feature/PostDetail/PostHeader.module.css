@@ -1,0 +1,117 @@
+.postHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 24px;
+  height: 68px;
+  border-bottom: 1px solid #ededed;
+}
+
+.postHeaderContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-basis: 1200px;
+  padding: 3px 0;
+}
+
+.h2Title {
+  color: var(--color-gray-700);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.postHeaderActions {
+  display: flex;
+  align-items: center;
+}
+
+/* postInfo */
+.postInfo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  position: relative;
+  padding-right: 28px;
+}
+
+.postInfo p {
+  color: var(--color-gray-900);
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.postInfo p span {
+  font-weight: 700;
+}
+
+/* postEmoji */
+.postEmoji {
+  position: relative;
+  padding: 0 13px 0 28px;
+}
+
+/* postShare */
+.postShare {
+  padding-left: 13px;
+}
+
+/* 회색 라인 */
+.postInfo::after,
+.postEmoji::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 28px;
+  background-color: var(--color-gray-200);
+}
+
+@media (width <= 1023px) {
+  .postInfo {
+    display: none;
+  }
+
+  .postEmoji {
+    padding: 0 13px 0 0;
+  }
+}
+
+@media (width <= 767px) {
+  .postHeader {
+    height: auto;
+    padding: 0;
+  }
+
+  .postHeaderContainer {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+  }
+
+  .h2Title {
+    width: 100%;
+    padding: 12.5px 20px;
+    font-size: 18px;
+    border-bottom: 1px solid #ededed;
+  }
+
+  .postHeaderActions {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 0;
+  }
+
+  /* postEmoji */
+  .postEmoji {
+    padding: 0 15px 0 0;
+  }
+
+  /* postShare */
+  .postShare {
+    padding-left: 15px;
+  }
+}
