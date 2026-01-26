@@ -1,0 +1,59 @@
+.optionContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.optionButton {
+  width: 168px;
+  height: 168px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+.optionButton:hover:not(.selected) {
+  opacity: 0.9;
+}
+
+.optionButton.selected {
+  outline: 2px solid #181818;
+  outline-offset: -2px;
+}
+
+.checkmark {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  background-color: #484848;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+/* 태블릿 */
+@media (max-width: 1248px) {
+  .optionButton {
+    width: 154px;
+    height: 154px;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .optionButton {
+    width: calc(50% - 8px);
+    height: 154px;
+  }
+}
