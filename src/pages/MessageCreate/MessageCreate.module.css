@@ -139,8 +139,8 @@
   margin-top: 30px;
 }
 
-/* 태블릿 */
-@media (max-width: 1248px) {
+/* 태블릿 + 모바일 */
+@media (max-width: 1023px) {
   .container {
     padding: 40px 24px 24px;
   }
@@ -155,7 +155,7 @@
 }
 
 /* 모바일 */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .container {
     padding: 24px;
   }
