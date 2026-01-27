@@ -2,9 +2,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: sticky;
+  top: 64px;
   padding: 13px 24px;
   height: 68px;
   border-bottom: 1px solid #ededed;
+  background: #fff;
 }
 
 .postHeaderContainer {
@@ -80,13 +83,10 @@
 }
 
 @media (width <= 767px) {
-  header {
-    display: none;
-  }
-
   .postHeader {
     height: auto;
     padding: 0;
+    top: 0;
   }
 
   .postHeaderContainer {
