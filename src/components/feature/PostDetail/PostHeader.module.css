@@ -80,6 +80,10 @@
 }
 
 @media (width <= 767px) {
+  header {
+    display: none;
+  }
+
   .postHeader {
     height: auto;
     padding: 0;
