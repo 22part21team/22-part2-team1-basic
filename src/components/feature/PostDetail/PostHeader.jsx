@@ -1,21 +1,18 @@
+import ProfileList from '@/components/common/ProfileList/ProfileList';
+import EmojiReactions from './EmojiReactions';
+import styles from './PostHeader.module.css';
+import LinkShare from './LinkShare';
+
 /**
- * 롤링페이퍼 상세 페이지 ( post/{id} ) 에서 사용하는 헤더 컴포넌트
- *
+ * 생성된 롤링페이퍼 페이지용 상단 헤더 컴포넌트
  * 주요 포함 요소 :
  * - 롤링페이퍼 유저 이름
  * - 참여자 리스트 ( ProfileList )
  * - 이모지 반응 ( EmojiReactions )
- * - 공유 버튼
+ * - 공유 버튼 ( LinkShare )
  *
- * @return 롤링페이퍼 상세 페이지 헤더 UI
+ * @return {JSX.Element} 상단 헤더 UI
  */
-
-import ProfileList from '@/components/common/ProfileList/ProfileList';
-import EmojiReactions from './EmojiReactions';
-import styles from './PostHeader.module.css';
-import Button from '@/components/common/Button/Button';
-import LinkShare from './LinkShare';
-
 function PostHeader() {
   return (
     <div className={styles.postHeader}>
