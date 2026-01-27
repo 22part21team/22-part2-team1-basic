@@ -1,40 +1,11 @@
 /* ===========================
   Home Styles
 =========================== */
-.header {
-  width: 100%;
-  height: 64px;
-  display: flex;
-  border-bottom: 1px solid #EDEDED;
-  margin-bottom: 60px;
-  border: 1px solid blue;
-}
-
-.header .inner {
-  width: 1207px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-}
-
-.headerLogoLink {
-  border-radius: 6px;
-  padding: 8px 16px;
-  border: 1px solid #CCCCCC;
-  font-family: Pretendard;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 26px;
-  letter-spacing: -1%;
-  text-align: center;
-}
-
 .contents {
-  width: 1207px;
-  margin: 0 auto;
+  max-width: 1207px;
+  margin: 49px auto 0;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
@@ -43,9 +14,19 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 60px;
+  padding: 60px 40px 60px 60px;
   border-radius: 16px;
   background: #F6F8FF;
+}
+
+.point02Box {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 30px;
+}
+
+.pointBadge {
+  margin-bottom: 14px;
 }
 
 .pointBadge span {
@@ -53,48 +34,232 @@
   padding: 6px 12px;
   color: #ffffff;
   background: #9935FF;
+  font-size: 14px;
 }
-
 
 .pointText {
   display: flex;
   flex-direction: column;
+  font-size: 18px;
+  color: #555555;
+}
 
-  border: 1px solid red;
+.pointText h2 {
+  color: #181818;
+  margin-bottom: 8px;
+  font-size: 24px;
 }
 
 .fromCades {
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 12px;
 }
 
 .fromCade {
   display: flex;
   flex-wrap: wrap;
   width: 205px;
-  height: 162px;
-  height: 162;
+  padding: 18px 12px 12px 12px;
   border-radius: 12px;
+  border: 0.99px solid #DBD9E9;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+}
+
+.fromCadeLine {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 46px;
+  border-bottom: 1px solid#E1E1E1;
+
 }
 
 .fromCadeImg img {
   width: 32px;
   border-radius: 56px;
+  margin-right: 12px;
 }
 
-.fromCadeName {}
+.fromCadeName {
+  font-size: 12px;
+}
 
-.fromCadeBadge span {
-  width: 28.705421447753906;
+.fromCadeName span:nth-child(2) {
+  font-weight: 700;
+}
+
+.fromCadeBadge {
+  width: 29px;
   height: 14px;
+  display: flex;
   border-radius: 2px;
   padding-right: 5px;
   padding-left: 5px;
+  margin-top: 2px;
   font-size: 10px;
   color: #00A2FE;
   background: #E2F5FF;
+}
+
+.fromCadeBadge.type {
+  color: #861DEE;
+  background: #ECD9FF;
+}
+
+.fromCadeText {
+  font-size: 12px;
+  color: #555555;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  max-height: calc(12px * 1.5 * 3);
+}
+
+.fromCadeDate {
+  display: flex;
+  align-items: flex-end;
+  font-size: 10px;
+  color: #777777;
+  line-height: 13px;
+}
+
+.fromCadeIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fromCadeImg02 {
+  margin-right: -30px;
+}
+
+.pointImg {
+  width: 470px;
+}
+
+/* 
+mobile:   360 ~ 767 px
+tablet:   768 ~ 1023 px
+desktop:  1024 px 이상 ~ 
+            */
+
+@media (min-width: 768px) {
+  /* tablet */
 
 }
 
+@media (min-width: 1024px) {
 
-.fromCadeText {}
+  /* desktop */
+
+}
+
+@media (max-width: 1023px) {
+
+  /* tablet + mobile */
+  .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .pointText {
+    margin-bottom: 57px;
+  }
+
+  .point {
+    flex-direction: column;
+  }
+
+  .point02Box {
+    flex-direction: column-reverse;
+  }
+
+  .point02Box .pointText {
+    margin-bottom: 36px;
+  }
+
+  .pointImg {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .point br {
+    display: none;
+  }
+
+  .fromCade {
+    width: calc((100% - 24px) / 3);
+    min-width: 0;
+    max-width: none;
+  }
+
+}
+
+@media (max-width: 767px) {
+
+  /* mobile */
+  .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .fromCades {
+    flex-wrap: nowrap;
+    margin-left: -15px;
+    gap: 6px;
+  }
+
+  .fromCade {
+    width: 35%;
+    flex-shrink: 0;
+    padding: 10px 6px;
+  }
+
+  .fromCadeLine {
+    height: 26px;
+  }
+
+  .fromCadeImg img {
+    width: 18px;
+  }
+
+  .point {
+    padding: 0 0 60px 0;
+    overflow: hidden;
+  }
+
+  .pointText {
+    padding: 24px;
+    margin-bottom: 26px;
+    font-size: 18px;
+  }
+
+  .pointText h2 {
+    font-size: 18px;
+  }
+
+  .pointText p {
+    font-size: 15px;
+  }
+
+  .pointImg {
+    width: 100%
+  }
+
+  .fromCadeText,
+  .fromCadeName {
+    font-size: 7px;
+  }
+
+  .point02Box br {
+    display: block;
+  }
+
+}
