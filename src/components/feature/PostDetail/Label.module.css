@@ -1,0 +1,31 @@
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 41px;
+  height: 20px;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.label.beige {
+  background-color: var(--color-beige-100);
+  color: var(--color-beige-500);
+}
+
+.label.purple {
+  background-color: var(--color-purple-100);
+  color: var(--color-purple-600);
+}
+
+.label.green {
+  background-color: var(--color-green-100);
+  color: var(--color-green-500);
+}
+
+.label.blue {
+  background-color: var(--color-blue-100);
+  color: var(--color-blue-500);
+}

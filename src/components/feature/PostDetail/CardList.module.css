@@ -1,0 +1,18 @@
+.cardList {
+  display: grid;
+  grid-template: 1fr / repeat(3, 1fr);
+  gap: 28px 24px;
+}
+
+@media (width <= 1023px) {
+  .cardList {
+    grid-template: 1fr / repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (width <= 767px) {
+  .cardList {
+    grid-template: 1fr / repeat(1, 1fr);
+  }
+}
