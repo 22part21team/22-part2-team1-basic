@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import AddButton from '@/components/common/AddButton/AddButton';
 import Label from './Label';
 import styles from './Card.module.css';
 
@@ -32,7 +33,7 @@ function Card({ simple = false, profileImageURL, sender, relationship, content, 
     <div className={cardStyle}>
       {simple ? ( // 추가 버튼 모드
         <Link to="/post/{id}/message" className={styles.linkButton}>
-          +
+          <AddButton />
         </Link>
       ) : (
         // 메시지 출력 모드
