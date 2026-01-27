@@ -23,15 +23,22 @@
   opacity: 0.9;
 }
 
-.optionButton.selected {
-  outline: 2px solid #181818;
-  outline-offset: -2px;
+.optionButton.selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
 }
 
 .checkmark {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 44px;
   height: 44px;
   background-color: #484848;
@@ -40,18 +47,19 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
+  z-index: 1;
 }
 
-/* 태블릿 */
-@media (max-width: 1248px) {
+/* tablet + mobile */
+@media (max-width: 1023px) {
   .optionButton {
     width: 154px;
     height: 154px;
   }
 }
 
-/* 모바일 */
-@media (max-width: 768px) {
+/* mobile */
+@media (max-width: 767px) {
   .optionButton {
     width: calc(50% - 8px);
     height: 154px;

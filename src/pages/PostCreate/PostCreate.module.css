@@ -1,12 +1,13 @@
 .container {
   min-height: 100vh;
   background-color: #ffffff;
-  padding: 47px 24px 24px;
+  padding: 47px 0 24px;
 }
 
 .content {
   max-width: 720px;
   margin: 0 auto;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
   gap: 50px;
@@ -47,10 +48,10 @@
   margin-top: 30px;
 }
 
-/* 태블릿 */
-@media (max-width: 1248px) {
+/* tablet + mobile */
+@media (max-width: 1023px) {
   .container {
-    padding: 40px 24px 24px;
+    padding: 40px 0 24px;
   }
 
   .content {
@@ -58,10 +59,10 @@
   }
 }
 
-/* 모바일 */
-@media (max-width: 768px) {
+/* mobile */
+@media (max-width: 767px) {
   .container {
-    padding: 24px;
+    padding: 24px 0;
   }
 
   .content {

@@ -26,8 +26,8 @@
 }
 
 .logo {
-  width: 80px;
-  height: 80px;
+  width: 105px;
+  height: 105px;
 }
 
 .logoText {
@@ -37,22 +37,50 @@
   line-height: 30px;
 }
 
-/* 태블릿 */
-@media (max-width: 1248px) {
+.createButton {
+  width: 157px;
+  height: 40px;
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #181818;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.createButton:hover {
+  background-color: #f8f9fa;
+  border-color: #999999;
+}
+
+.createButton:active {
+  background-color: #e9ecef;
+}
+
+/* tablet + mobile */
+@media (max-width: 1023px) {
   .container {
     max-width: 100%;
   }
 }
 
-/* 모바일 */
-@media (max-width: 768px) {
+/* mobile */
+@media (max-width: 767px) {
   .container {
     height: 56px;
   }
 
   .logo {
-    width: 32px;
-    height: 32px;
+    width: 53px;
+    height: 53px;
+  }
+
+  .createButton {
+    width: 122px;
+    font-size: 14px;
   }
 
   .logoText {

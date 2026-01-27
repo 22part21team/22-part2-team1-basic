@@ -26,12 +26,12 @@ const PostCreate = () => {
   // 배경 색상 옵션
   const colorOptions = ['beige', 'purple', 'blue', 'green'];
 
-  // 배경 이미지 옵션 (실제 프로젝트에서는 assets에서 가져옴)
+  // 배경 이미지 옵션
   const imageOptions = [
-    '/assets/images/post/bg-01.jpg',
-    '/assets/images/post/bg-02.jpg',
-    '/assets/images/post/bg-03.jpg',
-    '/assets/images/post/bg-04.jpg',
+    '/src/assets/images/post/post-backgroundchoice-01.jpg',
+    '/src/assets/images/post/post-backgroundchoice-02.jpg',
+    '/src/assets/images/post/post-backgroundchoice-03.jpg',
+    '/src/assets/images/post/post-backgroundchoice-04.jpg',
   ];
 
   /**
