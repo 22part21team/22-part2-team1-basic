@@ -13,6 +13,8 @@
 import ProfileList from '@/components/common/ProfileList/ProfileList';
 import EmojiReactions from './EmojiReactions';
 import styles from './PostHeader.module.css';
+import Button from '@/components/common/Button/Button';
+import LinkShare from './LinkShare';
 
 function PostHeader() {
   return (
@@ -30,9 +32,7 @@ function PostHeader() {
             <EmojiReactions />
           </div>
           <div className={styles.postShare}>
-            <button style={{ width: '36px', height: '32px', border: '1px solid gray' }}>
-              공유
-            </button>
+            <LinkShare />
           </div>
         </div>
       </div>

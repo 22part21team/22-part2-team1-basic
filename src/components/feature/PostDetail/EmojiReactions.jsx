@@ -12,8 +12,20 @@
 import EmojiButton from '@/components/common/EmojiButton/EmojiButton';
 import styles from './EmojiReactions.module.css';
 import arrowDown from '@/assets/images/common/icon-arrow-down.svg';
+import { useState } from 'react';
 
 function EmojiReactions() {
+  const [active, setActive] = useState(false);
+
+  const handleClick = () => {
+    setActive(!active);
+  };
+
+  // active : true 드롭다운 메뉴 활성화 / false 드롭다운 메뉴 비활성화
+  const emojiListClass = active
+    ? `${styles.emojiDetailList} ${styles.active}`
+    : `${styles.emojiDetailList}`;
+
   return (
     <div className={styles.emojiContainer}>
       <div className={styles.emojiButtonContainer}>
@@ -28,9 +40,37 @@ function EmojiReactions() {
             <EmojiButton emoji="🎉" count={10} />
           </li>
         </ul>
-        <button className={styles.emojiArrowDown}>
-          <img src={arrowDown} alt="" />
-        </button>
+        <div className={styles.emojiDetailContainer}>
+          <button className={styles.emojiArrowDown} onClick={handleClick}>
+            <img src={arrowDown} alt="" />
+          </button>
+          <ul className={emojiListClass}>
+            <li>
+              <EmojiButton emoji="👍" count={10} />
+            </li>
+            <li>
+              <EmojiButton emoji="😍" count={8} />
+            </li>
+            <li>
+              <EmojiButton emoji="🎉" count={24} />
+            </li>
+            <li>
+              <EmojiButton emoji="😂" count={2} />
+            </li>
+            <li>
+              <EmojiButton emoji="👍" count={10} />
+            </li>
+            <li>
+              <EmojiButton emoji="😍" count={8} />
+            </li>
+            <li>
+              <EmojiButton emoji="😍" count={24} />
+            </li>
+            <li>
+              <EmojiButton emoji="😍" count={2} />
+            </li>
+          </ul>
+        </div>
       </div>
       <button style={{ width: '36px', height: '32px', border: '1px solid gray' }}>추가</button>
     </div>
