@@ -1,0 +1,17 @@
+.cardListContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 113px 24px;
+}
+
+@media (width <= 1023px) {
+  .cardListContainer {
+    padding: 93px 24px;
+  }
+}
+
+@media (width <= 767px) {
+  .cardListContainer {
+    padding: 32px 24px;
+  }
+}
