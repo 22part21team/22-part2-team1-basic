@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextField from '../../components/common/TextField/TextField';
-import Toggle from '../../components/common/Toggle/Toggle';
+import { Toggle } from '../../components/common/Button';
 import Option from '../../components/common/Option/Option';
 import Button from '../../components/common/Button/Button';
 import styles from './PostCreate.module.css';
@@ -191,7 +191,7 @@ const handleNameBlur = () => {
           </div>
 
           <div className={styles.buttonWrapper}>
-          <Button size="large" disabled={isSubmitting} onClick={handleSubmit}>
+          <Button size="Large" disabled={isSubmitting} onClick={handleSubmit}>
               {isSubmitting ? '생성 중...' : '생성하기'}
             </Button>
           </div>
