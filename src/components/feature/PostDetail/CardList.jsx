@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import Card from './Card';
 import styles from './CardList.module.css';
+import CardModal from './CardModal';
 
 // 더미 리스트
 const messages = [
@@ -62,26 +64,53 @@ const messages = [
  * @return 추가 버튼 및 롤링페이퍼 메시지 카드 리스트 UI
  */
 function CardList() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState({});
+
+  const handleClick = (e) => {
+    const clickedId = Number(e.currentTarget.id);
+    const clickedMessage = messages.find((message) => message.id === clickedId);
+    if (clickedMessage) {
+      setSelectedMessage(clickedMessage);
+      setIsOpen(true);
+    }
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <ul className={styles.cardList}>
-      <li>
-        <Card simple />
-      </li>
-      {messages.map((message) => {
-        const { id, profileImageURL, sender, relationship, content, createdAt } = message;
-        return (
-          <li key={id}>
-            <Card
-              profileImageURL={profileImageURL}
-              sender={sender}
-              relationship={relationship}
-              content={content}
-              createdAt={createdAt}
-            />
-          </li>
-        );
-      })}
-    </ul>
+    <>
+      <ul className={styles.cardList}>
+        <li>
+          <Card simple />
+        </li>
+        {messages.map((message) => {
+          const { id, profileImageURL, sender, relationship, content, createdAt } = message;
+          return (
+            <li key={id} id={id} onClick={handleClick}>
+              <Card
+                profileImageURL={profileImageURL}
+                sender={sender}
+                relationship={relationship}
+                content={content}
+                createdAt={createdAt}
+              />
+            </li>
+          );
+        })}
+      </ul>
+      <CardModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        profileImageURL={selectedMessage.profileImageURL}
+        sender={selectedMessage.sender}
+        relationship={selectedMessage.relationship}
+        content={selectedMessage.content}
+        createdAt={selectedMessage.createdAt}
+      />
+    </>
   );
 }
 

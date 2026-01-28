@@ -1,0 +1,67 @@
+import { createPortal } from 'react-dom';
+import styles from './CardModal.module.css';
+import Label from './Label';
+import Button from '@/components/common/Button/Button';
+
+/**
+ * 메시지 카드의 상세 내용을 보여주는 모달 컴포넌트
+ * - createPortal을 사용하여 modal-root 노드에 렌더링
+ * - 배경(overlay) 클릭 시 닫기 기능 제공
+ *
+ * @param {boolean} isOpen - 모달 표시 여부
+ * @param {function} onClose - 모달 닫기 핸들러 함수
+ * @param {string} profileImageURL - 작성자 프로필 이미지 URL
+ * @param {string} sender - 작성자 이름
+ * @param {string} relationship - 수신자와의 관계 ( Label 컴포넌트에 전달 )
+ * @param {string} content - 메시지 본문
+ * @param {string} createdAt - 메시지 생성 일자
+ * @return {React.ReactPortal | null} modal-root에 렌더링되는 모달 UI 또는 null
+ */
+function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, content, createdAt }) {
+  // createdAt을 디자인과 같은 형식으로 변환
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}.${month}.${day}`;
+  }
+  const data = createdAt ? formatDate(createdAt) : '';
+
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.cardModalContainer}>
+        {/* 모달 본문 클릭 시 닫히지 않도록 이벤트 전파 방지 */}
+        <div className={styles.cardModal} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.profile}>
+            <div className={styles.user}>
+              <img src={profileImageURL} alt={sender} className={styles.userImg} />
+              <div className={styles.userTextContainer}>
+                <p className={styles.userText}>
+                  From. <span>{sender}</span>
+                </p>
+                <p className={styles.label}>
+                  <Label relationship={relationship} />
+                </p>
+              </div>
+            </div>
+            <p className={styles.date}>{data}</p>
+          </div>
+          <div className={styles.contentContainer}>
+            <p className={styles.content}>{content}</p>
+            <div className={styles.closeButton}>
+              <Button size="small" onClick={onClose}>
+                확인
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>,
+    document.getElementById('modal-root')
+  );
+}
+
+export default CardModal;

@@ -30,32 +30,36 @@ function Card({ simple = false, profileImageURL, sender, relationship, content, 
   const cardStyle = simple ? `${styles.card} ${styles.simple}` : `${styles.card}`;
 
   return (
-    <div className={cardStyle}>
+    <>
       {simple ? ( // 추가 버튼 모드
-        <Link to="/post/{id}/message" className={styles.linkButton}>
-          <AddButton />
-        </Link>
+        <div className={cardStyle}>
+          <Link to="/post/{id}/message" className={styles.linkButton}>
+            <AddButton />
+          </Link>
+        </div>
       ) : (
         // 메시지 출력 모드
-        <>
-          <div className={styles.profile}>
-            <img src={profileImageURL} alt={sender} className={styles.profileImg} />
-            <div className={styles.proflieTextContainer}>
-              <p className={styles.profileText}>
-                From. <span>{sender}</span>
-              </p>
-              <p className={styles.label}>
-                <Label relationship={relationship} />
-              </p>
+        <button>
+          <div className={cardStyle}>
+            <div className={styles.profile}>
+              <img src={profileImageURL} alt={sender} className={styles.profileImg} />
+              <div className={styles.proflieTextContainer}>
+                <p className={styles.profileText}>
+                  From. <span>{sender}</span>
+                </p>
+                <p className={styles.label}>
+                  <Label relationship={relationship} />
+                </p>
+              </div>
+            </div>
+            <div className={styles.contentContainer}>
+              <p className={styles.content}>{content}</p>
+              <p className={styles.date}>{data}</p>
             </div>
           </div>
-          <div className={styles.contentContainer}>
-            <p className={styles.content}>{content}</p>
-            <p className={styles.date}>{data}</p>
-          </div>
-        </>
+        </button>
       )}
-    </div>
+    </>
   );
 }
 
