@@ -23,17 +23,17 @@
   margin-bottom: 16px;
 }
 
-.slidePaperList {
-  width: 1160px;
+.slidePaperListHidden {
   overflow: hidden;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 16px;
-  transition: transform 0.3s ease;
 }
 
-.slidePaperListSliding {
-  transform: translateX(-20px);
+.slidePaperList {
+  width: 1160px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  transition: transform 0.3s ease;
+  transform: translateX(var(--slide-offset, 0px));
 }
 
 .slidePaperItem {
@@ -64,6 +64,10 @@
 .slidePaperItemTotal {
   font-size: 16px;
   line-height: 26px;
+}
+
+.slidePaperItemPhotoCount {
+  margin-bottom: 12px;
 }
 
 .slidePaperItemTotal span {
@@ -145,7 +149,6 @@
   left: 0;
   right: 0;
   width: 100%;
-  min-width: 1160px;
   display: flex;
   justify-content: space-between;
   transform: translateY(-50%);
@@ -194,14 +197,15 @@ desktop:  1024 px 이상 ~
   .slidePaperList {
     width: 100%;
     max-width: 100%;
+    transform: none;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     padding-bottom: 8px;
+    touch-action: pan-x;
   }
-
 
   .slidePaperList::-webkit-scrollbar {
     display: none;
