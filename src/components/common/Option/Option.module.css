@@ -1,12 +1,12 @@
 .optionContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
 }
 
 .optionButton {
-  width: 168px;
-  height: 168px;
+  width: 159px;
+  height: 159px;
   border: none;
   border-radius: 16px;
   cursor: pointer;
@@ -55,6 +55,10 @@
   .optionButton {
     width: 154px;
     height: 154px;
+  }
+  
+  .optionContainer {
+    gap: 12px;
   }
 }
 

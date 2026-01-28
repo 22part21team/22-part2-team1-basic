@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextField from '../../components/common/TextField/TextField';
-import Toggle from '../../components/common/Toggle/Toggle';
+import { Toggle } from '../../components/common/Button';
 import Option from '../../components/common/Option/Option';
 import Button from '../../components/common/Button/Button';
 import styles from './PostCreate.module.css';
