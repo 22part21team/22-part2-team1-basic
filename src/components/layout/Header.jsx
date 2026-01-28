@@ -14,6 +14,8 @@ const Header = () => {
 
   // / 또는 /list 페이지에서만 버튼 표시
   const showCreateButton = location.pathname === '/' || location.pathname === '/list';
+  const isLocation = location.pathname.startsWith('/post/');
+  const headerClass = isLocation ? `${styles.header} ${styles.mobileHide}` : `${styles.header}`;
 
   /**
    * 롤링 페이퍼 만들기 버튼 클릭 핸들러
@@ -23,7 +25,7 @@ const Header = () => {
   };
 
   return (
-    <header className={styles.header}>
+    <header className={headerClass}>
       <div className={styles.container}>
         <Link to="/" className={styles.logoLink}>
           <img src={logoMain} alt="Rolling 로고" className={styles.logo} />
