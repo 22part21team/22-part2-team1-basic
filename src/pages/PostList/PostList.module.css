@@ -1,0 +1,234 @@
+/* ===========================
+ PostList.module.css
+=========================== */
+.contents {
+  max-width: 1207px;
+  margin: 50px auto 0;
+}
+
+.slidePaper {
+  margin-left: 40px;
+  position: relative;
+}
+
+.slidePaperBest {
+  margin-bottom: 50px;
+}
+
+.slidePaperCurrent {
+  margin-bottom: 40px;
+}
+
+.slidePaperTitle {
+  margin-bottom: 16px;
+}
+
+.slidePaperList {
+  width: 1160px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  transition: transform 0.3s ease;
+}
+
+.slidePaperListSliding {
+  transform: translateX(-20px);
+}
+
+.slidePaperItem {
+  overflow: hidden;
+  width: 275px;
+  min-width: 275px;
+  max-width: 275px;
+  height: 260px;
+  padding: 30px 24px 20px;
+  border-radius: 16px;
+  background-color: #ECD9FF;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.slidePaperItemTitle {
+  width: 130px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 36px;
+  color: #181818;
+  margin-bottom: 12px;
+}
+
+.slidePaperItemTotal {
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.slidePaperItemTotal span {
+  font-weight: 700;
+}
+
+.slidePaperItemBadge {
+  margin-top: auto;
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  padding-top: 16px;
+
+}
+
+.slidePaperItem01 {
+  background: #ECD9FF url('../../assets/images/post/pattern-01.svg') no-repeat bottom right;
+}
+
+.slidePaperItem02 {
+  background: #FFE2AD url('../../assets/images/post/pattern-02.svg') no-repeat bottom right;
+}
+
+.slidePaperItem03 {
+  background: #B1E4FF url('../../assets/images/post/pattern-03.svg') no-repeat bottom right;
+}
+
+.slidePaperItem04 {
+  background: #D0F5C3 url('../../assets/images/post/pattern-04.svg') no-repeat bottom right;
+}
+
+.slidePaperItem05 {
+  color: #ffffff;
+  position: relative;
+  background: url('../../assets/images/post/pattern-05.png') no-repeat center center /cover;
+  z-index: -2;
+}
+
+.slidePaperItem06 {
+  color: #ffffff;
+  position: relative;
+  background: url('../../assets/images/post/pattern-06.png') no-repeat center center /cover;
+  z-index: -2;
+}
+
+.slidePaperItem05 .slidePaperItemTitle,
+.slidePaperItem06 .slidePaperItemTitle {
+  color: #ffffff;
+}
+
+.slidePaperItem05::after,
+.slidePaperItem06::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.54) 0%, rgba(0, 0, 0, 0.54) 100%);
+  z-index: -1;
+}
+
+.btnView {
+  width: 100%;
+  height: 104px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 150px;
+}
+
+.btnViewFull {
+  width: 280px;
+}
+
+.slidePaperArrow {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  min-width: 1160px;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.slidePaperArrowBtnLeft {
+  position: absolute;
+  left: -26px;
+  pointer-events: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.slidePaperArrowBtnLeft:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.slidePaperArrowBtnRight {
+  position: absolute;
+  right: -8px;
+  pointer-events: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.slidePaperArrowBtnRight:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 
+mobile:   360 ~ 767 px
+tablet:   768 ~ 1023 px
+desktop:  1024 px 이상 ~ 
+*/
+
+@media (max-width: 1023px) {
+  .slidePaper {
+    margin-left: 20px;
+  }
+
+  .slidePaperList {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-bottom: 8px;
+  }
+
+
+  .slidePaperList::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slidePaperItem {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
+
+  .slidePaperArrow {
+    display: none;
+  }
+
+}
+
+@media (max-width: 767px) {
+
+  .slidePaperItem {
+    width: 208px;
+    height: 232px;
+    min-width: 208px;
+    max-width: 208px;
+    padding: 30px 22px 20px 24px;
+  }
+
+  .slidePaperItemBadge {
+    gap: 4px;
+  }
+}
