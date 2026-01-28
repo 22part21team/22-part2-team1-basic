@@ -39,7 +39,7 @@ function Card({ simple = false, profileImageURL, sender, relationship, content, 
         </div>
       ) : (
         // 메시지 출력 모드
-        <button>
+        <button className={styles.cardButton}>
           <div className={cardStyle}>
             <div className={styles.profile}>
               <img src={profileImageURL} alt={sender} className={styles.profileImg} />

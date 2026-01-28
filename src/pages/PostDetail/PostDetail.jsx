@@ -56,7 +56,7 @@ function PostDetail() {
     <>
       <PostHeader recipient={recipient} />
       <div className={styles.cardListContainer}>
-        <CardList />
+        <CardList id={id} />
       </div>
     </>
   );

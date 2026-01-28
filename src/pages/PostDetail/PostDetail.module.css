@@ -7,8 +7,8 @@
 }
 
 .cardListContainer {
-  max-width: 1200px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
   padding: 113px 24px;
 }
 
