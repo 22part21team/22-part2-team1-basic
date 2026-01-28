@@ -6,6 +6,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
   height: 28px;
   background: #fff;
   border: 1.4px solid #fff;
@@ -17,7 +19,6 @@
 }
 
 .profileList li:last-of-type {
-  padding: 5px 6px;
   border: 1.4px solid #e3e3e3;
 }
 
