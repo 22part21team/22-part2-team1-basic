@@ -280,7 +280,7 @@ const MessageCreate = () => {
           </div>
 
           <div className={styles.buttonWrapper}>
-            <Button size="large" disabled={!isFormValid || isSubmitting} onClick={handleSubmit}>
+            <Button size="Large" disabled={!isFormValid || isSubmitting} onClick={handleSubmit}>
               {isSubmitting ? '전송 중...' : '생성하기'}
             </Button>
           </div>

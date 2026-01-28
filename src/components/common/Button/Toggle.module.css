@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  width: 244px;
+  height: 40px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 0;
+  gap: 0;
+}
+
+.option {
+  flex: 1;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  color: #555555;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 26px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option:hover:not(.selected) {
+  background-color: #e9ecef;
+}
+
+.option.selected {
+  background-color: #ffffff;
+  color: #9935ff;
+  border: 2px solid #9935ff;
+  padding: 7px 16px;
+}

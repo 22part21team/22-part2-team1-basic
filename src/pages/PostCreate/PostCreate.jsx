@@ -191,7 +191,7 @@ const handleNameBlur = () => {
           </div>
 
           <div className={styles.buttonWrapper}>
-          <Button size="large" disabled={isSubmitting} onClick={handleSubmit}>
+          <Button size="Large" disabled={isSubmitting} onClick={handleSubmit}>
               {isSubmitting ? '생성 중...' : '생성하기'}
             </Button>
           </div>
