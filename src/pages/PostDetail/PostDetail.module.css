@@ -1,3 +1,11 @@
+.backgroundImg {
+  min-height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
 .cardListContainer {
   max-width: 1200px;
   margin: 0 auto;
