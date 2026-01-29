@@ -1,4 +1,16 @@
-/* ===========================
+/**
+ * PostList 페이지 레이아웃 스타일
+ * 전체 페이지의 레이아웃과 섹션 간의 간격을 정의
+ 
+
+ .container {
+  max-width: 1200px;
+  margin: 0 auto;
+ }
+
+  */
+
+  /* ===========================
  PostList.module.css
 =========================== */
 .contents {
@@ -84,32 +96,32 @@
 }
 
 .slidePaperItem01 {
-  background: #ECD9FF url('../../assets/images/post/pattern-01.svg') no-repeat bottom right;
+  background: #ECD9FF url('../../assets/images/list/list-pattern-01.svg') no-repeat bottom right;
 }
 
 .slidePaperItem02 {
-  background: #FFE2AD url('../../assets/images/post/pattern-02.svg') no-repeat bottom right;
+  background: #FFE2AD url('../../assets/images/list/list-pattern-02.svg') no-repeat bottom right;
 }
 
 .slidePaperItem03 {
-  background: #B1E4FF url('../../assets/images/post/pattern-03.svg') no-repeat bottom right;
+  background: #B1E4FF url('../../assets/images/list/list-pattern-03.svg') no-repeat bottom right;
 }
 
 .slidePaperItem04 {
-  background: #D0F5C3 url('../../assets/images/post/pattern-04.svg') no-repeat bottom right;
+  background: #D0F5C3 url('../../assets/images/list/list-pattern-04.svg') no-repeat bottom right;
 }
 
 .slidePaperItem05 {
   color: #ffffff;
   position: relative;
-  background: url('../../assets/images/post/pattern-05.png') no-repeat center center /cover;
+  background: url('../../assets/images/list/list-pattern-05.png') no-repeat center center /cover;
   z-index: -2;
 }
 
 .slidePaperItem06 {
   color: #ffffff;
   position: relative;
-  background: url('../../assets/images/post/pattern-06.png') no-repeat center center /cover;
+  background: url('../../assets/images/list/list-pattern-06.png') no-repeat center center /cover;
   z-index: -2;
 }
 
@@ -142,6 +154,25 @@
 .btnViewFull {
   width: 280px;
 }
+
+.btnLargeFull {
+  width: 280px;
+  height: 56px;
+  padding: 14px 24px;
+
+  border-radius: 12px;
+  background-color: var(--color-purple-600);
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.button:hover {
+  background-color: var(--color-purple-900);
+}
+
+
 
 .slidePaperArrow {
   position: absolute;
