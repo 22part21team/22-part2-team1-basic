@@ -4,20 +4,57 @@ import TextField from '../../components/common/TextField/TextField';
 import Button from '../../components/common/Button/Button';
 import styles from './MessageCreate.module.css';
 
-// 프로필 이미지 옵션 (컴포넌트 외부에 선언)
+// 프로필 이미지 import
+import profileImage1 from '@/assets/images/message/message-profilechoice-01.jpg';
+import profileImage2 from '@/assets/images/message/message-profilechoice-02.jpg';
+import profileImage3 from '@/assets/images/message/message-profilechoice-03.jpg';
+import profileImage4 from '@/assets/images/message/message-profilechoice-04.jpg';
+import profileImage5 from '@/assets/images/message/message-profilechoice-05.jpg';
+import profileImage6 from '@/assets/images/message/message-profilechoice-06.jpg';
+import profileImage7 from '@/assets/images/message/message-profilechoice-07.jpg';
+import profileImage8 from '@/assets/images/message/message-profilechoice-08.jpg';
+
+// 프로필 이미지 옵션
+// displayImage: 화면에 표시할 로컬 이미지
+// apiUrl: API에 전송할 공개 URL (Rolling API 서버가 접근 가능한 URL)
+// TODO: 추후 사용자 파일 업로드 기능 추가 시, 업로드된 이미지 URL로 교체
 const PROFILE_IMAGE_OPTIONS = [
-  '/src/assets/images/message/message-profilechoice-01.jpg',
-  '/src/assets/images/message/message-profilechoice-02.jpg',
-  '/src/assets/images/message/message-profilechoice-03.jpg',
-  '/src/assets/images/message/message-profilechoice-04.jpg',
-  '/src/assets/images/message/message-profilechoice-05.jpg',
-  '/src/assets/images/message/message-profilechoice-06.jpg',
-  '/src/assets/images/message/message-profilechoice-07.jpg',
-  '/src/assets/images/message/message-profilechoice-08.jpg',
+  {
+    displayImage: profileImage1,
+    apiUrl: 'https://i.pravatar.cc/200?img=1',
+  },
+  {
+    displayImage: profileImage2,
+    apiUrl: 'https://i.pravatar.cc/200?img=2',
+  },
+  {
+    displayImage: profileImage3,
+    apiUrl: 'https://i.pravatar.cc/200?img=3',
+  },
+  {
+    displayImage: profileImage4,
+    apiUrl: 'https://i.pravatar.cc/200?img=4',
+  },
+  {
+    displayImage: profileImage5,
+    apiUrl: 'https://i.pravatar.cc/200?img=5',
+  },
+  {
+    displayImage: profileImage6,
+    apiUrl: 'https://i.pravatar.cc/200?img=6',
+  },
+  {
+    displayImage: profileImage7,
+    apiUrl: 'https://i.pravatar.cc/200?img=7',
+  },
+  {
+    displayImage: profileImage8,
+    apiUrl: 'https://i.pravatar.cc/200?img=8',
+  },
 ];
 
 // 기본 프로필 이미지
-const DEFAULT_PROFILE_IMAGE = '/src/assets/images/message/message-profilechoice-01.jpg';
+const DEFAULT_PROFILE_IMAGE = PROFILE_IMAGE_OPTIONS[0];
 
 /**
  * 롤링페이퍼 메시지 작성 페이지 컴포넌트
@@ -32,7 +69,7 @@ const MessageCreate = () => {
   // 폼 상태 관리
   const [senderName, setSenderName] = useState('');
   const [nameError, setNameError] = useState('');
-  const [selectedProfileImage, setSelectedProfileImage] = useState('');
+  const [selectedProfileImage, setSelectedProfileImage] = useState(null);
   const [relationship, setRelationship] = useState('지인');
   const [content, setContent] = useState('');
   const [font, setFont] = useState('Noto Sans');
@@ -94,11 +131,52 @@ const MessageCreate = () => {
   /**
    * 프로필 이미지 선택 핸들러
    *
-   * @param {string} imageUrl - 선택된 이미지 URL
+   * @param {Object} imageOption - 선택된 이미지 옵션 객체
    */
-  const handleProfileImageSelect = (imageUrl) => {
-    setSelectedProfileImage(imageUrl);
+  const handleProfileImageSelect = (imageOption) => {
+    setSelectedProfileImage(imageOption);
   };
+
+  /**
+   * 사용자 파일 업로드 핸들러 (추후 구현 예정)
+   * TODO: 파일 업로드 기능 구현
+   * - 이미지 파일 선택 (input type="file")
+   * - 이미지 업로드 (아마 클라우드 스토리지 사용 예정)
+   * - 업로드된 이미지 URL을 selectedProfileImage에 설정
+   * 
+   * @param {Event} e - File input change 이벤트
+   */
+  // const handleFileUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+  //
+  //   // 파일 타입 검증
+  //   if (!file.type.startsWith('image/')) {
+  //     alert('이미지 파일만 업로드 가능합니다.');
+  //     return;
+  //   }
+  //
+  //   // 파일 크기 검증 (예: 5MB 제한)
+  //   if (file.size > 5 * 1024 * 1024) {
+  //     alert('파일 크기는 5MB 이하여야 합니다.');
+  //     return;
+  //   }
+  //
+  //   try {
+  //     // TODO: 실제 업로드 API 호출
+  //     // const formData = new FormData();
+  //     // formData.append('image', file);
+  //     // const response = await fetch('YOUR_UPLOAD_API_URL', {
+  //     //   method: 'POST',
+  //     //   body: formData,
+  //     // });
+  //     // const data = await response.json();
+  //     // setSelectedProfileImage(data.imageUrl);
+  //   } catch (error) {
+  //     console.error('이미지 업로드 실패:', error);
+  //     alert('이미지 업로드에 실패했습니다.');
+  //   }
+  // };
 
   /**
    * 관계 선택 핸들러
@@ -147,12 +225,14 @@ const MessageCreate = () => {
 
     try {
       // 프로필 이미지가 선택되지 않았으면 기본 이미지 사용
-      const finalProfileImage = selectedProfileImage || DEFAULT_PROFILE_IMAGE;
+      const finalProfileImageOption = selectedProfileImage || DEFAULT_PROFILE_IMAGE;
+      // API에는 공개 URL 전송 (로컬 URL은 Rolling API 서버가 접근 불가)
+      const finalProfileImageURL = finalProfileImageOption.apiUrl;
 
       // API 요청 데이터 구성
       const requestData = {
         sender: senderName,
-        profileImageURL: finalProfileImage,
+        profileImageURL: finalProfileImageURL,
         relationship: relationship,
         content: content,
         font: font,
@@ -214,7 +294,7 @@ const MessageCreate = () => {
               <div className={styles.defaultProfileIcon}>
                 {selectedProfileImage ? (
                   <img
-                    src={selectedProfileImage}
+                    src={selectedProfileImage.displayImage}
                     alt="선택된 프로필"
                     className={styles.defaultProfileImage}
                   />
@@ -240,23 +320,39 @@ const MessageCreate = () => {
               <div className={styles.profileContent}>
                 <p className={styles.description}>프로필 이미지를 선택해주세요!</p>
                 <div className={styles.profileImageGrid}>
-                  {PROFILE_IMAGE_OPTIONS.map((imageUrl, index) => (
+                  {PROFILE_IMAGE_OPTIONS.map((imageOption, index) => (
                     <button
                       key={index}
                       type="button"
-                      onClick={() => handleProfileImageSelect(imageUrl)}
+                      onClick={() => handleProfileImageSelect(imageOption)}
                       className={`${styles.profileImageButton} ${
-                        selectedProfileImage === imageUrl ? styles.selected : ''
+                        selectedProfileImage === imageOption ? styles.selected : ''
                       }`}
                     >
                       <img
-                        src={imageUrl}
+                        src={imageOption.displayImage}
                         alt={`프로필 ${index + 1}`}
                         className={styles.profileImage}
                       />
                     </button>
                   ))}
                 </div>
+
+                {/* 파일 업로드 기능 추가 시 활성화 할 코드 */}
+                {/* 
+                <div className={styles.uploadSection}>
+                  <label htmlFor="profile-upload" className={styles.uploadButton}>
+                    <input
+                      id="profile-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className={styles.fileInput}
+                    />
+                    <span>내 기기에서 업로드</span>
+                  </label>
+                </div>
+                */}
               </div>
             </div>
           </div>
