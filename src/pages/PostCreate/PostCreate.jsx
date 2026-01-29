@@ -65,6 +65,15 @@ const handleNameBlur = () => {
   }
 };
 
+  /**
+   * 이름 필드 검증 헬퍼 함수
+   * 배경 선택 등 다른 액션 시에도 이름 검증을 수행
+   */
+  const validateName = () => {
+    if (!recipientName.trim()) {
+      setNameError('값을 입력해 주세요');
+    }
+  };
 
   /**
    * 배경 타입 토글 핸들러
@@ -72,6 +81,7 @@ const handleNameBlur = () => {
    * @param {string} type - 선택된 배경 타입 ("left" | "right")
    */
   const handleBackgroundToggle = (type) => {
+    validateName();
     setBackgroundType(type);
   };
 
@@ -81,6 +91,7 @@ const handleNameBlur = () => {
    * @param {string} color - 선택된 색상
    */
   const handleColorSelect = (color) => {
+    validateName();
     setSelectedColor(color);
   };
 
@@ -90,6 +101,7 @@ const handleNameBlur = () => {
    * @param {string} image - 선택된 이미지 URL
    */
   const handleImageSelect = (image) => {
+    validateName();
     setSelectedImage(image);
   };
 
@@ -140,7 +152,7 @@ const handleNameBlur = () => {
   };
 
   // 생성하기 버튼 활성화 조건
-  // const isFormValid = recipientName.trim() && !nameError;
+  const isFormValid = recipientName.trim() && !nameError;
 
   return (
     <>
@@ -191,7 +203,7 @@ const handleNameBlur = () => {
           </div>
 
           <div className={styles.buttonWrapper}>
-          <Button size="Large" disabled={isSubmitting} onClick={handleSubmit}>
+          <Button size="Large" disabled={!isFormValid || isSubmitting} onClick={handleSubmit}>
               {isSubmitting ? '생성 중...' : '생성하기'}
             </Button>
           </div>
