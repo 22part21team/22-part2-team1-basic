@@ -4,20 +4,32 @@ import TextField from '../../components/common/TextField/TextField';
 import Button from '../../components/common/Button/Button';
 import styles from './MessageCreate.module.css';
 
+// 프로필 이미지 import
+import profileImage1 from '@/assets/images/message/message-profilechoice-01.jpg';
+import profileImage2 from '@/assets/images/message/message-profilechoice-02.jpg';
+import profileImage3 from '@/assets/images/message/message-profilechoice-03.jpg';
+import profileImage4 from '@/assets/images/message/message-profilechoice-04.jpg';
+import profileImage5 from '@/assets/images/message/message-profilechoice-05.jpg';
+import profileImage6 from '@/assets/images/message/message-profilechoice-06.jpg';
+import profileImage7 from '@/assets/images/message/message-profilechoice-07.jpg';
+import profileImage8 from '@/assets/images/message/message-profilechoice-08.jpg';
+
 // 프로필 이미지 옵션 (컴포넌트 외부에 선언)
+// NOTE: 현재는 로컬 이미지 사용 (Vite의 import를 통해 번들링)
+// TODO: 추후 사용자 파일 업로드 기능 추가 시, 업로드된 이미지 URL로 교체
 const PROFILE_IMAGE_OPTIONS = [
-  '/src/assets/images/message/message-profilechoice-01.jpg',
-  '/src/assets/images/message/message-profilechoice-02.jpg',
-  '/src/assets/images/message/message-profilechoice-03.jpg',
-  '/src/assets/images/message/message-profilechoice-04.jpg',
-  '/src/assets/images/message/message-profilechoice-05.jpg',
-  '/src/assets/images/message/message-profilechoice-06.jpg',
-  '/src/assets/images/message/message-profilechoice-07.jpg',
-  '/src/assets/images/message/message-profilechoice-08.jpg',
+  profileImage1,
+  profileImage2,
+  profileImage3,
+  profileImage4,
+  profileImage5,
+  profileImage6,
+  profileImage7,
+  profileImage8,
 ];
 
 // 기본 프로필 이미지
-const DEFAULT_PROFILE_IMAGE = '/src/assets/images/message/message-profilechoice-01.jpg';
+const DEFAULT_PROFILE_IMAGE = profileImage1;
 
 /**
  * 롤링페이퍼 메시지 작성 페이지 컴포넌트
@@ -99,6 +111,47 @@ const MessageCreate = () => {
   const handleProfileImageSelect = (imageUrl) => {
     setSelectedProfileImage(imageUrl);
   };
+
+  /**
+   * 사용자 파일 업로드 핸들러 (추후 구현 예정)
+   * TODO: 파일 업로드 기능 구현
+   * - 이미지 파일 선택 (input type="file")
+   * - 이미지 업로드 (아마 클라우드 스토리지 사용 예정)
+   * - 업로드된 이미지 URL을 selectedProfileImage에 설정
+   * 
+   * @param {Event} e - File input change 이벤트
+   */
+  // const handleFileUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+  //
+  //   // 파일 타입 검증
+  //   if (!file.type.startsWith('image/')) {
+  //     alert('이미지 파일만 업로드 가능합니다.');
+  //     return;
+  //   }
+  //
+  //   // 파일 크기 검증 (예: 5MB 제한)
+  //   if (file.size > 5 * 1024 * 1024) {
+  //     alert('파일 크기는 5MB 이하여야 합니다.');
+  //     return;
+  //   }
+  //
+  //   try {
+  //     // TODO: 실제 업로드 API 호출
+  //     // const formData = new FormData();
+  //     // formData.append('image', file);
+  //     // const response = await fetch('YOUR_UPLOAD_API_URL', {
+  //     //   method: 'POST',
+  //     //   body: formData,
+  //     // });
+  //     // const data = await response.json();
+  //     // setSelectedProfileImage(data.imageUrl);
+  //   } catch (error) {
+  //     console.error('이미지 업로드 실패:', error);
+  //     alert('이미지 업로드에 실패했습니다.');
+  //   }
+  // };
 
   /**
    * 관계 선택 핸들러
@@ -257,6 +310,22 @@ const MessageCreate = () => {
                     </button>
                   ))}
                 </div>
+
+                {/* 파일 업로드 기능 추가 시 활성화 할 코드 */}
+                {/* 
+                <div className={styles.uploadSection}>
+                  <label htmlFor="profile-upload" className={styles.uploadButton}>
+                    <input
+                      id="profile-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className={styles.fileInput}
+                    />
+                    <span>내 기기에서 업로드</span>
+                  </label>
+                </div>
+                */}
               </div>
             </div>
           </div>
