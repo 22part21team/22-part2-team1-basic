@@ -1,7 +1,6 @@
 
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './Home.module.css';
-import Button from '@/components/common/Button/Button';
 import homePhoto from '../../assets/images/home/home-photo.jpg';
 import homeArrow from '../../assets/images/home/home-arrow.svg';
 import homeIconPlus from '../../assets/images/home/home-icon-plus.svg';
@@ -20,11 +19,6 @@ import homePointImg from '../../assets/images/home/home-point-img.png';
  */
 
 function Home() {
-  const navigate = useNavigate();
-
-  const handleViewClick = () => {
-    navigate('/list');
-  };
 
   return <>
 
@@ -84,9 +78,9 @@ function Home() {
           </div>
         </div>
         <div className={styles.btnView}>
-          <Button size="large" className={styles.btnLargeFull} onClick={handleViewClick}>
+          <Link to="/list" className={styles.linkButton}>
             구경해 보기
-          </Button>
+          </Link>
         </div>
 
       </section>
