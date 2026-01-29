@@ -18,6 +18,29 @@
   border-radius: 16px;
   background: #F6F8FF;
   margin-bottom: 30px;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: pointFadeIn 0.6s ease-out forwards;
+}
+
+.contents .point:nth-of-type(1) {
+  animation-delay: 0.1s;
+}
+
+.contents .point:nth-of-type(2) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pointFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .point02Box {
@@ -68,9 +91,7 @@
   border: 0.99px solid #DBD9E9;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
-
 }
-
 
 .fromCadeLine {
   display: flex;
@@ -160,10 +181,40 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 150px;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: pointFadeIn 0.6s ease-out forwards;
+  animation-delay: 0.7s;
 }
 
-.btnViewFull {
+
+.linkButton {
   width: 280px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #9935ff;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-decoration: none;
+  height: 56px;
+  font-size: 18px;
+  line-height: 28px;
+  padding: 14px 24px;
+}
+
+.linkButton:hover {
+  background-color: #7b2acc;
+}
+
+.linkButton:active {
+  background-color: #6b1fb8;
 }
 
 /* 
@@ -211,6 +262,11 @@ desktop:  1024 px 이상 ~
     display: flex;
     justify-content: center;
     margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .linkButton {
+    width: 100%;
   }
 }
 
@@ -220,6 +276,33 @@ desktop:  1024 px 이상 ~
   .container {
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .point {
+    padding: 0 0 60px 0;
+    overflow: hidden;
+  }
+
+  .pointText {
+    padding: 24px;
+    margin-bottom: 26px;
+    font-size: 18px;
+  }
+
+  .pointText h2 {
+    font-size: 18px;
+  }
+
+  .pointText p {
+    font-size: 15px;
+  }
+
+  .pointImg {
+    width: 100%
+  }
+
+  .point02Box br {
+    display: block;
   }
 
   .fromCades {
@@ -265,31 +348,6 @@ desktop:  1024 px 이상 ~
     font-size: 6px;
   }
 
-  .point {
-    padding: 0 0 60px 0;
-    overflow: hidden;
-  }
 
-  .pointText {
-    padding: 24px;
-    margin-bottom: 26px;
-    font-size: 18px;
-  }
-
-  .pointText h2 {
-    font-size: 18px;
-  }
-
-  .pointText p {
-    font-size: 15px;
-  }
-
-  .pointImg {
-    width: 100%
-  }
-
-  .point02Box br {
-    display: block;
-  }
 
 }
