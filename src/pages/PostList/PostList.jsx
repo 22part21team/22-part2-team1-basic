@@ -37,7 +37,7 @@ const recentPaperItems = [
   { id: 3, patternClass: 'slidePaperItem06', title: 'To. Sowon' },
   { id: 4, patternClass: 'slidePaperItem04', title: 'To. Sowon' },
   { id: 5, patternClass: 'slidePaperItem04', title: 'To. Sowon' },
-  { id: 1, patternClass: 'slidePaperItem05', title: 'To. Sowon Sowon Kim' },
+  { id: 6, patternClass: 'slidePaperItem05', title: 'To. Sowon Sowon Kim' },
 ];
 
 function SlidePaperCard({ patternClass, title = 'To. Sowon', onClick }) {

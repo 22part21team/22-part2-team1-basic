@@ -115,14 +115,14 @@
   color: #ffffff;
   position: relative;
   background: url('../../assets/images/list/list-pattern-05.png') no-repeat center center /cover;
-  z-index: -2;
+  z-index: 0;
 }
 
 .slidePaperItem06 {
   color: #ffffff;
   position: relative;
   background: url('../../assets/images/list/list-pattern-06.png') no-repeat center center /cover;
-  z-index: -2;
+  z-index: 0;
 }
 
 .slidePaperItem05 .slidePaperItemTitle,
@@ -151,10 +151,6 @@
   margin-bottom: 150px;
 }
 
-.btnViewFull {
-  width: 280px;
-}
-
 .btnLargeFull {
   width: 280px;
   height: 56px;
@@ -167,12 +163,6 @@
   font-size: 18px;
   font-weight: 700;
 }
-
-.button:hover {
-  background-color: var(--color-purple-900);
-}
-
-
 
 .slidePaperArrow {
   position: absolute;
