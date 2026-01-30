@@ -69,7 +69,7 @@ function PostDetail() {
 
   return (
     <>
-      <PostHeader recipient={recipient} />
+      <PostHeader id={id} recipient={recipient} />
       <div className={styles.cardListContainer}>
         <CardList id={id} />
       </div>
