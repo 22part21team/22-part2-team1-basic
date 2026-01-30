@@ -1,8 +1,26 @@
 .toastContainer {
-  padding: 0 20px;
-  width: 100%;
-  height: 64px;
-  max-width: 524px;
+  position: fixed;
+  width: 524px;
+  bottom: 70px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.toastContainer.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toastContainer.exiting {
+  opacity: 0;
+  transform: translateY(12px);
 }
 
 .toast {
@@ -12,6 +30,7 @@
   padding: 19px 30px;
   background-color: rgb(0 0 0 / 80%);
   border-radius: 8px;
+
 }
 
 .toastText {
@@ -28,4 +47,14 @@
   justify-content: center;
   width: 24px;
   height: 24px;
+}
+
+
+@media (max-width: 767px) {
+  .toastContainer {
+    width: calc(100% - 48px);
+    bottom: 88px;
+    left: 20px;
+    right: 20px;
+  }
 }
