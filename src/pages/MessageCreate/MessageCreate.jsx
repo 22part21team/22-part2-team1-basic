@@ -19,40 +19,39 @@ import profileImage8 from '@/assets/images/message/message-profilechoice-08.jpg'
 
 // 프로필 이미지 옵션
 // displayImage: 화면에 표시할 로컬 이미지
-// apiUrl: API에 전송할 공개 URL (Rolling API 서버가 접근 가능한 URL)
-// TODO: 추후 사용자 파일 업로드 기능 추가 시, 업로드된 이미지 URL로 교체
+// apiUrl: API에 전송할 URL (개발: 외부 URL, 배포: 실제 이미지)
 const PROFILE_IMAGE_OPTIONS = [
   {
     displayImage: profileImage1,
-    apiUrl: 'https://i.pravatar.cc/200?img=1',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=1' : profileImage1,
   },
   {
     displayImage: profileImage2,
-    apiUrl: 'https://i.pravatar.cc/200?img=2',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=2' : profileImage2,
   },
   {
     displayImage: profileImage3,
-    apiUrl: 'https://i.pravatar.cc/200?img=3',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=3' : profileImage3,
   },
   {
     displayImage: profileImage4,
-    apiUrl: 'https://i.pravatar.cc/200?img=4',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=4' : profileImage4,
   },
   {
     displayImage: profileImage5,
-    apiUrl: 'https://i.pravatar.cc/200?img=5',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=5' : profileImage5,
   },
   {
     displayImage: profileImage6,
-    apiUrl: 'https://i.pravatar.cc/200?img=6',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=6' : profileImage6,
   },
   {
     displayImage: profileImage7,
-    apiUrl: 'https://i.pravatar.cc/200?img=7',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=7' : profileImage7,
   },
   {
     displayImage: profileImage8,
-    apiUrl: 'https://i.pravatar.cc/200?img=8',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=8' : profileImage8,
   },
 ];
 
