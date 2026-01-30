@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import TextAlign from '@tiptap/extension-text-align';
 import TextField from '../../components/common/TextField/TextField';
 import Button from '../../components/common/Button/Button';
 import styles from './MessageCreate.module.css';
@@ -16,45 +19,45 @@ import profileImage8 from '@/assets/images/message/message-profilechoice-08.jpg'
 
 // 프로필 이미지 옵션
 // displayImage: 화면에 표시할 로컬 이미지
-// apiUrl: API에 전송할 공개 URL (Rolling API 서버가 접근 가능한 URL)
-// TODO: 추후 사용자 파일 업로드 기능 추가 시, 업로드된 이미지 URL로 교체
+// apiUrl: API에 전송할 URL (개발: 외부 URL, 배포: 실제 이미지)
 const PROFILE_IMAGE_OPTIONS = [
   {
     displayImage: profileImage1,
-    apiUrl: 'https://i.pravatar.cc/200?img=1',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=1' : profileImage1,
   },
   {
     displayImage: profileImage2,
-    apiUrl: 'https://i.pravatar.cc/200?img=2',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=2' : profileImage2,
   },
   {
     displayImage: profileImage3,
-    apiUrl: 'https://i.pravatar.cc/200?img=3',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=3' : profileImage3,
   },
   {
     displayImage: profileImage4,
-    apiUrl: 'https://i.pravatar.cc/200?img=4',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=4' : profileImage4,
   },
   {
     displayImage: profileImage5,
-    apiUrl: 'https://i.pravatar.cc/200?img=5',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=5' : profileImage5,
   },
   {
     displayImage: profileImage6,
-    apiUrl: 'https://i.pravatar.cc/200?img=6',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=6' : profileImage6,
   },
   {
     displayImage: profileImage7,
-    apiUrl: 'https://i.pravatar.cc/200?img=7',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=7' : profileImage7,
   },
   {
     displayImage: profileImage8,
-    apiUrl: 'https://i.pravatar.cc/200?img=8',
+    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=8' : profileImage8,
   },
 ];
 
-// 기본 프로필 이미지
-const DEFAULT_PROFILE_IMAGE = PROFILE_IMAGE_OPTIONS[0];
+// 프로필 이미지 미선택 시 사용할 기본 URL (Card 컴포넌트에서 이 URL을 감지하여 SVG 아이콘 표시)
+// Rolling API는 실제 HTTP/HTTPS URL만 허용하므로 외부 이미지 사용
+export const DEFAULT_PROFILE_URL = 'https://i.pravatar.cc/1?img=default';
 
 /**
  * 롤링페이퍼 메시지 작성 페이지 컴포넌트
@@ -72,15 +75,46 @@ const MessageCreate = () => {
   const [selectedProfileImage, setSelectedProfileImage] = useState(null);
   const [relationship, setRelationship] = useState('지인');
   const [content, setContent] = useState('');
-  const [font, setFont] = useState('Noto Sans');
+  const [font, setFont] = useState('Noto Sans KR');
   const [recipientInfo, setRecipientInfo] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 에디터 상태 업데이트를 위한 state
+  const [editorState, setEditorState] = useState(0);
+
+  // Tiptap 에디터 초기화
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+    ],
+    content: '',
+    onUpdate: ({ editor }) => {
+      setContent(editor.getHTML());
+    },
+    onTransaction: () => {
+      // 에디터의 모든 변경사항에 대해 컴포넌트를 리렌더링
+      setEditorState((prev) => prev + 1);
+    },
+    editorProps: {
+      attributes: {
+        style: `font-family: ${font}`,
+      },
+    },
+  });
 
   // 관계 옵션
   const relationshipOptions = ['친구', '지인', '동료', '가족'];
 
-  // 폰트 옵션
-  const fontOptions = ['Noto Sans', 'Pretendard', '나눔명조', '나눔손글씨 손편지체'];
+  // 폰트 옵션 (label: 화면 표시용, cssValue: CSS font-family, apiValue: API 전송용)
+  const fontOptions = [
+    { label: 'Noto Sans', cssValue: 'Noto Sans KR', apiValue: 'Noto Sans' },
+    { label: 'Pretendard', cssValue: 'Pretendard', apiValue: 'Pretendard' },
+    { label: '나눔명조', cssValue: 'Nanum Myeongjo', apiValue: '나눔명조' },
+    { label: '나눔손글씨 손편지체', cssValue: 'Nanum Pen Script', apiValue: '나눔손글씨 손편지체' },
+  ];
 
   /**
    * 롤링페이퍼 정보 조회
@@ -106,6 +140,15 @@ const MessageCreate = () => {
 
     fetchRecipientInfo();
   }, [id, navigate]);
+
+  /**
+   * 폰트 변경 시 에디터 스타일 업데이트
+   */
+  useEffect(() => {
+    if (editor) {
+      editor.view.dom.style.fontFamily = font;
+    }
+  }, [font, editor]);
 
   /**
    * 보내는 사람 이름 입력 핸들러
@@ -188,12 +231,46 @@ const MessageCreate = () => {
   };
 
   /**
-   * 메시지 내용 입력 핸들러
-   *
-   * @param {Event} e - Textarea change 이벤트
+   * 에디터 툴바 버튼 핸들러
    */
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
+  const handleBold = () => {
+    if (!editor) return;
+    editor.chain().focus().toggleBold().run();
+  };
+
+  const handleItalic = () => {
+    if (!editor) return;
+    editor.chain().focus().toggleItalic().run();
+  };
+
+  const handleUnderline = () => {
+    if (!editor) return;
+    editor.chain().focus().toggleStrike().run();
+  };
+
+  const handleAlignLeft = () => {
+    if (!editor) return;
+    editor.chain().focus().setTextAlign('left').run();
+  };
+
+  const handleAlignCenter = () => {
+    if (!editor) return;
+    editor.chain().focus().setTextAlign('center').run();
+  };
+
+  const handleAlignRight = () => {
+    if (!editor) return;
+    editor.chain().focus().setTextAlign('right').run();
+  };
+
+  const handleOrderedList = () => {
+    if (!editor) return;
+    editor.chain().focus().toggleOrderedList().run();
+  };
+
+  const handleBulletList = () => {
+    if (!editor) return;
+    editor.chain().focus().toggleBulletList().run();
   };
 
   /**
@@ -224,10 +301,12 @@ const MessageCreate = () => {
     setIsSubmitting(true);
 
     try {
-      // 프로필 이미지가 선택되지 않았으면 기본 이미지 사용
-      const finalProfileImageOption = selectedProfileImage || DEFAULT_PROFILE_IMAGE;
-      // API에는 공개 URL 전송 (로컬 URL은 Rolling API 서버가 접근 불가)
-      const finalProfileImageURL = finalProfileImageOption.apiUrl;
+      // 프로필 이미지가 선택되지 않았으면 기본 URL 전송 (Card에서 이 URL을 감지하여 SVG 아이콘 표시)
+      const finalProfileImageURL = selectedProfileImage ? selectedProfileImage.apiUrl : DEFAULT_PROFILE_URL;
+
+      // 선택된 폰트의 API용 값 찾기
+      const selectedFont = fontOptions.find(option => option.cssValue === font);
+      const apiFontValue = selectedFont ? selectedFont.apiValue : 'Noto Sans';
 
       // API 요청 데이터 구성
       const requestData = {
@@ -235,7 +314,7 @@ const MessageCreate = () => {
         profileImageURL: finalProfileImageURL,
         relationship: relationship,
         content: content,
-        font: font,
+        font: apiFontValue,
       };
 
       // API 호출
@@ -251,6 +330,9 @@ const MessageCreate = () => {
       );
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('API 에러 응답:', errorData);
+        console.error('전송한 데이터:', requestData);
         throw new Error('메시지 전송에 실패했습니다.');
       }
 
@@ -381,44 +463,91 @@ const MessageCreate = () => {
             </label>
             <div className={styles.editorContainer}>
               <div className={styles.editorToolbar}>
-                <button type="button" className={styles.toolbarButton} title="Bold">
+                <button 
+                  type="button" 
+                  className={`${styles.toolbarButton} ${editor?.isActive('bold') ? styles.isActive : ''}`}
+                  onClick={handleBold}
+                  title="Bold"
+                >
                   <strong>B</strong>
                 </button>
-                <button type="button" className={styles.toolbarButton} title="Italic">
+                <button 
+                  type="button" 
+                  className={`${styles.toolbarButton} ${editor?.isActive('italic') ? styles.isActive : ''}`}
+                  onClick={handleItalic}
+                  title="Italic"
+                >
                   <em>I</em>
                 </button>
-                <button type="button" className={styles.toolbarButton} title="Underline">
-                  <u>U</u>
+                <button 
+                  type="button" 
+                  className={`${styles.toolbarButton} ${editor?.isActive('strike') ? styles.isActive : ''}`}
+                  onClick={handleUnderline}
+                  title="Strike"
+                >
+                  <s>S</s>
                 </button>
                 <div className={styles.toolbarDivider}></div>
-                <button type="button" className={styles.toolbarButton} title="Align Left">
-                  ≡
+                <button 
+                  type="button" 
+                  className={`${styles.toolbarButton} ${editor?.isActive({ textAlign: 'left' }) ? styles.isActive : ''}`}
+                  onClick={handleAlignLeft}
+                  title="왼쪽 정렬"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 3H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M2 6H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M2 9H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M2 12H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
                 </button>
-                <button type="button" className={styles.toolbarButton} title="Align Center">
-                  ≡
+                <button 
+                  type="button" 
+                  className={`${styles.toolbarButton} ${editor?.isActive({ textAlign: 'center' }) ? styles.isActive : ''}`}
+                  onClick={handleAlignCenter}
+                  title="가운데 정렬"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 3H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M4 6H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M3 9H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M5 12H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
                 </button>
-                <button type="button" className={styles.toolbarButton} title="Align Right">
-                  ≡
+                <button 
+                  type="button" 
+                  className={`${styles.toolbarButton} ${editor?.isActive({ textAlign: 'right' }) ? styles.isActive : ''}`}
+                  onClick={handleAlignRight}
+                  title="오른쪽 정렬"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 3H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M6 6H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M4 9H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M7 12H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
                 </button>
                 <div className={styles.toolbarDivider}></div>
-                <button type="button" className={styles.toolbarButton} title="Ordered List">
-                  ⋮
+                <button 
+                  type="button" 
+                  className={`${styles.toolbarButton} ${editor?.isActive('orderedList') ? styles.isActive : ''}`}
+                  onClick={handleOrderedList}
+                  title="Ordered List"
+                >
+                  1.
                 </button>
-                <button type="button" className={styles.toolbarButton} title="Bullet List">
+                <button 
+                  type="button" 
+                  className={`${styles.toolbarButton} ${editor?.isActive('bulletList') ? styles.isActive : ''}`}
+                  onClick={handleBulletList}
+                  title="Bullet List"
+                >
                   •
                 </button>
-                <div className={styles.toolbarDivider}></div>
-                <button type="button" className={styles.toolbarButton} title="Link">
-                  🔗
-                </button>
               </div>
-              <textarea
-                id="content"
-                value={content}
-                onChange={handleContentChange}
-                placeholder="I am your reach text editor."
+              <EditorContent 
+                editor={editor}
                 className={styles.textarea}
-                style={{ fontFamily: font }}
               />
             </div>
           </div>
@@ -429,8 +558,8 @@ const MessageCreate = () => {
             </label>
             <select id="font" value={font} onChange={handleFontChange} className={styles.select}>
               {fontOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
+                <option key={option.cssValue} value={option.cssValue} style={{ fontFamily: option.cssValue }}>
+                  {option.label}
                 </option>
               ))}
             </select>

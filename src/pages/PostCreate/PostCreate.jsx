@@ -6,6 +6,12 @@ import Option from '../../components/common/Option/Option';
 import Button from '../../components/common/Button/Button';
 import styles from './PostCreate.module.css';
 
+// 배경 이미지 import
+import bgImage1 from '@/assets/images/post/post-backgroundchoice-01.jpg';
+import bgImage2 from '@/assets/images/post/post-backgroundchoice-02.jpg';
+import bgImage3 from '@/assets/images/post/post-backgroundchoice-03.jpg';
+import bgImage4 from '@/assets/images/post/post-backgroundchoice-04.jpg';
+
 /**
  * 롤링페이퍼 만들기 페이지 컴포넌트
  * 받는 사람 이름, 배경색 또는 배경 이미지를 선택하여 롤링페이퍼를 생성
@@ -20,26 +26,43 @@ const PostCreate = () => {
   const [nameError, setNameError] = useState('');
   const [backgroundType, setBackgroundType] = useState('left'); // 'left' = 컬러, 'right' = 이미지
   const [selectedColor, setSelectedColor] = useState('beige');
-  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 배경 색상 옵션
   const colorOptions = ['beige', 'purple', 'blue', 'green'];
 
   // 배경 이미지 옵션
-  const imageOptions = [
-    '/src/assets/images/post/post-backgroundchoice-01.jpg',
-    '/src/assets/images/post/post-backgroundchoice-02.jpg',
-    '/src/assets/images/post/post-backgroundchoice-03.jpg',
-    '/src/assets/images/post/post-backgroundchoice-04.jpg',
+  // displayImage: 화면에 표시할 로컬 이미지
+  // apiUrl: API에 전송할 URL (개발: 외부 URL, 배포: 실제 이미지)
+  const IMAGE_OPTIONS = [
+    {
+      displayImage: bgImage1,
+      apiUrl: import.meta.env.DEV ? 'https://picsum.photos/seed/bg1/1920/1080' : bgImage1,
+    },
+    {
+      displayImage: bgImage2,
+      apiUrl: import.meta.env.DEV ? 'https://picsum.photos/seed/bg2/1920/1080' : bgImage2,
+    },
+    {
+      displayImage: bgImage3,
+      apiUrl: import.meta.env.DEV ? 'https://picsum.photos/seed/bg3/1920/1080' : bgImage3,
+    },
+    {
+      displayImage: bgImage4,
+      apiUrl: import.meta.env.DEV ? 'https://picsum.photos/seed/bg4/1920/1080' : bgImage4,
+    },
   ];
+
+  // 화면 표시용 이미지 경로 배열 (Option 컴포넌트에 전달)
+  const imageOptions = IMAGE_OPTIONS.map((option) => option.displayImage);
 
   /**
    * 컴포넌트 마운트 시 이미지 기본값 설정
    */
   useEffect(() => {
     // 이미지 옵션의 첫 번째 항목을 기본값으로 설정
-    setSelectedImage(imageOptions[0]);
+    setSelectedImage(IMAGE_OPTIONS[0]);
   }, []);
 
   /**
@@ -98,11 +121,13 @@ const handleNameBlur = () => {
   /**
    * 배경 이미지 선택 핸들러
    *
-   * @param {string} image - 선택된 이미지 URL
+   * @param {string} image - 선택된 이미지 경로 (displayImage)
    */
   const handleImageSelect = (image) => {
     validateName();
-    setSelectedImage(image);
+    // displayImage로 IMAGE_OPTIONS에서 해당 객체 찾기
+    const imageOption = IMAGE_OPTIONS.find((option) => option.displayImage === image);
+    setSelectedImage(imageOption);
   };
 
   /**
@@ -123,7 +148,7 @@ const handleNameBlur = () => {
       const requestData = {
         name: recipientName,
         backgroundColor: backgroundType === 'left' ? selectedColor : 'beige',
-        backgroundImageURL: backgroundType === 'right' ? selectedImage : null,
+        backgroundImageURL: backgroundType === 'right' && selectedImage ? selectedImage.apiUrl : null,
       };
 
       // API 호출
@@ -195,7 +220,7 @@ const handleNameBlur = () => {
                 <Option
                   type="image"
                   options={imageOptions}
-                  selected={selectedImage}
+                  selected={selectedImage ? selectedImage.displayImage : null}
                   onSelect={handleImageSelect}
                 />
               )}

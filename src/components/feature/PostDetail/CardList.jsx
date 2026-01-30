@@ -49,7 +49,7 @@ function CardList({ id }) {
           <Card simple />
         </li>
         {messages.map((message) => {
-          const { id, profileImageURL, sender, relationship, content, createdAt } = message;
+          const { id, profileImageURL, sender, relationship, content, font, createdAt } = message;
           return (
             <li key={id} id={id} onClick={handleClick}>
               <Card
@@ -57,6 +57,7 @@ function CardList({ id }) {
                 sender={sender}
                 relationship={relationship}
                 content={content}
+                font={font}
                 createdAt={createdAt}
               />
             </li>

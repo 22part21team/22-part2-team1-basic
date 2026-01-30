@@ -90,6 +90,48 @@
   border-radius: 8px;
 }
 
+/* HTML 콘텐츠 스타일 */
+.content p {
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.content p:last-child {
+  margin-bottom: 0;
+}
+
+.content ul,
+.content ol {
+  padding-left: 20px;
+  margin: 8px 0;
+  list-style-position: outside;
+}
+
+.content ul {
+  list-style-type: disc;
+}
+
+.content ol {
+  list-style-type: decimal;
+}
+
+.content li {
+  margin: 4px 0;
+  display: list-item;
+}
+
+.content strong {
+  font-weight: 700;
+}
+
+.content em {
+  font-style: italic;
+}
+
+.content s {
+  text-decoration: line-through;
+}
+
 .closeButton {
   display: flex;
   justify-content: center;

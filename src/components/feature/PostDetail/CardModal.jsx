@@ -2,6 +2,18 @@ import { createPortal } from 'react-dom';
 import styles from './CardModal.module.css';
 import Label from './Label';
 import Button from '@/components/common/Button/Button';
+import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
+
+// API 폰트 이름을 CSS 폰트 이름으로 변환
+const getFontFamily = (apiFont) => {
+  const fontMap = {
+    'Noto Sans': 'Noto Sans KR',
+    'Pretendard': 'Pretendard',
+    '나눔명조': 'Nanum Myeongjo',
+    '나눔손글씨 손편지체': 'Nanum Pen Script',
+  };
+  return fontMap[apiFont] || 'Noto Sans KR';
+};
 
 /**
  * 메시지 카드의 상세 내용을 보여주는 모달 컴포넌트
@@ -13,11 +25,12 @@ import Button from '@/components/common/Button/Button';
  * @param {string} profileImageURL - 작성자 프로필 이미지 URL
  * @param {string} sender - 작성자 이름
  * @param {string} relationship - 수신자와의 관계 ( Label 컴포넌트에 전달 )
- * @param {string} content - 메시지 본문
+ * @param {string} content - 메시지 본문 (HTML 형식)
+ * @param {string} font - 메시지 폰트
  * @param {string} createdAt - 메시지 생성 일자
  * @return {React.ReactPortal | null} modal-root에 렌더링되는 모달 UI 또는 null
  */
-function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, content, createdAt }) {
+function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, content, font, createdAt }) {
   // createdAt을 디자인과 같은 형식으로 변환
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -37,7 +50,28 @@ function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, con
         <div className={styles.cardModal} onClick={(e) => e.stopPropagation()}>
           <div className={styles.profile}>
             <div className={styles.user}>
-              <img src={profileImageURL} alt={sender} className={styles.userImg} />
+              {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL ? (
+                <img src={profileImageURL} alt={sender} className={styles.userImg} />
+              ) : (
+                <svg
+                  width="56"
+                  height="56"
+                  viewBox="0 0 56 56"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={styles.userImg}
+                >
+                  <circle cx="28" cy="28" r="28" fill="#E3E3E3" />
+                  <path
+                    d="M28 28C31.3137 28 34 25.3137 34 22C34 18.6863 31.3137 16 28 16C24.6863 16 22 18.6863 22 22C22 25.3137 24.6863 28 28 28Z"
+                    fill="#999999"
+                  />
+                  <path
+                    d="M28 30C21.3726 30 16 35.3726 16 42H40C40 35.3726 34.6274 30 28 30Z"
+                    fill="#999999"
+                  />
+                </svg>
+              )}
               <div className={styles.userTextContainer}>
                 <p className={styles.userText}>
                   From. <span>{sender}</span>
@@ -50,7 +84,11 @@ function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, con
             <p className={styles.date}>{data}</p>
           </div>
           <div className={styles.contentContainer}>
-            <p className={styles.content}>{content}</p>
+            <div 
+              className={styles.content}
+              style={{ fontFamily: getFontFamily(font) }}
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
             <div className={styles.closeButton}>
               <Button size="small" onClick={onClose}>
                 확인
