@@ -151,8 +151,6 @@ const handleNameBlur = () => {
         backgroundImageURL: backgroundType === 'right' && selectedImage ? selectedImage.apiUrl : null,
       };
 
-      console.log('전송할 데이터:', requestData);
-
       // API 호출
       const response = await fetch('https://rolling-api.vercel.app/22-1/recipients/', {
         method: 'POST',
@@ -163,8 +161,6 @@ const handleNameBlur = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('API 오류 응답:', errorData);
         throw new Error('롤링페이퍼 생성에 실패했습니다.');
       }
 
