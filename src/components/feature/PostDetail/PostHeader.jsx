@@ -11,13 +11,14 @@ import styles from './PostHeader.module.css';
  * - 이모지 반응 ( EmojiReactions )
  * - 공유 버튼 ( LinkShare )
  *
+ * @param {number} id - 롤링페이퍼 수신자의 고유 식별 ID
  * @param {Object} recipient - 수신자 데이터 객체
  * @param {string} recipient.name - 수신자 이름
  * @param {number} recipient.messageCount - 전체 메시지 작성자 수
- * @param {Array} recipient.recentMessages - 최근 메시지를 작성한 유저 리스트 (프로필 이미지 포함)
+ * @param {Array} recipient.recentMessages - 최근 작성자 정보 객체가 담긴 배열 ( API 제공 최대 3명 )
  * @return {JSX.Element} 상단 헤더 UI
  */
-function PostHeader({ recipient }) {
+function PostHeader({ id, recipient }) {
   const { name, messageCount, recentMessages } = recipient;
 
   return (
@@ -32,7 +33,7 @@ function PostHeader({ recipient }) {
             </p>
           </div>
           <div className={styles.postEmoji}>
-            <EmojiReactions />
+            <EmojiReactions id={id} />
           </div>
           <div className={styles.postShare}>
             <LinkShare />
