@@ -1,10 +1,12 @@
+
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import styles from './PostList.module.css';
 import Button from '@/components/common/Button/Button';
 import ProfileList from '@/components/common/ProfileList/ProfileList';
 import EmojiButton from '@/components/common/EmojiButton/EmojiButton';
-import arrowLeft from '@/assets/images/post/arrow-left.svg';
-import arrowRight from '@/assets/images/post/arrow-right.svg';
+import listArrowLeft from '@/assets/images/list/list-arrow-left.svg';
+import listArrowRight from '@/assets/images/list/list-arrow-right.svg';
 
 /**
  * 롤링 페이퍼 리스트 페이지 컴포넌트
@@ -35,12 +37,15 @@ const recentPaperItems = [
   { id: 3, patternClass: 'slidePaperItem06', title: 'To. Sowon' },
   { id: 4, patternClass: 'slidePaperItem04', title: 'To. Sowon' },
   { id: 5, patternClass: 'slidePaperItem04', title: 'To. Sowon' },
-  { id: 1, patternClass: 'slidePaperItem05', title: 'To. Sowon Sowon Kim' },
+  { id: 6, patternClass: 'slidePaperItem05', title: 'To. Sowon Sowon Kim' },
 ];
 
-function SlidePaperCard({ patternClass, title = 'To. Sowon' }) {
+function SlidePaperCard({ patternClass, title = 'To. Sowon', onClick }) {
   return (
-    <div className={`${styles.slidePaperItem} ${styles[patternClass]}`}>
+    <div className={`${styles.slidePaperItem} ${styles[patternClass]}`}
+      onClick={onClick}
+      role="button"
+      >
       <p className={styles.slidePaperItemTitle}>{title}</p>
       <p className={styles.slidePaperItemPhotoCount}>
         <ProfileList authorCount={27} />
@@ -57,8 +62,15 @@ function SlidePaperCard({ patternClass, title = 'To. Sowon' }) {
 
 
 function PostList() {
+
+  const navigate = useNavigate();
+  const handleCreatePost = () => {navigate('/post');}; 
+  const handleCardClick = (id) => { navigate(`/post/${id}`); };
+
   const [bestSlideIndex, setBestSlideIndex] = useState(0);
   const [recentSlideIndex, setRecentSlideIndex] = useState(0);
+
+  
 
   const bestTotalCards = bestPaperItems.length;
   const bestTotalPages = Math.ceil(bestTotalCards / CARDS_PER_PAGE);
@@ -104,7 +116,9 @@ function PostList() {
               {bestPaperItems.map((item) => (
                 <SlidePaperCard
                   key={item.id}
+                  id={item.id}
                   patternClass={item.patternClass}
+                  onClick={() => handleCardClick(item.id)}
                 />
               ))}
             </div>
@@ -117,7 +131,7 @@ function PostList() {
                 onClick={goPrevBest}
                 aria-label="이전"
               >
-                <img src={arrowLeft} alt="" />
+                <img src={listArrowLeft} alt="" />
               </button>
             )}
             {bestShowRightButton && (
@@ -127,7 +141,7 @@ function PostList() {
                 onClick={goNextBest}
                 aria-label="다음"
               >
-                <img src={arrowRight} alt="" />
+                <img src={listArrowRight} alt="" />
               </button>
             )}
           </div>
@@ -143,8 +157,10 @@ function PostList() {
               {recentPaperItems.map((item) => (
                 <SlidePaperCard
                   key={item.id}
+                  id={item.id}
                   patternClass={item.patternClass}
                   title={item.title}
+                  onClick={() => handleCardClick(item.id)}
                 />
               ))}
             </div>
@@ -157,7 +173,7 @@ function PostList() {
                 onClick={goPrevRecent}
                 aria-label="이전"
               >
-                <img src={arrowLeft} alt="" />
+                <img src={listArrowLeft} alt="" />
               </button>
             )}
             {recentShowRightButton && (
@@ -167,14 +183,14 @@ function PostList() {
                 onClick={goNextRecent}
                 aria-label="다음"
               >
-                <img src={arrowRight} alt="" />
+                <img src={listArrowRight} alt="" />
               </button>
             )}
           </div>
         </div>
 
         <div className={styles.btnView}>
-          <Button size="large" className={styles.btnLargeFull}>
+          <Button size="56" className={styles.btnLargeFull} onClick={handleCreatePost}>
             나도 만들어보기
           </Button>
         </div>
