@@ -4,6 +4,17 @@ import Label from './Label';
 import Button from '@/components/common/Button/Button';
 import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
 
+// API 폰트 이름을 CSS 폰트 이름으로 변환
+const getFontFamily = (apiFont) => {
+  const fontMap = {
+    'Noto Sans': 'Noto Sans KR',
+    'Pretendard': 'Pretendard',
+    '나눔명조': 'Nanum Myeongjo',
+    '나눔손글씨 손편지체': 'Nanum Pen Script',
+  };
+  return fontMap[apiFont] || 'Noto Sans KR';
+};
+
 /**
  * 메시지 카드의 상세 내용을 보여주는 모달 컴포넌트
  * - createPortal을 사용하여 modal-root 노드에 렌더링
@@ -14,11 +25,12 @@ import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
  * @param {string} profileImageURL - 작성자 프로필 이미지 URL
  * @param {string} sender - 작성자 이름
  * @param {string} relationship - 수신자와의 관계 ( Label 컴포넌트에 전달 )
- * @param {string} content - 메시지 본문
+ * @param {string} content - 메시지 본문 (HTML 형식)
+ * @param {string} font - 메시지 폰트
  * @param {string} createdAt - 메시지 생성 일자
  * @return {React.ReactPortal | null} modal-root에 렌더링되는 모달 UI 또는 null
  */
-function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, content, createdAt }) {
+function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, content, font, createdAt }) {
   // createdAt을 디자인과 같은 형식으로 변환
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -72,7 +84,11 @@ function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, con
             <p className={styles.date}>{data}</p>
           </div>
           <div className={styles.contentContainer}>
-            <p className={styles.content}>{content}</p>
+            <div 
+              className={styles.content}
+              style={{ fontFamily: getFontFamily(font) }}
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
             <div className={styles.closeButton}>
               <Button size="small" onClick={onClose}>
                 확인

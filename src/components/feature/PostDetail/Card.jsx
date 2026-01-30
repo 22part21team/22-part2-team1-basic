@@ -4,6 +4,17 @@ import Label from './Label';
 import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
 import styles from './Card.module.css';
 
+// API 폰트 이름을 CSS 폰트 이름으로 변환
+const getFontFamily = (apiFont) => {
+  const fontMap = {
+    'Noto Sans': 'Noto Sans KR',
+    'Pretendard': 'Pretendard',
+    '나눔명조': 'Nanum Myeongjo',
+    '나눔손글씨 손편지체': 'Nanum Pen Script',
+  };
+  return fontMap[apiFont] || 'Noto Sans KR';
+};
+
 /**
  * 생성된 롤링페이퍼 페이지의 개별 메시지 카드 컴포넌트
  * - simple 여부에 따라 추가 버튼 혹은 메시지 출력 모드로 전환
@@ -13,11 +24,12 @@ import styles from './Card.module.css';
  * @param {string} profileImageURL - 작성자 프로필 이미지 URL
  * @param {string} sender - 작성자 이름
  * @param {string} relationship - 수신자와의 관계 ( Label 컴포넌트에 전달 )
- * @param {string} content - 메시지 본문
+ * @param {string} content - 메시지 본문 (HTML 형식)
+ * @param {string} font - 메시지 폰트
  * @param {string} createdAt - 메시지 생성 일자
  * @return {JSX.Element} 메시지 카드 또는 추가 액션 카드 UI
  */
-function Card({ simple = false, profileImageURL, sender, relationship, content, createdAt }) {
+function Card({ simple = false, profileImageURL, sender, relationship, content, font, createdAt }) {
   // createdAt을 디자인과 같은 형식으로 변환
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -75,7 +87,11 @@ function Card({ simple = false, profileImageURL, sender, relationship, content, 
               </div>
             </div>
             <div className={styles.contentContainer}>
-              <p className={styles.content}>{content}</p>
+              <div 
+                className={styles.content}
+                style={{ fontFamily: getFontFamily(font) }}
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
               <p className={styles.date}>{data}</p>
             </div>
           </div>
