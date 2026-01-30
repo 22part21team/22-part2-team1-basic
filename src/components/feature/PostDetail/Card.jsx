@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import AddButton from '@/components/common/AddButton/AddButton';
 import Label from './Label';
+import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
 import styles from './Card.module.css';
 
 /**
@@ -42,7 +43,28 @@ function Card({ simple = false, profileImageURL, sender, relationship, content, 
         <button className={styles.cardButton}>
           <div className={cardStyle}>
             <div className={styles.profile}>
-              <img src={profileImageURL} alt={sender} className={styles.profileImg} />
+              {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL ? (
+                <img src={profileImageURL} alt={sender} className={styles.profileImg} />
+              ) : (
+                <svg
+                  width="56"
+                  height="56"
+                  viewBox="0 0 56 56"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={styles.profileImg}
+                >
+                  <circle cx="28" cy="28" r="28" fill="#E3E3E3" />
+                  <path
+                    d="M28 28C31.3137 28 34 25.3137 34 22C34 18.6863 31.3137 16 28 16C24.6863 16 22 18.6863 22 22C22 25.3137 24.6863 28 28 28Z"
+                    fill="#999999"
+                  />
+                  <path
+                    d="M28 30C21.3726 30 16 35.3726 16 42H40C40 35.3726 34.6274 30 28 30Z"
+                    fill="#999999"
+                  />
+                </svg>
+              )}
               <div className={styles.proflieTextContainer}>
                 <p className={styles.profileText}>
                   From. <span>{sender}</span>

@@ -53,8 +53,9 @@ const PROFILE_IMAGE_OPTIONS = [
   },
 ];
 
-// 기본 프로필 이미지
-const DEFAULT_PROFILE_IMAGE = PROFILE_IMAGE_OPTIONS[0];
+// 프로필 이미지 미선택 시 사용할 기본 URL (Card 컴포넌트에서 이 URL을 감지하여 SVG 아이콘 표시)
+// Rolling API는 실제 HTTP/HTTPS URL만 허용하므로 외부 이미지 사용
+export const DEFAULT_PROFILE_URL = 'https://i.pravatar.cc/1?img=default';
 
 /**
  * 롤링페이퍼 메시지 작성 페이지 컴포넌트
@@ -224,10 +225,8 @@ const MessageCreate = () => {
     setIsSubmitting(true);
 
     try {
-      // 프로필 이미지가 선택되지 않았으면 기본 이미지 사용
-      const finalProfileImageOption = selectedProfileImage || DEFAULT_PROFILE_IMAGE;
-      // API에는 공개 URL 전송 (로컬 URL은 Rolling API 서버가 접근 불가)
-      const finalProfileImageURL = finalProfileImageOption.apiUrl;
+      // 프로필 이미지가 선택되지 않았으면 기본 URL 전송 (Card에서 이 URL을 감지하여 SVG 아이콘 표시)
+      const finalProfileImageURL = selectedProfileImage ? selectedProfileImage.apiUrl : DEFAULT_PROFILE_URL;
 
       // API 요청 데이터 구성
       const requestData = {
@@ -251,6 +250,9 @@ const MessageCreate = () => {
       );
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('API 에러 응답:', errorData);
+        console.error('전송한 데이터:', requestData);
         throw new Error('메시지 전송에 실패했습니다.');
       }
 
