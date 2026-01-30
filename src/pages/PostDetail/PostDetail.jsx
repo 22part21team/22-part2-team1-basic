@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fetchApi } from '@/api/api';
 import PostHeader from '@/components/feature/PostDetail/PostHeader';
 import CardList from '@/components/feature/PostDetail/CardList';
@@ -21,11 +21,14 @@ const BACKGROUND_COLORS = {
  */
 function PostDetail() {
   const { id } = useParams();
-  const [recipient, setRecipient] = useState({});
+  const [recipient, setRecipient] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipientInfo = async () => {
       try {
+        setIsLoading(true);
         const data = await fetchApi(`recipients/${id}`);
         setRecipient(data);
 
@@ -40,6 +43,10 @@ function PostDetail() {
         }
       } catch (error) {
         console.error('롤링페이퍼 정보 조회 오류:', error);
+        alert('롤링페이퍼를 찾을 수 없습니다.');
+        navigate('/list');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -50,7 +57,15 @@ function PostDetail() {
       document.body.style.backgroundColor = '';
       document.body.style.backgroundImage = '';
     };
-  }, [id]);
+  }, [id, navigate]);
+
+  if (isLoading) {
+    return <div className={styles.loading}>로딩 중...</div>;
+  }
+
+  if (!recipient) {
+    return null;
+  }
 
   return (
     <>
