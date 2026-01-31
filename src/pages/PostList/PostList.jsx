@@ -45,7 +45,7 @@ function SlidePaperCard({ patternClass, title = 'To. Sowon', onClick }) {
     <div className={`${styles.slidePaperItem} ${styles[patternClass]}`}
       onClick={onClick}
       role="button"
-      >
+    >
       <p className={styles.slidePaperItemTitle}>{title}</p>
       <p className={styles.slidePaperItemPhotoCount}>
         <ProfileList authorCount={27} />
@@ -64,13 +64,13 @@ function SlidePaperCard({ patternClass, title = 'To. Sowon', onClick }) {
 function PostList() {
 
   const navigate = useNavigate();
-  const handleCreatePost = () => {navigate('/post');}; 
+  const handleCreatePost = () => { navigate('/post'); };
   const handleCardClick = (id) => { navigate(`/post/${id}`); };
 
   const [bestSlideIndex, setBestSlideIndex] = useState(0);
   const [recentSlideIndex, setRecentSlideIndex] = useState(0);
 
-  
+
 
   const bestTotalCards = bestPaperItems.length;
   const bestTotalPages = Math.ceil(bestTotalCards / CARDS_PER_PAGE);

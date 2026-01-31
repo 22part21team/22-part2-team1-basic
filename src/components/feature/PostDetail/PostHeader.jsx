@@ -36,7 +36,7 @@ function PostHeader({ id, recipient }) {
             <EmojiReactions id={id} />
           </div>
           <div className={styles.postShare}>
-            <LinkShare />
+            <LinkShare recipient={recipient} />
           </div>
         </div>
       </div>
