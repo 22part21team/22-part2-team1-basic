@@ -19,7 +19,7 @@
   font-weight: 700;
   line-height: 26px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 6px;
   padding: 8px 16px;
   display: flex;
@@ -29,6 +29,11 @@
 
 .option:hover:not(.selected) {
   background-color: #e9ecef;
+  transform: scale(1.02);
+}
+
+.option:active {
+  transform: scale(0.98);
 }
 
 .option.selected {
@@ -36,4 +41,5 @@
   color: #9935ff;
   border: 2px solid #9935ff;
   padding: 7px 16px;
+  box-shadow: 0 2px 8px rgba(153, 53, 255, 0.15);
 }
