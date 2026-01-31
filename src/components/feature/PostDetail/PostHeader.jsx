@@ -36,6 +36,7 @@ function PostHeader({ id, recipient }) {
             <EmojiReactions id={id} />
           </div>
           <div className={styles.postShare}>
+            {/* 카카오톡 / URL 공유 드롭다운 - recipient.name, recipient.messageCount로 공유 카드 내용 구성 */}
             <LinkShare recipient={recipient} />
           </div>
         </div>
