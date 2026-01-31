@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchApi } from '@/api/api';
 import PostHeader from '@/components/feature/PostDetail/PostHeader';
 import CardList from '@/components/feature/PostDetail/CardList';
+import LoadingModal from '@/components/common/LoadingModal/LoadingModal';
 import styles from './PostDetail.module.css';
 
 const BACKGROUND_COLORS = {
@@ -60,7 +61,7 @@ function PostDetail() {
   }, [id, navigate]);
 
   if (isLoading) {
-    return <div className={styles.loading}>로딩 중...</div>;
+    return <LoadingModal />;
   }
 
   if (!recipient) {

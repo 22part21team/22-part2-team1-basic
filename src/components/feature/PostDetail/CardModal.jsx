@@ -1,15 +1,16 @@
 import { createPortal } from 'react-dom';
-import styles from './CardModal.module.css';
+import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
+import { formatDate } from '@/utils/formatDate';
 import Label from './Label';
 import Button from '@/components/common/Button/Button';
-import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
+import styles from './CardModal.module.css';
 
 // API 폰트 이름을 CSS 폰트 이름으로 변환
 const getFontFamily = (apiFont) => {
   const fontMap = {
     'Noto Sans': 'Noto Sans KR',
-    'Pretendard': 'Pretendard',
-    '나눔명조': 'Nanum Myeongjo',
+    Pretendard: 'Pretendard',
+    나눔명조: 'Nanum Myeongjo',
     '나눔손글씨 손편지체': 'Nanum Pen Script',
   };
   return fontMap[apiFont] || 'Noto Sans KR';
@@ -30,15 +31,16 @@ const getFontFamily = (apiFont) => {
  * @param {string} createdAt - 메시지 생성 일자
  * @return {React.ReactPortal | null} modal-root에 렌더링되는 모달 UI 또는 null
  */
-function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, content, font, createdAt }) {
-  // createdAt을 디자인과 같은 형식으로 변환
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}.${month}.${day}`;
-  }
+function CardModal({
+  isOpen,
+  onClose,
+  profileImageURL,
+  sender,
+  relationship,
+  content,
+  font,
+  createdAt,
+}) {
   const data = createdAt ? formatDate(createdAt) : '';
 
   if (!isOpen) return null;
@@ -84,13 +86,13 @@ function CardModal({ isOpen, onClose, profileImageURL, sender, relationship, con
             <p className={styles.date}>{data}</p>
           </div>
           <div className={styles.contentContainer}>
-            <div 
+            <div
               className={styles.content}
               style={{ fontFamily: getFontFamily(font) }}
               dangerouslySetInnerHTML={{ __html: content }}
             />
             <div className={styles.closeButton}>
-              <Button size="small" onClick={onClose}>
+              <Button size="40" onClick={onClose}>
                 확인
               </Button>
             </div>

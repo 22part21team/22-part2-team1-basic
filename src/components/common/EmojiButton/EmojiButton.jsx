@@ -1,3 +1,4 @@
+import { formatCount } from '@/utils/formatCount';
 import styles from './EmojiButton.module.css';
 
 /**
@@ -12,7 +13,7 @@ function EmojiButton({ emoji, count, onClick }) {
   return (
     <button className={styles.emoji} onClick={onClick}>
       <span>{emoji}</span>
-      <span>{count}</span>
+      <span>{formatCount(count)}</span>
     </button>
   );
 }

@@ -1,0 +1,11 @@
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+.spinnerContainer img {
+  width: 80px;
+}
