@@ -16,7 +16,11 @@
 .cardListContainer {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 113px 24px;
+  box-sizing: content-box;
 }
 
 @media (width <= 1023px) {
