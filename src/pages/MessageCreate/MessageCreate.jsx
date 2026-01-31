@@ -532,7 +532,7 @@ const MessageCreate = () => {
                   •
                 </button>
               </div>
-              <div style={{ fontFamily: font }}>
+              <div style={{ '--editor-font-family': font }}>
                 <EditorContent 
                   editor={editor}
                   className={styles.textarea}
