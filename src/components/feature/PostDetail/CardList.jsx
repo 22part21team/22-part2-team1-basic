@@ -46,12 +46,20 @@ function CardList({ id }) {
     <>
       <ul className={styles.cardList}>
         <li>
-          <Card simple />
+          <Card simple simpleId={id} />
         </li>
         {messages.map((message) => {
-          const { id, profileImageURL, sender, relationship, content, font, createdAt } = message;
+          const {
+            id: messageId,
+            profileImageURL,
+            sender,
+            relationship,
+            content,
+            font,
+            createdAt,
+          } = message;
           return (
-            <li key={id} id={id} onClick={handleClick}>
+            <li key={messageId} id={messageId} onClick={handleClick}>
               <Card
                 profileImageURL={profileImageURL}
                 sender={sender}
