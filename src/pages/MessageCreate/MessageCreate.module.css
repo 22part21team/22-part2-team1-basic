@@ -205,7 +205,7 @@
   background-color: #ffffff;
   border: none;
   outline: none;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: var(--editor-font-family, 'Noto Sans KR', sans-serif);
   box-sizing: border-box;
 }
 
@@ -216,6 +216,7 @@
   outline: none;
   white-space: pre-wrap;
   word-wrap: break-word;
+  font-family: inherit;
 }
 
 .textarea :global(.ProseMirror:focus) {

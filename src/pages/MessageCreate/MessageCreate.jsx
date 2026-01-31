@@ -94,14 +94,15 @@ const MessageCreate = () => {
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML());
     },
+    onFocus: () => {
+      // 에디터에 포커스할 때 이름 검증
+      if (!senderName.trim()) {
+        setNameError('값을 입력해 주세요');
+      }
+    },
     onTransaction: () => {
       // 에디터의 모든 변경사항에 대해 컴포넌트를 리렌더링
       setEditorState((prev) => prev + 1);
-    },
-    editorProps: {
-      attributes: {
-        style: `font-family: ${font}`,
-      },
     },
   });
 
@@ -141,14 +142,6 @@ const MessageCreate = () => {
     fetchRecipientInfo();
   }, [id, navigate]);
 
-  /**
-   * 폰트 변경 시 에디터 스타일 업데이트
-   */
-  useEffect(() => {
-    if (editor) {
-      editor.view.dom.style.fontFamily = font;
-    }
-  }, [font, editor]);
 
   /**
    * 보내는 사람 이름 입력 핸들러
@@ -172,11 +165,22 @@ const MessageCreate = () => {
   };
 
   /**
+   * 이름 필드 검증 헬퍼 함수
+   * 다른 액션 시에도 이름 검증을 수행
+   */
+  const validateName = () => {
+    if (!senderName.trim()) {
+      setNameError('값을 입력해 주세요');
+    }
+  };
+
+  /**
    * 프로필 이미지 선택 핸들러
    *
    * @param {Object} imageOption - 선택된 이미지 옵션 객체
    */
   const handleProfileImageSelect = (imageOption) => {
+    validateName();
     setSelectedProfileImage(imageOption);
   };
 
@@ -227,6 +231,7 @@ const MessageCreate = () => {
    * @param {Event} e - Select change 이벤트
    */
   const handleRelationshipChange = (e) => {
+    validateName();
     setRelationship(e.target.value);
   };
 
@@ -279,6 +284,7 @@ const MessageCreate = () => {
    * @param {Event} e - Select change 이벤트
    */
   const handleFontChange = (e) => {
+    validateName();
     setFont(e.target.value);
   };
 
@@ -545,10 +551,12 @@ const MessageCreate = () => {
                   •
                 </button>
               </div>
-              <EditorContent 
-                editor={editor}
-                className={styles.textarea}
-              />
+              <div style={{ '--editor-font-family': font }}>
+                <EditorContent 
+                  editor={editor}
+                  className={styles.textarea}
+                />
+              </div>
             </div>
           </div>
 
