@@ -145,7 +145,7 @@ const MessageCreate = () => {
    * 폰트 변경 시 에디터 스타일 업데이트
    */
   useEffect(() => {
-    if (editor) {
+    if (editor && editor.view && editor.view.dom) {
       editor.view.dom.style.fontFamily = font;
     }
   }, [font, editor]);
@@ -274,7 +274,7 @@ const MessageCreate = () => {
   };
 
   /**
-   * 폰트 선택 핸들러
+   * 폰트 선택 핸들러 ㅣㅣㅣㅣ
    *
    * @param {Event} e - Select change 이벤트
    */
