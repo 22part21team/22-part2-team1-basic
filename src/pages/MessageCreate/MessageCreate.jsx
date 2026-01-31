@@ -98,11 +98,6 @@ const MessageCreate = () => {
       // 에디터의 모든 변경사항에 대해 컴포넌트를 리렌더링
       setEditorState((prev) => prev + 1);
     },
-    editorProps: {
-      attributes: {
-        style: `font-family: ${font}`,
-      },
-    },
   });
 
   // 관계 옵션
@@ -141,15 +136,6 @@ const MessageCreate = () => {
     fetchRecipientInfo();
   }, [id, navigate]);
 
-  /**
-   * 폰트 변경 시 에디터 스타일 업데이트
-   * 에디터가 완전히 마운트된 경우에만 스타일 업데이트
-   */
-  useEffect(() => {
-    if (editor?.view?.dom) {
-      editor.view.dom.style.fontFamily = font;
-    }
-  }, [font, editor]);
 
   /**
    * 보내는 사람 이름 입력 핸들러
@@ -546,10 +532,12 @@ const MessageCreate = () => {
                   •
                 </button>
               </div>
-              <EditorContent 
-                editor={editor}
-                className={styles.textarea}
-              />
+              <div style={{ fontFamily: font }}>
+                <EditorContent 
+                  editor={editor}
+                  className={styles.textarea}
+                />
+              </div>
             </div>
           </div>
 
