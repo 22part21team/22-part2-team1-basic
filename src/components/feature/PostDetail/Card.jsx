@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
+import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
+import { formatDate } from '@/utils/formatDate';
 import AddButton from '@/components/common/AddButton/AddButton';
 import Label from './Label';
-import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
 import styles from './Card.module.css';
 
 // API 폰트 이름을 CSS 폰트 이름으로 변환
@@ -40,14 +41,6 @@ function Card({
   font,
   createdAt,
 }) {
-  // createdAt을 디자인과 같은 형식으로 변환
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}.${month}.${day}`;
-  }
   const data = createdAt ? formatDate(createdAt) : '';
 
   const cardStyle = simple ? `${styles.card} ${styles.simple}` : `${styles.card}`;
