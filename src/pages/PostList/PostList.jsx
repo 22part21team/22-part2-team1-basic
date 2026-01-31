@@ -14,7 +14,10 @@ import listArrowRight from '@/assets/images/list/list-arrow-right.svg';
  * 인기 롤링 페이퍼와 최근에 생성된 롤링 페이퍼를
  * 가로 슬라이드 형태의 카드 리스트로 보여주며,
  * 좌우 화살표 버튼을 통해 페이지 단위로 이동할 수 있습니다.
- *
+ * 
+ * @param {string} patternClass - 카드 배경에 적용될 패턴 클래스명
+ * @param {string} title - 카드 상단에 표시될 제목 텍스트
+ * @param {Function} onClick - 카드 클릭 시 실행되는 이벤트 핸들러
  * @returns {JSX.Element} 롤링 페이퍼 리스트 페이지 JSX 요소
  */
 
