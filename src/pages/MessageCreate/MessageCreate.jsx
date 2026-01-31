@@ -83,27 +83,30 @@ const MessageCreate = () => {
   const [editorState, setEditorState] = useState(0);
 
   // Tiptap 에디터 초기화
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-      }),
-    ],
-    content: '',
-    onUpdate: ({ editor }) => {
-      setContent(editor.getHTML());
-    },
-    onTransaction: () => {
-      // 에디터의 모든 변경사항에 대해 컴포넌트를 리렌더링
-      setEditorState((prev) => prev + 1);
-    },
-    editorProps: {
-      attributes: {
-        style: `font-family: ${font}`,
+  const editor = useEditor(
+    {
+      extensions: [
+        StarterKit,
+        TextAlign.configure({
+          types: ['heading', 'paragraph'],
+        }),
+      ],
+      content: '',
+      onUpdate: ({ editor }) => {
+        setContent(editor.getHTML());
+      },
+      onTransaction: () => {
+        // 에디터의 모든 변경사항에 대해 컴포넌트를 리렌더링
+        setEditorState((prev) => prev + 1);
+      },
+      editorProps: {
+        attributes: {
+          style: `font-family: ${font}`,
+        },
       },
     },
-  });
+    [font]
+  );
 
   // 관계 옵션
   const relationshipOptions = ['친구', '지인', '동료', '가족'];
@@ -141,14 +144,6 @@ const MessageCreate = () => {
     fetchRecipientInfo();
   }, [id, navigate]);
 
-  /**
-   * 폰트 변경 시 에디터 스타일 업데이트
-   */
-  useEffect(() => {
-    if (editor && editor.view && editor.view.dom) {
-      editor.view.dom.style.fontFamily = font;
-    }
-  }, [font, editor]);
 
   /**
    * 보내는 사람 이름 입력 핸들러
