@@ -20,6 +20,7 @@ import styles from './EmojiReactions.module.css';
 function EmojiReactions({ id }) {
   const [listActive, setListActive] = useState(false);
   const [emojiActive, setEmojiActive] = useState(false);
+  const [emojiPickerActive, setEmojiPickerActive] = useState(false);
   const [reactionData, setReactionData] = useState([]);
   const listRef = useRef(null);
   const emojiRef = useRef(null);
@@ -85,14 +86,18 @@ function EmojiReactions({ id }) {
 
   // 드롭다운 메뉴 오픈 ver 이모지 리스트
   const handleListClick = () => {
-    setEmojiActive(false);
     setListActive(!listActive);
   };
 
   // 드롭다운 메뉴 오픈 ver 이모지 피커
   const handleEmojiClick = () => {
-    setListActive(false);
-    setEmojiActive(!emojiActive);
+    if (!emojiActive) {
+      setEmojiPickerActive(true);
+      setTimeout(() => setEmojiActive(true), 200);
+    } else {
+      setEmojiActive(false);
+      setTimeout(() => setEmojiPickerActive(false), 200);
+    }
   };
 
   return (
@@ -115,42 +120,51 @@ function EmojiReactions({ id }) {
         </ul>
         {/* reaction 개수가 3개 이상일 경우 최대 8개 보여주는 리스트 생성 */}
         {reactionData.length > 3 && (
-          <div className={styles.emojiDetailContainer}>
+          <div className={styles.emojiDetailContainer} ref={listRef}>
             <button className={styles.emojiArrowDown} onClick={handleListClick}>
               <img src={arrowDown} alt="" />
             </button>
             {/* arrowDown 버튼 클릭하면 드롭다운 메뉴 보여주기 */}
-            {listActive && (
-              <ul className={styles.emojiDetailList} ref={listRef}>
-                {reactionData.map((reaction) => {
-                  return (
-                    <li key={reaction.id}>
-                      <EmojiButton
-                        emoji={reaction.emoji}
-                        count={reaction.count}
-                        onClick={() => handleEmojiAdd(reaction.emoji)}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            <ul
+              className={
+                listActive ? `${styles.emojiDetailList} ${styles.active}` : styles.emojiDetailList
+              }
+            >
+              {reactionData.map((reaction) => {
+                return (
+                  <li key={reaction.id}>
+                    <EmojiButton
+                      emoji={reaction.emoji}
+                      count={reaction.count}
+                      onClick={() => handleEmojiAdd(reaction.emoji)}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         )}
       </div>
       <div className={styles.addButtonContainer} ref={emojiRef}>
         <Outlined size="36" className={styles.addButton} onClick={handleEmojiClick}>
-          <img src={emojiIcon} alt="" /> 추가
+          <img src={emojiIcon} alt="" />
+          <span className={styles.addButtonText}> 추가</span>
         </Outlined>
         {/* 추가 버튼 클릭하면 드롭다운 메뉴 보여주기 */}
-        {emojiActive && (
-          <div className={styles.addEmojiContainer}>
+        <div
+          className={
+            emojiActive
+              ? `${styles.emojiPickerContainer} ${styles.active}`
+              : styles.emojiPickerContainer
+          }
+        >
+          {emojiPickerActive && (
             <EmojiPicker
-              className={styles.addEmoji}
+              className={styles.emojiPicker}
               onEmojiClick={(emojiObject) => handleNewEmojiAdd(emojiObject)}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
