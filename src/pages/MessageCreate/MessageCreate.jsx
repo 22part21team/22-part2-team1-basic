@@ -94,6 +94,12 @@ const MessageCreate = () => {
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML());
     },
+    onFocus: () => {
+      // 에디터에 포커스할 때 이름 검증
+      if (!senderName.trim()) {
+        setNameError('값을 입력해 주세요');
+      }
+    },
     onTransaction: () => {
       // 에디터의 모든 변경사항에 대해 컴포넌트를 리렌더링
       setEditorState((prev) => prev + 1);
@@ -159,11 +165,22 @@ const MessageCreate = () => {
   };
 
   /**
+   * 이름 필드 검증 헬퍼 함수
+   * 다른 액션 시에도 이름 검증을 수행
+   */
+  const validateName = () => {
+    if (!senderName.trim()) {
+      setNameError('값을 입력해 주세요');
+    }
+  };
+
+  /**
    * 프로필 이미지 선택 핸들러
    *
    * @param {Object} imageOption - 선택된 이미지 옵션 객체
    */
   const handleProfileImageSelect = (imageOption) => {
+    validateName();
     setSelectedProfileImage(imageOption);
   };
 
@@ -214,6 +231,7 @@ const MessageCreate = () => {
    * @param {Event} e - Select change 이벤트
    */
   const handleRelationshipChange = (e) => {
+    validateName();
     setRelationship(e.target.value);
   };
 
@@ -261,11 +279,12 @@ const MessageCreate = () => {
   };
 
   /**
-   * 폰트 선택 핸들러 ㅣㅣㅣㅣ
+   * 폰트 선택 핸들러
    *
    * @param {Event} e - Select change 이벤트
    */
   const handleFontChange = (e) => {
+    validateName();
     setFont(e.target.value);
   };
 
