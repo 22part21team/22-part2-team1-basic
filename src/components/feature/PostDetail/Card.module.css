@@ -24,8 +24,10 @@
 
 .profileImg {
   width: 56px;
+  height: 56px;
   border-radius: 9999px;
   border: 1px solid var(--color-gray-200);
+  object-fit: cover;
 }
 
 .proflieTextContainer {

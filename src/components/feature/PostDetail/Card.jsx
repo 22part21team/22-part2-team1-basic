@@ -8,8 +8,8 @@ import styles from './Card.module.css';
 const getFontFamily = (apiFont) => {
   const fontMap = {
     'Noto Sans': 'Noto Sans KR',
-    'Pretendard': 'Pretendard',
-    '나눔명조': 'Nanum Myeongjo',
+    Pretendard: 'Pretendard',
+    나눔명조: 'Nanum Myeongjo',
     '나눔손글씨 손편지체': 'Nanum Pen Script',
   };
   return fontMap[apiFont] || 'Noto Sans KR';
@@ -21,6 +21,7 @@ const getFontFamily = (apiFont) => {
  * - 전달받은 작성자 정보, 관계 ( Label ), 메시지 내용 및 날짜를 포맷팅하여 표시
  *
  * @param {boolean} simple - 추가 버튼 모드 활성화 여부 ( 기본값 : false )
+ * @param {number} simpleId - 추가 버튼 모드에서 사용할 롤링페이퍼 id
  * @param {string} profileImageURL - 작성자 프로필 이미지 URL
  * @param {string} sender - 작성자 이름
  * @param {string} relationship - 수신자와의 관계 ( Label 컴포넌트에 전달 )
@@ -29,7 +30,16 @@ const getFontFamily = (apiFont) => {
  * @param {string} createdAt - 메시지 생성 일자
  * @return {JSX.Element} 메시지 카드 또는 추가 액션 카드 UI
  */
-function Card({ simple = false, profileImageURL, sender, relationship, content, font, createdAt }) {
+function Card({
+  simple = false,
+  simpleId,
+  profileImageURL,
+  sender,
+  relationship,
+  content,
+  font,
+  createdAt,
+}) {
   // createdAt을 디자인과 같은 형식으로 변환
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -46,7 +56,7 @@ function Card({ simple = false, profileImageURL, sender, relationship, content, 
     <>
       {simple ? ( // 추가 버튼 모드
         <div className={cardStyle}>
-          <Link to="/post/{id}/message" className={styles.linkButton}>
+          <Link to={`/post/${simpleId}/message`} className={styles.linkButton}>
             <AddButton />
           </Link>
         </div>
@@ -87,7 +97,7 @@ function Card({ simple = false, profileImageURL, sender, relationship, content, 
               </div>
             </div>
             <div className={styles.contentContainer}>
-              <div 
+              <div
                 className={styles.content}
                 style={{ fontFamily: getFontFamily(font) }}
                 dangerouslySetInnerHTML={{ __html: content }}
