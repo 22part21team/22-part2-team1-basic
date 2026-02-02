@@ -353,7 +353,9 @@ const MessageCreate = () => {
   };
 
   // 생성하기 버튼 활성화 조건
-  const isFormValid = senderName.trim() && content.trim() && !nameError;
+  // 에디터의 실제 텍스트 내용을 확인 (HTML 태그 제외)
+  const hasContent = editor?.getText().trim().length > 0;
+  const isFormValid = senderName.trim() && hasContent && !nameError;
 
   if (!recipientInfo) {
     return (
