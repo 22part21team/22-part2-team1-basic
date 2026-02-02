@@ -17,6 +17,7 @@ function AppRouter() {
           <Route index element={<PostCreate />} />
           <Route path=":id">
             <Route index element={<PostDetail />} />
+            <Route path="edit" element={<PostDetail />} />
             <Route path="message" element={<MessageCreate />} />
           </Route>
         </Route>

@@ -7,11 +7,14 @@ import styles from './CardList.module.css';
 
 /**
  * 생성된 롤링페이퍼 페이지의 메시지 카드 리스트 컴포넌트
+ * - 일반 모드 : 롤링페이퍼 추가 버튼 + 롤링페이퍼 5개 데이터 구성으로 시작
+ * - 편집 모드 : 롤링페이퍼 6개 데이터 구성으로 시작
  *
  * @param {number} id - 롤링페이퍼 수신자의 고유 식별 ID
+ * @param {boolean} isEditMode - 편집 모드 활성화 여부
  * @return 추가 버튼 및 롤링페이퍼 메시지 카드 리스트 UI
  */
-function CardList({ id }) {
+function CardList({ id, isEditMode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState({});
   const [messages, setMessages] = useState([]);
@@ -26,7 +29,11 @@ function CardList({ id }) {
     const fetchRecipientInfo = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchApi(`recipients/${id}/messages`, {}, '?limit=5');
+        const data = await fetchApi(
+          `recipients/${id}/messages`,
+          {},
+          isEditMode ? '?limit=6' : '?limit=5'
+        );
         setMessages(data.results);
         setNextPage(data.next);
       } catch (error) {
@@ -37,7 +44,7 @@ function CardList({ id }) {
     };
 
     fetchRecipientInfo();
-  }, [id]);
+  }, [id, isEditMode]);
 
   // 추가 데이터 로드 함수
   const loadMoreMessages = useCallback(async () => {
@@ -137,6 +144,8 @@ function CardList({ id }) {
 
   // 모달 여는 이벤트
   const handleClick = (e) => {
+    if (isEditMode) return;
+
     const clickedId = Number(e.currentTarget.id);
     const clickedMessage = messages.find((message) => message.id === clickedId);
     if (clickedMessage) {
@@ -157,9 +166,11 @@ function CardList({ id }) {
   return (
     <>
       <ul className={styles.cardList}>
-        <li>
-          <Card simple simpleId={id} />
-        </li>
+        {!isEditMode && (
+          <li>
+            <Card simple simpleId={id} />
+          </li>
+        )}
         {messages.map((message) => {
           const {
             id: messageId,
@@ -173,6 +184,7 @@ function CardList({ id }) {
           return (
             <li key={messageId} id={messageId} onClick={handleClick}>
               <Card
+                isEditMode={isEditMode}
                 profileImageURL={profileImageURL}
                 sender={sender}
                 relationship={relationship}

@@ -77,8 +77,9 @@
   margin-top: 16px;
   padding-right: 20px;
   font-size: 18px;
-  font-weight: 400;
   overflow-y: scroll;
+
+  transform: rotate(0.03deg);
 }
 
 .content::-webkit-scrollbar {

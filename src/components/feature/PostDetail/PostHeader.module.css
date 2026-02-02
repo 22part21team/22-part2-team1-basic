@@ -8,6 +8,7 @@
   height: 68px;
   border-bottom: 1px solid #ededed;
   background: #fff;
+  z-index: var(--z-subHeader);
 }
 
 .postHeaderContainer {

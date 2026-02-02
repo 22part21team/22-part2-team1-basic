@@ -23,14 +23,26 @@
   box-sizing: content-box;
 }
 
+.cardListContainer.editMode {
+  padding: 63px 24px;
+}
+
 @media (width <= 1023px) {
   .cardListContainer {
     padding: 93px 24px;
+  }
+
+  .cardListContainer.editMode {
+    padding: 49px 24px 135px;
   }
 }
 
 @media (width <= 767px) {
   .cardListContainer {
     padding: 32px 24px;
+  }
+
+  .cardListContainer.editMode {
+    padding: 24px 24px 38px;
   }
 }
