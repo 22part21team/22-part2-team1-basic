@@ -222,7 +222,7 @@ mobile:   360 ~ 767 px
 tablet:   768 ~ 1023 px
 desktop:  1024 px 이상 ~ 
 */
-@media (max-width: 1200px) {
+@media (max-width: 1248px) {
   .contents {
     max-width: 100%;
   }
