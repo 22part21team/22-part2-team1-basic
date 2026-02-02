@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './LinkShare.module.css';
 import Toast from '@/components/common/Toast/Toast';
-
+import { Outlined } from '@/components/common/Button';
+import iconShare from '@/assets/images/common/icon-share.svg';
 /**
  * 카카오 공유용 기본 이미지 URL
  * - 카카오톡 공유 시 카드 썸네일로 사용됨
@@ -24,6 +25,7 @@ const DEFAULT_SHARE_IMAGE =
 function LinkShare({ recipient }) {
   const [active, setActive] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const containerRef = useRef(null);  // 컴포넌트 외부 클릭 시 메뉴 닫기
 
   // 카카오 JavaScript SDK 초기화에 사용할 앱 키
   // - 카카오 개발자 콘솔(https://developers.kakao.com)에서 애플리케이션 생성 후 발급
@@ -38,6 +40,18 @@ function LinkShare({ recipient }) {
       window.Kakao.init(kakaoKey);
     }
   }, [kakaoKey]);
+
+  // 메뉴 활성화 시, 그 외 화면 클릭 시 메뉴 닫기
+  useEffect(() => {
+    if (!active) return;
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setActive(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [active]);
 
   const handleClick = () => {
     setActive(!active);
@@ -115,13 +129,11 @@ function LinkShare({ recipient }) {
   const linkMenuClass = active ? `${styles.linkMenu} ${styles.active}` : `${styles.linkMenu}`;
 
   return (
-    <div className={styles.linkShareContainer}>
-      <button
-        style={{ width: '36px', height: '32px', border: '1px solid gray' }}
-        onClick={handleClick}
-      >
-        공유
-      </button>
+    <div ref={containerRef} className={styles.linkShareContainer}>
+
+      <Outlined size="36" className={styles.shareButton} onClick={handleClick}>
+        <img src={iconShare} alt="" /> <span className={styles.visuallyHidden}>공유</span>
+      </Outlined>
       <ul className={linkMenuClass}>
         <li>
           <button type="button" className={styles.linkMenuButton} onClick={handleKakaoShareClick}>
