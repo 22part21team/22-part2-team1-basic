@@ -7,20 +7,26 @@
 .editButton {
   width: 100% !important;
   max-width: 92px;
+  font-size: 16px;
   font-weight: 400;
 }
 
 @media (width <= 1023px) {
   .editContainer {
     position: fixed;
-    bottom: 24px;
+    bottom: 10px;
     left: 0;
     width: 100%;
     margin-bottom: 0;
     padding: 0 24px;
+    z-index: var(--z-button);
   }
 
   .editButton {
     max-width: none;
+    height: 56px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
   }
 }

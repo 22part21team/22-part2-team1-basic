@@ -50,8 +50,12 @@
   --color-surface: #f6f8ff;
 
   /* Z-index */
+  --z-button: 50;
+  --z-header: 100;
+  --z-subHeader: 110;
   --z-dropdown: 1000;
   --z-sticky: 1020;
+  --z-toast: 1030;
   --z-modal-backdrop: 1040;
   --z-modal: 1050;
 }
