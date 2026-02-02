@@ -1,3 +1,16 @@
+/* 스크린 리더 전용: 시각적으로 숨기되 읽기는 가능 */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .linkShareContainer {
   position: relative;
 }
@@ -42,4 +55,22 @@
 
 .linkMenu .linkMenuButton:hover {
   background-color: var(--color-gray-100);
+}
+
+
+.shareButton {
+  width: 56px !important;
+}
+
+@media (max-width: 767px) {
+  .shareButton {
+    width: 36px !important;
+    height: 32px !important;
+  }
+
+  .shareButton img {
+    width: 15px;
+    height: 19px;
+    max-width: none;
+  }
 }
