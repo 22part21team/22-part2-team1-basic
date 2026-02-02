@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useMatch, useNavigate, useParams } from 'react-router-dom';
 import { fetchApi } from '@/api/api';
 import PostHeader from '@/components/feature/PostDetail/PostHeader';
 import CardList from '@/components/feature/PostDetail/CardList';
 import LoadingModal from '@/components/common/LoadingModal/LoadingModal';
+import Edit from '@/components/feature/PostDetail/Edit';
 import styles from './PostDetail.module.css';
 
 const BACKGROUND_COLORS = {
@@ -14,9 +15,10 @@ const BACKGROUND_COLORS = {
 };
 
 /**
- * 생성된 롤링페이퍼 페이지 컴포넌트 (Route: /post/{id})
+ * 생성된 롤링페이퍼 페이지 컴포넌트 (Route: /post/{id} 및 /post/{id}/edit)
  * - URL 파라미터 ( id ) 를 통해 수신자가 설정한 배경색 or 이미지로 변경
  * - 전용 헤더 및 메시지 카드 리스트 렌더링
+ * - URL 경로에 '/edit' 포함 여부에 따라 편집 모드 UI를 활성화
  *
  * @return {JSX.Element} PostDetail 페이지 레이아웃
  */
@@ -25,6 +27,11 @@ function PostDetail() {
   const [recipient, setRecipient] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  // 편집 모드 여부 확인
+  const isEditMode = Boolean(useMatch('/post/:id/edit'));
+  const cardListContainerStyle = isEditMode
+    ? `${styles.cardListContainer} ${styles.editMode}`
+    : styles.cardListContainer;
 
   useEffect(() => {
     const fetchRecipientInfo = async () => {
@@ -71,8 +78,9 @@ function PostDetail() {
   return (
     <>
       <PostHeader id={id} recipient={recipient} />
-      <div className={styles.cardListContainer}>
-        <CardList id={id} />
+      <div className={cardListContainerStyle}>
+        {isEditMode && <Edit />}
+        <CardList id={id} isEditMode={isEditMode} />
       </div>
     </>
   );

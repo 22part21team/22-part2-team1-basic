@@ -1,0 +1,26 @@
+.editContainer {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 11px;
+}
+
+.editButton {
+  width: 100% !important;
+  max-width: 92px;
+  font-weight: 400;
+}
+
+@media (width <= 1023px) {
+  .editContainer {
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0 24px;
+  }
+
+  .editButton {
+    max-width: none;
+  }
+}

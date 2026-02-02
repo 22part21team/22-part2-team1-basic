@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
 import { formatDate } from '@/utils/formatDate';
+import { Outlined } from '@/components/common/Button';
 import AddButton from '@/components/common/AddButton/AddButton';
 import Label from './Label';
+import trashIcon from '@/assets/images/common/icon-trashcan.svg';
 import styles from './Card.module.css';
 
 // API 폰트 이름을 CSS 폰트 이름으로 변환
@@ -23,6 +25,7 @@ const getFontFamily = (apiFont) => {
  *
  * @param {boolean} simple - 추가 버튼 모드 활성화 여부 ( 기본값 : false )
  * @param {number} simpleId - 추가 버튼 모드에서 사용할 롤링페이퍼 id
+ * @param {boolean} isEditMode - 편집 모드 활성화 여부
  * @param {string} profileImageURL - 작성자 프로필 이미지 URL
  * @param {string} sender - 작성자 이름
  * @param {string} relationship - 수신자와의 관계 ( Label 컴포넌트에 전달 )
@@ -34,6 +37,7 @@ const getFontFamily = (apiFont) => {
 function Card({
   simple = false,
   simpleId,
+  isEditMode,
   profileImageURL,
   sender,
   relationship,
@@ -80,13 +84,20 @@ function Card({
                   />
                 </svg>
               )}
-              <div className={styles.proflieTextContainer}>
-                <p className={styles.profileText}>
-                  From. <span>{sender}</span>
-                </p>
-                <p className={styles.label}>
-                  <Label relationship={relationship} />
-                </p>
+              <div className={styles.profileContainer}>
+                <div className={styles.proflieTextContainer}>
+                  <p className={styles.profileText}>
+                    From. <span>{sender}</span>
+                  </p>
+                  <p className={styles.label}>
+                    <Label relationship={relationship} />
+                  </p>
+                </div>
+                {isEditMode && (
+                  <Outlined size="Trash">
+                    <img src={trashIcon} alt="" />
+                  </Outlined>
+                )}
               </div>
             </div>
             <div className={styles.contentContainer}>
