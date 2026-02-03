@@ -1,50 +1,44 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { fetchApi } from '@/api/api';
 import Card from './Card';
 import CardModal from './CardModal';
 import Loading from '@/components/common/Loading/Loading';
+import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
 import styles from './CardList.module.css';
 
 /**
  * 생성된 롤링페이퍼 페이지의 메시지 카드 리스트 컴포넌트
  * - 일반 모드 : 롤링페이퍼 추가 버튼 + 롤링페이퍼 5개 데이터 구성으로 시작
  * - 편집 모드 : 롤링페이퍼 6개 데이터 구성으로 시작
+ * - 무한 스크롤을 통한 메시지 추가 로드 처리
  *
  * @param {number} id - 롤링페이퍼 수신자의 고유 식별 ID
  * @param {boolean} isEditMode - 편집 모드 활성화 여부
+ * @param {Array} messages - 렌더링할 메시지 리스트 데이터
+ * @param {Function} setMessages - 메시지 리스트 상태 업데이트 함수
+ * @param {string} nextPage - 다음 페이지 데이터를 가져올 API URL
+ * @param {Function} setNextPage - 다음 페이지 상태 업데이트 함수
+ * @param {boolean} isDeleteMessageOpen - 메시지 삭제 확인 모달 오픈 상태
+ * @param {Function} onMessageDeleteModal - 메시지 삭제 모달 토글 및 ID 저장 함수
+ * @param {Function} onMessageDelete - 메시지 삭제 실행 함수
  * @return 추가 버튼 및 롤링페이퍼 메시지 카드 리스트 UI
  */
-function CardList({ id, isEditMode }) {
+function CardList({
+  id,
+  isEditMode,
+  messages,
+  setMessages,
+  nextPage,
+  setNextPage,
+  isDeleteMessageOpen,
+  onMessageDeleteModal,
+  onMessageDelete,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState({});
-  const [messages, setMessages] = useState([]);
-  const [nextPage, setNextPage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isAddLoading, setIsAddLoading] = useState(false);
 
   const observerRef = useRef(null);
   const loadMoreRef = useRef(null);
-
-  useEffect(() => {
-    const fetchRecipientInfo = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchApi(
-          `recipients/${id}/messages`,
-          {},
-          isEditMode ? '?limit=6' : '?limit=5'
-        );
-        setMessages(data.results);
-        setNextPage(data.next);
-      } catch (error) {
-        console.error('롤링페이퍼 정보 조회 오류:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchRecipientInfo();
-  }, [id, isEditMode]);
 
   // 추가 데이터 로드 함수
   const loadMoreMessages = useCallback(async () => {
@@ -52,6 +46,7 @@ function CardList({ id, isEditMode }) {
 
     try {
       setIsAddLoading(true);
+      // 첫 데이터 로드 후, 리스트 배열에 따라 짝수로 로드
       const res = await fetch(nextPage.replace('limit=5', 'limit=6'));
       const data = await res.json();
 
@@ -66,7 +61,7 @@ function CardList({ id, isEditMode }) {
     } finally {
       setIsAddLoading(false);
     }
-  }, [isAddLoading, nextPage]);
+  }, [isAddLoading, nextPage, setMessages, setNextPage]);
 
   // Intersection Observer 설정
   useEffect(() => {
@@ -107,7 +102,7 @@ function CardList({ id, isEditMode }) {
         추가 데이터 로드 조건:
         - target.isIntersecting: 관찰 대상이 화면에 보임 (threshold 조건 만족)
         - nextPage: 다음 페이지 URL이 존재함
-        - !isLoading: 현재 로딩 중이 아님
+        - !isAddLoading: 현재 로딩 중이 아님
       */
       if (target.isIntersecting && nextPage && !isAddLoading) {
         loadMoreMessages();
@@ -144,8 +139,6 @@ function CardList({ id, isEditMode }) {
 
   // 모달 여는 이벤트
   const handleClick = (e) => {
-    if (isEditMode) return;
-
     const clickedId = Number(e.currentTarget.id);
     const clickedMessage = messages.find((message) => message.id === clickedId);
     if (clickedMessage) {
@@ -158,10 +151,6 @@ function CardList({ id, isEditMode }) {
   const handleClose = () => {
     setIsOpen(false);
   };
-
-  if (isLoading) {
-    return null;
-  }
 
   return (
     <>
@@ -191,6 +180,7 @@ function CardList({ id, isEditMode }) {
                 content={content}
                 font={font}
                 createdAt={createdAt}
+                onMessageDeleteModal={() => onMessageDeleteModal(messageId)}
               />
             </li>
           );
@@ -202,6 +192,15 @@ function CardList({ id, isEditMode }) {
           {isAddLoading && <Loading />}
         </div>
       )}
+      {/* confirm 모달 호출 */}
+      <ConfirmModal
+        isOpen={isDeleteMessageOpen}
+        onClose={onMessageDeleteModal}
+        onConfirm={() => onMessageDelete()}
+      >
+        메시지를 삭제하시겠습니까?
+      </ConfirmModal>
+      {/* 카드 상세보기 모달 */}
       <CardModal isOpen={isOpen} onClose={handleClose} {...selectedMessage} />
     </>
   );

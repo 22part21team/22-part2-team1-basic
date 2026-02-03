@@ -32,6 +32,7 @@ const getFontFamily = (apiFont) => {
  * @param {string} content - 메시지 본문 (HTML 형식)
  * @param {string} font - 메시지 폰트
  * @param {string} createdAt - 메시지 생성 일자
+ * @param {Function} onMessageDeleteModal - 메시지 삭제 확인 모달 호출 함수
  * @return {JSX.Element} 메시지 카드 또는 추가 액션 카드 UI
  */
 function Card({
@@ -44,6 +45,7 @@ function Card({
   content,
   font,
   createdAt,
+  onMessageDeleteModal,
 }) {
   const data = createdAt ? formatDate(createdAt) : '';
 
@@ -59,7 +61,7 @@ function Card({
         </div>
       ) : (
         // 메시지 출력 모드
-        <button className={styles.cardButton}>
+        <div className={styles.cardButton}>
           <div className={cardStyle}>
             <div className={styles.profile}>
               {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL ? (
@@ -93,8 +95,15 @@ function Card({
                     <Label relationship={relationship} />
                   </p>
                 </div>
+                {/* 편집 모드 */}
                 {isEditMode && (
-                  <Outlined size="Trash">
+                  <Outlined
+                    size="Trash"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onMessageDeleteModal();
+                    }}
+                  >
                     <img src={trashIcon} alt="" />
                   </Outlined>
                 )}
@@ -109,7 +118,7 @@ function Card({
               <p className={styles.date}>{data}</p>
             </div>
           </div>
-        </button>
+        </div>
       )}
     </>
   );

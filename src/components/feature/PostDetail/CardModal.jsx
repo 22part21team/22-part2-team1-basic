@@ -41,9 +41,12 @@ function CardModal({
   font,
   createdAt,
 }) {
-  const data = createdAt ? formatDate(createdAt) : '';
-
   if (!isOpen) return null;
+
+  const modalRoot = document.getElementById('modal-root');
+  if (!modalRoot) return null;
+
+  const data = createdAt ? formatDate(createdAt) : '';
 
   return createPortal(
     <div className={styles.overlay} onClick={onClose}>
@@ -100,7 +103,7 @@ function CardModal({
         </div>
       </div>
     </div>,
-    document.getElementById('modal-root')
+    modalRoot
   );
 }
 
