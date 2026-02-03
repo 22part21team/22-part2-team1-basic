@@ -144,8 +144,6 @@ function CardList({ id, isEditMode }) {
 
   // 모달 여는 이벤트
   const handleClick = (e) => {
-    if (isEditMode) return;
-
     const clickedId = Number(e.currentTarget.id);
     const clickedMessage = messages.find((message) => message.id === clickedId);
     if (clickedMessage) {

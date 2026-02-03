@@ -59,7 +59,7 @@ function Card({
         </div>
       ) : (
         // 메시지 출력 모드
-        <button className={styles.cardButton}>
+        <div className={styles.cardButton}>
           <div className={cardStyle}>
             <div className={styles.profile}>
               {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL ? (
@@ -93,6 +93,7 @@ function Card({
                     <Label relationship={relationship} />
                   </p>
                 </div>
+                {/* 편집 모드 */}
                 {isEditMode && (
                   <Outlined size="Trash">
                     <img src={trashIcon} alt="" />
@@ -109,7 +110,7 @@ function Card({
               <p className={styles.date}>{data}</p>
             </div>
           </div>
-        </button>
+        </div>
       )}
     </>
   );

@@ -32,6 +32,8 @@ function PostDetail() {
   const cardListContainerStyle = isEditMode
     ? `${styles.cardListContainer} ${styles.editMode}`
     : styles.cardListContainer;
+  // 삭제 확인
+  const [isDelete, setIsDelete] = useState(false);
 
   useEffect(() => {
     const fetchRecipientInfo = async () => {
@@ -67,6 +69,21 @@ function PostDetail() {
     };
   }, [id, navigate]);
 
+  // 롤링페이퍼 삭제 모달 이벤트
+  const handleDeleteModal = () => {
+    setIsDelete(!isDelete);
+  };
+
+  // 롤링페이퍼 삭제 이벤트
+  const handleDeleteEvent = async () => {
+    try {
+      await fetchApi(`recipients/${id}`, { method: 'DELETE' });
+      navigate('/list');
+    } catch (error) {
+      console.error('삭제 중 오류:', error);
+    }
+  };
+
   if (isLoading) {
     return <LoadingModal />;
   }
@@ -77,9 +94,15 @@ function PostDetail() {
 
   return (
     <>
-      <PostHeader id={id} recipient={recipient} />
+      <PostHeader id={id} recipient={recipient} isEditMode={isEditMode} />
       <div className={cardListContainerStyle}>
-        {isEditMode && <Edit />}
+        {isEditMode && (
+          <Edit
+            isDelete={isDelete}
+            onDeleteModal={handleDeleteModal}
+            onDeleteEvent={handleDeleteEvent}
+          />
+        )}
         <CardList id={id} isEditMode={isEditMode} />
       </div>
     </>
