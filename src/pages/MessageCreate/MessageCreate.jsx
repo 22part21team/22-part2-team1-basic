@@ -6,7 +6,13 @@ import TextAlign from '@tiptap/extension-text-align';
 import TextField from '../../components/common/TextField/TextField';
 import Button from '../../components/common/Button/Button';
 import Toast from '../../components/common/Toast/Toast';
-import { DEFAULT_PROFILE_URL } from '@/constants/profileImage';
+import LoadingModal from '../../components/common/LoadingModal/LoadingModal';
+import { useToast } from '../../hooks/useToast';
+import { useNameValidation } from '../../hooks/useNameValidation';
+import { useApiImages } from '../../hooks/useApiImages';
+import { get, post } from '../../utils/apiClient';
+import { RELATIONSHIP_OPTIONS, FONT_OPTIONS } from '../../constants/form';
+import { API_ENDPOINTS } from '../../constants/api';
 import styles from './MessageCreate.module.css';
 
 /**
@@ -19,9 +25,11 @@ const MessageCreate = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // 롤링페이퍼 ID
 
+  // 커스텀 훅
+  const { toast, showToast } = useToast();
+  const { name: senderName, nameError, handleNameChange, handleNameBlur, validateName } = useNameValidation();
+
   // 폼 상태 관리
-  const [senderName, setSenderName] = useState('');
-  const [nameError, setNameError] = useState('');
   const [selectedProfileImage, setSelectedProfileImage] = useState(null);
   const [relationship, setRelationship] = useState('지인');
   const [content, setContent] = useState('');
@@ -33,9 +41,6 @@ const MessageCreate = () => {
   const [profileImages, setProfileImages] = useState([]);
   const [defaultAvatarUrl, setDefaultAvatarUrl] = useState('');
   const [isLoadingImages, setIsLoadingImages] = useState(true);
-  
-  // 토스트 메시지 상태
-  const [toast, setToast] = useState({ show: false, message: '' });
 
   // 에디터 상태 업데이트를 위한 state
   const [editorState, setEditorState] = useState(0);
@@ -54,9 +59,7 @@ const MessageCreate = () => {
     },
     onFocus: () => {
       // 에디터에 포커스할 때 이름 검증
-      if (!senderName.trim()) {
-        setNameError('값을 입력해 주세요');
-      }
+      validateName();
     },
     onTransaction: () => {
       // 에디터의 모든 변경사항에 대해 컴포넌트를 리렌더링
@@ -64,34 +67,13 @@ const MessageCreate = () => {
     },
   });
 
-  // 관계 옵션
-  const relationshipOptions = ['친구', '지인', '동료', '가족'];
-
-  // 폰트 옵션 (label: 화면 표시용, cssValue: CSS font-family, apiValue: API 전송용)
-  const fontOptions = [
-    { label: 'Noto Sans', cssValue: 'Noto Sans KR', apiValue: 'Noto Sans' },
-    { label: 'Pretendard', cssValue: 'Pretendard', apiValue: 'Pretendard' },
-    { label: '나눔명조', cssValue: 'Nanum Myeongjo', apiValue: '나눔명조' },
-    { label: '나눔손글씨 손편지체', cssValue: 'Nanum Pen Script', apiValue: '나눔손글씨 손편지체' },
-  ];
-
-  /**
-   * 토스트 메시지 표시
-   */
-  const showToast = (message) => {
-    setToast({ show: true, message });
-    setTimeout(() => {
-      setToast({ show: false, message: '' });
-    }, 3000);
-  };
-
   /**
    * 프로필 이미지 목록 조회
    */
   useEffect(() => {
     const fetchProfileImages = async () => {
       try {
-        const response = await fetch('https://rolling-api.vercel.app/profile-images/');
+        const response = await fetch(API_ENDPOINTS.PROFILE_IMAGES);
         
         if (response.ok) {
           const data = await response.json();
@@ -121,6 +103,7 @@ const MessageCreate = () => {
     };
 
     fetchProfileImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -130,37 +113,32 @@ const MessageCreate = () => {
   useEffect(() => {
     const fetchRecipientInfo = async () => {
       try {
-        const response = await fetch(`https://rolling-api.vercel.app/22-1/recipients/${id}/`);
+        const data = await get(`/recipients/${id}/`, '롤링페이퍼 조회');
+        setRecipientInfo(data);
+      } catch (error) {
+        console.error('롤링페이퍼 정보 조회 에러:', error);
 
-        // 성공 응답 처리
-        if (response.ok) {
-          const data = await response.json();
-          setRecipientInfo(data);
-          return;
-        }
-
-        // 에러 응답 처리
-        const status = response.status;
-        let errorData;
-        
-        try {
-          errorData = await response.json();
-        } catch {
-          errorData = {};
-        }
-
-        // 404 에러 - 롤링페이퍼를 찾을 수 없음
-        if (status === 404) {
-          console.error('롤링페이퍼를 찾을 수 없습니다:', { status, errorData });
-          navigate('/list', { 
-            state: { message: '롤링페이퍼를 찾을 수 없습니다.' }
+        // 네트워크 에러 - 에러 페이지로 이동
+        if (error.isNetworkError) {
+          navigate('/error', {
+            state: {
+              type: 'network',
+              message: error.message,
+            },
           });
           return;
         }
 
-        // 400번대 클라이언트 에러
-        if (status >= 400 && status < 500) {
-          console.error('롤링페이퍼 조회 클라이언트 에러:', { status, errorData });
+        // 404 에러 - 목록 페이지로 이동
+        if (error.status === 404) {
+          navigate('/list', { 
+            state: { message: error.message }
+          });
+          return;
+        }
+
+        // 400번대 클라이언트 에러 - 목록 페이지로 이동
+        if (error.status >= 400 && error.status < 500) {
           navigate('/list', {
             state: { message: '롤링페이퍼 조회 중 문제가 발생했습니다.' }
           });
@@ -168,7 +146,7 @@ const MessageCreate = () => {
         }
 
         // 500번대 서버 에러 - 에러 페이지로 이동
-        if (status >= 500) {
+        if (error.status >= 500) {
           navigate('/error', {
             state: {
               type: 'server',
@@ -177,53 +155,12 @@ const MessageCreate = () => {
           });
           return;
         }
-
-      } catch (error) {
-        // 네트워크 에러 - 에러 페이지로 이동
-        console.error('롤링페이퍼 정보 조회 네트워크 에러:', error);
-        navigate('/error', {
-          state: {
-            type: 'network',
-            message: '네트워크 연결을 확인해주세요.',
-          },
-        });
       }
     };
 
     fetchRecipientInfo();
   }, [id, navigate]);
 
-
-  /**
-   * 보내는 사람 이름 입력 핸들러
-   *
-   * @param {Event} e - Input change 이벤트
-   */
-  const handleNameChange = (e) => {
-    setSenderName(e.target.value);
-    if (nameError) {
-      setNameError('');
-    }
-  };
-
-  /**
-   * 보내는 사람 이름 focus out 핸들러
-   */
-  const handleNameBlur = () => {
-    if (!senderName.trim()) {
-      setNameError('값을 입력해 주세요');
-    }
-  };
-
-  /**
-   * 이름 필드 검증 헬퍼 함수
-   * 다른 액션 시에도 이름 검증을 수행
-   */
-  const validateName = () => {
-    if (!senderName.trim()) {
-      setNameError('값을 입력해 주세요');
-    }
-  };
 
   /**
    * 프로필 이미지 선택 핸들러
@@ -288,45 +225,24 @@ const MessageCreate = () => {
 
   /**
    * 에디터 툴바 버튼 핸들러
+   * @param {string} action - 수행할 액션 타입
+   * @param {any} value - 액션에 필요한 값 (선택적)
    */
-  const handleBold = () => {
+  const handleEditorAction = (action, value) => {
     if (!editor) return;
-    editor.chain().focus().toggleBold().run();
-  };
+    
+    const actions = {
+      bold: () => editor.chain().focus().toggleBold().run(),
+      italic: () => editor.chain().focus().toggleItalic().run(),
+      strike: () => editor.chain().focus().toggleStrike().run(),
+      alignLeft: () => editor.chain().focus().setTextAlign('left').run(),
+      alignCenter: () => editor.chain().focus().setTextAlign('center').run(),
+      alignRight: () => editor.chain().focus().setTextAlign('right').run(),
+      orderedList: () => editor.chain().focus().toggleOrderedList().run(),
+      bulletList: () => editor.chain().focus().toggleBulletList().run(),
+    };
 
-  const handleItalic = () => {
-    if (!editor) return;
-    editor.chain().focus().toggleItalic().run();
-  };
-
-  const handleUnderline = () => {
-    if (!editor) return;
-    editor.chain().focus().toggleStrike().run();
-  };
-
-  const handleAlignLeft = () => {
-    if (!editor) return;
-    editor.chain().focus().setTextAlign('left').run();
-  };
-
-  const handleAlignCenter = () => {
-    if (!editor) return;
-    editor.chain().focus().setTextAlign('center').run();
-  };
-
-  const handleAlignRight = () => {
-    if (!editor) return;
-    editor.chain().focus().setTextAlign('right').run();
-  };
-
-  const handleOrderedList = () => {
-    if (!editor) return;
-    editor.chain().focus().toggleOrderedList().run();
-  };
-
-  const handleBulletList = () => {
-    if (!editor) return;
-    editor.chain().focus().toggleBulletList().run();
+    actions[action]?.();
   };
 
   /**
@@ -345,8 +261,7 @@ const MessageCreate = () => {
    */
   const handleSubmit = async () => {
     // 유효성 검사
-    if (!senderName.trim()) {
-      setNameError('값을 입력해 주세요');
+    if (!validateName()) {
       return;
     }
 
@@ -363,7 +278,7 @@ const MessageCreate = () => {
       const finalProfileImageURL = selectedProfileImage || defaultAvatarUrl;
 
       // 선택된 폰트의 API용 값 찾기
-      const selectedFont = fontOptions.find(option => option.cssValue === font);
+      const selectedFont = FONT_OPTIONS.find(option => option.cssValue === font);
       const apiFontValue = selectedFont ? selectedFont.apiValue : 'Noto Sans';
 
       // API 요청 데이터 구성
@@ -376,47 +291,32 @@ const MessageCreate = () => {
       };
 
       // API 호출
-      const response = await fetch(
-        `https://rolling-api.vercel.app/22-1/recipients/${id}/messages/`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
+      await post(`/recipients/${id}/messages/`, requestData, '메시지 전송');
+      
+      // 롤링페이퍼 페이지로 이동
+      navigate(`/post/${id}`);
+    } catch (error) {
+      console.error('메시지 전송 에러:', error);
 
-      // 성공 응답 처리
-      if (response.ok) {
-        // 롤링페이퍼 페이지로 이동
-        navigate(`/post/${id}`);
+      // 네트워크 에러 - 에러 페이지로 이동
+      if (error.isNetworkError) {
+        navigate('/error', {
+          state: {
+            type: 'network',
+            message: error.message,
+          },
+        });
         return;
       }
 
-      // 에러 응답 처리
-      const status = response.status;
-      let errorData;
-      
-      try {
-        errorData = await response.json();
-      } catch {
-        errorData = {};
-      }
-
-      console.error('API 에러 응답:', errorData);
-      console.error('전송한 데이터:', requestData);
-
       // 400번대 클라이언트 에러 - UI에 메시지 표시
-      if (status >= 400 && status < 500) {
-        const errorMessage = errorData.message || getClientErrorMessage(status);
-        showToast(errorMessage);
-        console.error('메시지 전송 클라이언트 에러:', { status, errorData });
+      if (error.status >= 400 && error.status < 500) {
+        showToast(error.message);
         return;
       }
 
       // 500번대 서버 에러 - 에러 페이지로 이동
-      if (status >= 500) {
+      if (error.status >= 500) {
         navigate('/error', {
           state: {
             type: 'server',
@@ -428,34 +328,8 @@ const MessageCreate = () => {
 
       // 기타 에러
       showToast('메시지 전송 중 오류가 발생했습니다.');
-      
-    } catch (error) {
-      // 네트워크 에러 - 에러 페이지로 이동
-      console.error('메시지 전송 네트워크 에러:', error);
-      navigate('/error', {
-        state: {
-          type: 'network',
-          message: '네트워크 연결을 확인해주세요.',
-        },
-      });
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  /**
-   * 클라이언트 에러 메시지 생성
-   */
-  const getClientErrorMessage = (status) => {
-    switch (status) {
-      case 400:
-        return '잘못된 요청입니다. 입력 내용을 확인해주세요.';
-      case 404:
-        return '롤링페이퍼를 찾을 수 없습니다.';
-      case 422:
-        return '입력 형식이 올바르지 않습니다.';
-      default:
-        return '메시지 전송에 실패했습니다.';
     }
   };
 
@@ -465,11 +339,7 @@ const MessageCreate = () => {
   const isFormValid = senderName.trim() && hasContent && !nameError;
 
   if (!recipientInfo) {
-    return (
-      <div className={styles.loadingContainer}>
-        <p>로딩 중...</p>
-      </div>
-    );
+    return <LoadingModal />;
   }
 
   return (
@@ -570,7 +440,7 @@ const MessageCreate = () => {
               onChange={handleRelationshipChange}
               className={styles.select}
             >
-              {relationshipOptions.map((option) => (
+              {RELATIONSHIP_OPTIONS.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
@@ -587,7 +457,7 @@ const MessageCreate = () => {
                 <button 
                   type="button" 
                   className={`${styles.toolbarButton} ${editor?.isActive('bold') ? styles.isActive : ''}`}
-                  onClick={handleBold}
+                  onClick={() => handleEditorAction('bold')}
                   title="Bold"
                 >
                   <strong>B</strong>
@@ -595,7 +465,7 @@ const MessageCreate = () => {
                 <button 
                   type="button" 
                   className={`${styles.toolbarButton} ${editor?.isActive('italic') ? styles.isActive : ''}`}
-                  onClick={handleItalic}
+                  onClick={() => handleEditorAction('italic')}
                   title="Italic"
                 >
                   <em>I</em>
@@ -603,7 +473,7 @@ const MessageCreate = () => {
                 <button 
                   type="button" 
                   className={`${styles.toolbarButton} ${editor?.isActive('strike') ? styles.isActive : ''}`}
-                  onClick={handleUnderline}
+                  onClick={() => handleEditorAction('strike')}
                   title="Strike"
                 >
                   <s>S</s>
@@ -612,7 +482,7 @@ const MessageCreate = () => {
                 <button 
                   type="button" 
                   className={`${styles.toolbarButton} ${editor?.isActive({ textAlign: 'left' }) ? styles.isActive : ''}`}
-                  onClick={handleAlignLeft}
+                  onClick={() => handleEditorAction('alignLeft')}
                   title="왼쪽 정렬"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -625,7 +495,7 @@ const MessageCreate = () => {
                 <button 
                   type="button" 
                   className={`${styles.toolbarButton} ${editor?.isActive({ textAlign: 'center' }) ? styles.isActive : ''}`}
-                  onClick={handleAlignCenter}
+                  onClick={() => handleEditorAction('alignCenter')}
                   title="가운데 정렬"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -638,7 +508,7 @@ const MessageCreate = () => {
                 <button 
                   type="button" 
                   className={`${styles.toolbarButton} ${editor?.isActive({ textAlign: 'right' }) ? styles.isActive : ''}`}
-                  onClick={handleAlignRight}
+                  onClick={() => handleEditorAction('alignRight')}
                   title="오른쪽 정렬"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -652,7 +522,7 @@ const MessageCreate = () => {
                 <button 
                   type="button" 
                   className={`${styles.toolbarButton} ${editor?.isActive('orderedList') ? styles.isActive : ''}`}
-                  onClick={handleOrderedList}
+                  onClick={() => handleEditorAction('orderedList')}
                   title="Ordered List"
                 >
                   1.
@@ -660,7 +530,7 @@ const MessageCreate = () => {
                 <button 
                   type="button" 
                   className={`${styles.toolbarButton} ${editor?.isActive('bulletList') ? styles.isActive : ''}`}
-                  onClick={handleBulletList}
+                  onClick={() => handleEditorAction('bulletList')}
                   title="Bullet List"
                 >
                   •
@@ -680,7 +550,7 @@ const MessageCreate = () => {
               폰트 선택
             </label>
             <select id="font" value={font} onChange={handleFontChange} className={styles.select}>
-              {fontOptions.map((option) => (
+              {FONT_OPTIONS.map((option) => (
                 <option key={option.cssValue} value={option.cssValue} style={{ fontFamily: option.cssValue }}>
                   {option.label}
                 </option>
