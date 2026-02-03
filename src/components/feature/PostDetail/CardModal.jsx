@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
+import { DEFAULT_PROFILE_URL } from '@/constants/profileImage';
 import { formatDate } from '@/utils/formatDate';
 import Label from './Label';
 import Button from '@/components/common/Button/Button';
@@ -52,7 +52,7 @@ function CardModal({
         <div className={styles.cardModal} onClick={(e) => e.stopPropagation()}>
           <div className={styles.profile}>
             <div className={styles.user}>
-              {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL ? (
+              {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL && !profileImageURL.includes('default_avatar') ? (
                 <img src={profileImageURL} alt={sender} className={styles.userImg} />
               ) : (
                 <svg

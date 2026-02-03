@@ -5,59 +5,9 @@ import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
 import TextField from '../../components/common/TextField/TextField';
 import Button from '../../components/common/Button/Button';
+import Toast from '../../components/common/Toast/Toast';
+import { DEFAULT_PROFILE_URL } from '@/constants/profileImage';
 import styles from './MessageCreate.module.css';
-
-// 프로필 이미지 import
-import profileImage1 from '@/assets/images/message/message-profilechoice-01.jpg';
-import profileImage2 from '@/assets/images/message/message-profilechoice-02.jpg';
-import profileImage3 from '@/assets/images/message/message-profilechoice-03.jpg';
-import profileImage4 from '@/assets/images/message/message-profilechoice-04.jpg';
-import profileImage5 from '@/assets/images/message/message-profilechoice-05.jpg';
-import profileImage6 from '@/assets/images/message/message-profilechoice-06.jpg';
-import profileImage7 from '@/assets/images/message/message-profilechoice-07.jpg';
-import profileImage8 from '@/assets/images/message/message-profilechoice-08.jpg';
-
-// 프로필 이미지 옵션
-// displayImage: 화면에 표시할 로컬 이미지
-// apiUrl: API에 전송할 URL (개발: 외부 URL, 배포: 실제 이미지)
-const PROFILE_IMAGE_OPTIONS = [
-  {
-    displayImage: profileImage1,
-    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=1' : profileImage1,
-  },
-  {
-    displayImage: profileImage2,
-    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=2' : profileImage2,
-  },
-  {
-    displayImage: profileImage3,
-    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=3' : profileImage3,
-  },
-  {
-    displayImage: profileImage4,
-    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=4' : profileImage4,
-  },
-  {
-    displayImage: profileImage5,
-    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=5' : profileImage5,
-  },
-  {
-    displayImage: profileImage6,
-    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=6' : profileImage6,
-  },
-  {
-    displayImage: profileImage7,
-    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=7' : profileImage7,
-  },
-  {
-    displayImage: profileImage8,
-    apiUrl: import.meta.env.DEV ? 'https://i.pravatar.cc/200?img=8' : profileImage8,
-  },
-];
-
-// 프로필 이미지 미선택 시 사용할 기본 URL (Card 컴포넌트에서 이 URL을 감지하여 SVG 아이콘 표시)
-// Rolling API는 실제 HTTP/HTTPS URL만 허용하므로 외부 이미지 사용
-export const DEFAULT_PROFILE_URL = 'https://i.pravatar.cc/1?img=default';
 
 /**
  * 롤링페이퍼 메시지 작성 페이지 컴포넌트
@@ -78,6 +28,14 @@ const MessageCreate = () => {
   const [font, setFont] = useState('Noto Sans KR');
   const [recipientInfo, setRecipientInfo] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // 프로필 이미지 목록 상태
+  const [profileImages, setProfileImages] = useState([]);
+  const [defaultAvatarUrl, setDefaultAvatarUrl] = useState('');
+  const [isLoadingImages, setIsLoadingImages] = useState(true);
+  
+  // 토스트 메시지 상태
+  const [toast, setToast] = useState({ show: false, message: '' });
 
   // 에디터 상태 업데이트를 위한 state
   const [editorState, setEditorState] = useState(0);
@@ -118,6 +76,54 @@ const MessageCreate = () => {
   ];
 
   /**
+   * 토스트 메시지 표시
+   */
+  const showToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => {
+      setToast({ show: false, message: '' });
+    }, 3000);
+  };
+
+  /**
+   * 프로필 이미지 목록 조회
+   */
+  useEffect(() => {
+    const fetchProfileImages = async () => {
+      try {
+        const response = await fetch('https://rolling-api.vercel.app/profile-images/');
+        
+        if (response.ok) {
+          const data = await response.json();
+          const allImages = data.imageUrls || [];
+          
+          // 기본 아바타(default_avatar)를 찾아서 별도로 저장
+          const defaultAvatar = allImages.find(url => url.includes('default_avatar'));
+          if (defaultAvatar) {
+            setDefaultAvatarUrl(defaultAvatar);
+          }
+          
+          // 선택 가능한 이미지 목록에서는 기본 아바타 제외
+          const filteredImages = allImages.filter(
+            url => !url.includes('default_avatar')
+          );
+          setProfileImages(filteredImages);
+        } else {
+          console.error('프로필 이미지 로드 실패:', response.status);
+          showToast('프로필 이미지를 불러올 수 없습니다.');
+        }
+      } catch (error) {
+        console.error('프로필 이미지 로드 에러:', error);
+        showToast('프로필 이미지를 불러올 수 없습니다.');
+      } finally {
+        setIsLoadingImages(false);
+      }
+    };
+
+    fetchProfileImages();
+  }, []);
+
+  /**
    * 롤링페이퍼 정보 조회
    * 페이지 로드 시 recipient 정보를 가져옴
    */
@@ -126,16 +132,61 @@ const MessageCreate = () => {
       try {
         const response = await fetch(`https://rolling-api.vercel.app/22-1/recipients/${id}/`);
 
-        if (!response.ok) {
-          throw new Error('롤링페이퍼 정보를 가져올 수 없습니다.');
+        // 성공 응답 처리
+        if (response.ok) {
+          const data = await response.json();
+          setRecipientInfo(data);
+          return;
         }
 
-        const data = await response.json();
-        setRecipientInfo(data);
+        // 에러 응답 처리
+        const status = response.status;
+        let errorData;
+        
+        try {
+          errorData = await response.json();
+        } catch {
+          errorData = {};
+        }
+
+        // 404 에러 - 롤링페이퍼를 찾을 수 없음
+        if (status === 404) {
+          console.error('롤링페이퍼를 찾을 수 없습니다:', { status, errorData });
+          navigate('/list', { 
+            state: { message: '롤링페이퍼를 찾을 수 없습니다.' }
+          });
+          return;
+        }
+
+        // 400번대 클라이언트 에러
+        if (status >= 400 && status < 500) {
+          console.error('롤링페이퍼 조회 클라이언트 에러:', { status, errorData });
+          navigate('/list', {
+            state: { message: '롤링페이퍼 조회 중 문제가 발생했습니다.' }
+          });
+          return;
+        }
+
+        // 500번대 서버 에러 - 에러 페이지로 이동
+        if (status >= 500) {
+          navigate('/error', {
+            state: {
+              type: 'server',
+              message: '서버에 일시적인 문제가 발생했습니다.',
+            },
+          });
+          return;
+        }
+
       } catch (error) {
-        console.error('롤링페이퍼 정보 조회 오류:', error);
-        alert('롤링페이퍼를 찾을 수 없습니다.');
-        navigate('/list');
+        // 네트워크 에러 - 에러 페이지로 이동
+        console.error('롤링페이퍼 정보 조회 네트워크 에러:', error);
+        navigate('/error', {
+          state: {
+            type: 'network',
+            message: '네트워크 연결을 확인해주세요.',
+          },
+        });
       }
     };
 
@@ -177,11 +228,11 @@ const MessageCreate = () => {
   /**
    * 프로필 이미지 선택 핸들러
    *
-   * @param {Object} imageOption - 선택된 이미지 옵션 객체
+   * @param {string} imageUrl - 선택된 이미지 URL
    */
-  const handleProfileImageSelect = (imageOption) => {
+  const handleProfileImageSelect = (imageUrl) => {
     validateName();
-    setSelectedProfileImage(imageOption);
+    setSelectedProfileImage(imageUrl);
   };
 
   /**
@@ -300,15 +351,16 @@ const MessageCreate = () => {
     }
 
     if (!content.trim()) {
-      alert('메시지 내용을 입력해 주세요.');
+      showToast('메시지 내용을 입력해 주세요.');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // 프로필 이미지가 선택되지 않았으면 기본 URL 전송 (Card에서 이 URL을 감지하여 SVG 아이콘 표시)
-      const finalProfileImageURL = selectedProfileImage ? selectedProfileImage.apiUrl : DEFAULT_PROFILE_URL;
+      // 프로필 이미지가 선택되지 않았으면 기본 아바타 URL을 전송
+      // Card 컴포넌트에서 default_avatar URL을 감지하여 SVG 아이콘을 표시
+      const finalProfileImageURL = selectedProfileImage || defaultAvatarUrl;
 
       // 선택된 폰트의 API용 값 찾기
       const selectedFont = fontOptions.find(option => option.cssValue === font);
@@ -335,20 +387,75 @@ const MessageCreate = () => {
         }
       );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('API 에러 응답:', errorData);
-        console.error('전송한 데이터:', requestData);
-        throw new Error('메시지 전송에 실패했습니다.');
+      // 성공 응답 처리
+      if (response.ok) {
+        // 롤링페이퍼 페이지로 이동
+        navigate(`/post/${id}`);
+        return;
       }
 
-      // 롤링페이퍼 페이지로 이동
-      navigate(`/post/${id}`);
+      // 에러 응답 처리
+      const status = response.status;
+      let errorData;
+      
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = {};
+      }
+
+      console.error('API 에러 응답:', errorData);
+      console.error('전송한 데이터:', requestData);
+
+      // 400번대 클라이언트 에러 - UI에 메시지 표시
+      if (status >= 400 && status < 500) {
+        const errorMessage = errorData.message || getClientErrorMessage(status);
+        showToast(errorMessage);
+        console.error('메시지 전송 클라이언트 에러:', { status, errorData });
+        return;
+      }
+
+      // 500번대 서버 에러 - 에러 페이지로 이동
+      if (status >= 500) {
+        navigate('/error', {
+          state: {
+            type: 'server',
+            message: '서버에 일시적인 문제가 발생했습니다.',
+          },
+        });
+        return;
+      }
+
+      // 기타 에러
+      showToast('메시지 전송 중 오류가 발생했습니다.');
+      
     } catch (error) {
-      console.error('메시지 전송 오류:', error);
-      alert('메시지 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
+      // 네트워크 에러 - 에러 페이지로 이동
+      console.error('메시지 전송 네트워크 에러:', error);
+      navigate('/error', {
+        state: {
+          type: 'network',
+          message: '네트워크 연결을 확인해주세요.',
+        },
+      });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  /**
+   * 클라이언트 에러 메시지 생성
+   */
+  const getClientErrorMessage = (status) => {
+    switch (status) {
+      case 400:
+        return '잘못된 요청입니다. 입력 내용을 확인해주세요.';
+      case 404:
+        return '롤링페이퍼를 찾을 수 없습니다.';
+      case 422:
+        return '입력 형식이 올바르지 않습니다.';
+      default:
+        return '메시지 전송에 실패했습니다.';
     }
   };
 
@@ -366,7 +473,9 @@ const MessageCreate = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <>
+      {toast.show && <Toast message={toast.message} />}
+      <div className={styles.container}>
       <div className={styles.content}>
           <TextField
             label="From."
@@ -384,7 +493,7 @@ const MessageCreate = () => {
               <div className={styles.defaultProfileIcon}>
                 {selectedProfileImage ? (
                   <img
-                    src={selectedProfileImage.displayImage}
+                    src={selectedProfileImage}
                     alt="선택된 프로필"
                     className={styles.defaultProfileImage}
                   />
@@ -409,24 +518,28 @@ const MessageCreate = () => {
               </div>
               <div className={styles.profileContent}>
                 <p className={styles.description}>프로필 이미지를 선택해주세요!</p>
-                <div className={styles.profileImageGrid}>
-                  {PROFILE_IMAGE_OPTIONS.map((imageOption, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => handleProfileImageSelect(imageOption)}
-                      className={`${styles.profileImageButton} ${
-                        selectedProfileImage === imageOption ? styles.selected : ''
-                      }`}
-                    >
-                      <img
-                        src={imageOption.displayImage}
-                        alt={`프로필 ${index + 1}`}
-                        className={styles.profileImage}
-                      />
-                    </button>
-                  ))}
-                </div>
+                {isLoadingImages ? (
+                  <p>이미지를 불러오는 중...</p>
+                ) : (
+                  <div className={styles.profileImageGrid}>
+                    {profileImages.map((imageUrl, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => handleProfileImageSelect(imageUrl)}
+                        className={`${styles.profileImageButton} ${
+                          selectedProfileImage === imageUrl ? styles.selected : ''
+                        }`}
+                      >
+                        <img
+                          src={imageUrl}
+                          alt={`프로필 ${index + 1}`}
+                          className={styles.profileImage}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
 
                 {/* 파일 업로드 기능 추가 시 활성화 할 코드 */}
                 {/* 
@@ -581,7 +694,8 @@ const MessageCreate = () => {
             </Button>
           </div>
         </div>
-    </div>
+      </div>
+    </>
   );
 };
 
