@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { DEFAULT_PROFILE_URL } from '@/pages/MessageCreate/MessageCreate';
+import { DEFAULT_PROFILE_URL } from '@/constants/profileImage';
 import { formatDate } from '@/utils/formatDate';
 import { Outlined } from '@/components/common/Button';
 import AddButton from '@/components/common/AddButton/AddButton';
@@ -64,7 +64,7 @@ function Card({
         <div className={styles.cardButton}>
           <div className={cardStyle}>
             <div className={styles.profile}>
-              {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL ? (
+              {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL && !profileImageURL.includes('default_avatar') ? (
                 <img src={profileImageURL} alt={sender} className={styles.profileImg} />
               ) : (
                 <svg

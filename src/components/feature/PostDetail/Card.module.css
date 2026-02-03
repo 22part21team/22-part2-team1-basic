@@ -26,6 +26,10 @@
 .profileImg {
   width: 56px;
   height: 56px;
+}
+
+/* img 태그에만 border와 border-radius 적용 */
+.profileImg[src] {
   border-radius: 9999px;
   border: 1px solid var(--color-gray-200);
   object-fit: cover;
