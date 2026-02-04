@@ -7,6 +7,10 @@ import emojiIcon from '@/assets/images/common/icon-smileplus.svg';
 import arrowDown from '@/assets/images/common/icon-arrow-down.svg';
 import styles from './EmojiReactions.module.css';
 
+const TOP_EMOJI_COUNT = 3;
+const DROPDOWN_EMOJI_COUNT = 8;
+const TOTAL_LIMIT = TOP_EMOJI_COUNT + DROPDOWN_EMOJI_COUNT;
+
 /**
  * 게시글 반응(이모지) 관리 및 표시 컨테이너 컴포넌트
  * 주요 기능 :
@@ -28,7 +32,8 @@ function EmojiReactions({ id }) {
   useEffect(() => {
     const fetchReaction = async () => {
       try {
-        const data = await fetchApi(`recipients/${id}/reactions`);
+        // 화면에 표시될 이모지 데이터 로드 (상위 노출 3개 + 더보기 드롭다운 최대 8개)
+        const data = await fetchApi(`recipients/${id}/reactions`, {}, `?limit=${TOTAL_LIMIT}`);
         setReactionData(data.results);
       } catch (error) {
         console.error('롤링페이퍼 정보 조회 오류:', error);
@@ -57,7 +62,7 @@ function EmojiReactions({ id }) {
   // reaction 정보 다시 불러오는 이벤트
   const handleLoad = useCallback(async () => {
     try {
-      const data = await fetchApi(`recipients/${id}/reactions`);
+      const data = await fetchApi(`recipients/${id}/reactions`, {}, `?limit=${TOTAL_LIMIT}`);
       setReactionData(data.results);
     } catch (error) {
       console.error('롤링페이퍼 정보 조회 오류:', error);
@@ -104,7 +109,7 @@ function EmojiReactions({ id }) {
     <div className={styles.emojiContainer}>
       <div className={styles.emojiButtonContainer}>
         <ul className={styles.emojiButtonList}>
-          {/* reaction 개수가 0개 이상일 경우 최대 3개 출력 */}
+          {/* reaction 개수가 0개 이상일 경우, 가장 반응 많은 이모지를 최대 3개 출력 */}
           {reactionData.length > 0 &&
             reactionData.slice(0, 3).map((reaction) => {
               return (
@@ -118,7 +123,7 @@ function EmojiReactions({ id }) {
               );
             })}
         </ul>
-        {/* reaction 개수가 3개 이상일 경우 최대 8개 보여주는 리스트 생성 */}
+        {/* reaction 개수가 3개 이상일 경우, 가장 반응 많은 이모지 중 최상위 3개를 제외한 나머지 8개를 인기순으로 보여주는 리스트 생성 */}
         {reactionData.length > 3 && (
           <div className={styles.emojiDetailContainer} ref={listRef}>
             <button className={styles.emojiArrowDown} onClick={handleListClick}>
@@ -130,7 +135,8 @@ function EmojiReactions({ id }) {
                 listActive ? `${styles.emojiDetailList} ${styles.active}` : styles.emojiDetailList
               }
             >
-              {reactionData.map((reaction) => {
+              {reactionData.slice(3).map((reaction) => {
+                console.log(reactionData);
                 return (
                   <li key={reaction.id}>
                     <EmojiButton
