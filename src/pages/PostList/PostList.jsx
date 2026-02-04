@@ -12,6 +12,13 @@ import EmojiButton from '@/components/common/EmojiButton/EmojiButton';
 import listArrowLeft from '@/assets/images/list/list-arrow-left.svg';
 import listArrowRight from '@/assets/images/list/list-arrow-right.svg';
 
+const BACKGROUND_COLORS = {
+  beige: 'var(--color-beige-200)',
+  purple: 'var(--color-purple-200)',
+  blue: 'var(--color-blue-200)',
+  green: 'var(--color-green-200)',
+};
+
 /**
  * 롤링 페이퍼 리스트 페이지 컴포넌트
  *
@@ -27,21 +34,9 @@ import listArrowRight from '@/assets/images/list/list-arrow-right.svg';
  */
 
 /**
- * backgroundColor 매핑 (Swagger: purple/blue/green/beige)
- */
-
-const COLOR_MAP = {
-  purple: '#ECD9FF',
-  blue: '#E3F2FF',
-  green: '#E4F8EF',
-  beige: '#FFF4D6',
-};
-
-/**
  * 슬라이드 관련 상수 정의
  * 카드당 표시할 개수, 카드 너비, 카드 간격, 슬라이드 오프셋 계산
  */
-
 const CARDS_PER_PAGE = 4;
 const CARD_WIDTH = 275;
 const GAP = 20;
@@ -61,6 +56,7 @@ function SlidePaperCard({ recipient, onClick }) {
     id,
     name,
     messageCount = 0,
+    recentMessages = [],
     topReactions = [],
     backgroundColor,
     backgroundImageURL,
@@ -72,11 +68,13 @@ function SlidePaperCard({ recipient, onClick }) {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }
-    : { backgroundColor: COLOR_MAP[backgroundColor] ?? COLOR_MAP.beige };
+    : { backgroundColor: BACKGROUND_COLORS[backgroundColor] ?? BACKGROUND_COLORS.beige, };
 
   return (
+
+    //* 카드 배경이 이미지일 경우 hasimageBg 클래스 추가
     <div
-      className={styles.slidePaperItem}
+      className={`${styles.slidePaperItem} ${backgroundImageURL ? styles.hasImageBg : ''}`}
       style={backgroundStyle}
       role="button"
       tabIndex={0}
@@ -88,7 +86,7 @@ function SlidePaperCard({ recipient, onClick }) {
       <p className={styles.slidePaperItemTitle}>To. {name}</p>
 
       <p className={styles.slidePaperItemPhotoCount}>
-        <ProfileList authorCount={messageCount} />
+        <ProfileList recentMessages={recentMessages} authorCount={messageCount} />
       </p>
 
       <p className={styles.slidePaperItemTotal}>
@@ -161,17 +159,17 @@ function PostList() {
   const recentShowRightButton = recentShowArrows && recentSlideIndex < recentTotalPages - 1; // 요구사항 7
   const recentSlideOffsetPx = -recentSlideIndex * SLIDE_OFFSET_PER_PAGE; // 요구사항 6
 
-  const goPrevBest = () => setBestSlideIndex((i) => Math.max(0, i - 1));
-  const goNextBest = () => setBestSlideIndex((i) => Math.min(bestTotalPages - 1, i + 1));
-  const goPrevRecent = () => setRecentSlideIndex((i) => Math.max(0, i - 1));
-  const goNextRecent = () => setRecentSlideIndex((i) => Math.min(recentTotalPages - 1, i + 1));
+  const handlePrevBest = () => setBestSlideIndex((i) => Math.max(0, i - 1));
+  const handleNextBest = () => setBestSlideIndex((i) => Math.min(bestTotalPages - 1, i + 1));
+  const handlePrevRecent = () => setRecentSlideIndex((i) => Math.max(0, i - 1));
+  const handleNextRecent = () => setRecentSlideIndex((i) => Math.min(recentTotalPages - 1, i + 1));
 
   if (status === 'loading') return <div className={styles.contents}>불러오는 중...</div>;
   if (status === 'error') return <div className={styles.contents}>목록을 불러오지 못했어요.</div>;
 
   return (
     <div className={styles.contents}>
-      <div className={`${styles.slidePaper} ${styles.slidePaperBest}`}>
+      <div className={`${styles.slidePaper} ${styles.slidePaperBest} ${styles.dropDown}`}>
         <h2 className={styles.slidePaperTitle}>인기 롤링 페이퍼 🔥</h2>
 
         <div className={styles.slidePaperListHidden}>
@@ -194,7 +192,7 @@ function PostList() {
             <button
               type="button"
               className={styles.slidePaperArrowBtnLeft}
-              onClick={goPrevBest}
+              onClick={handlePrevBest}
               aria-label="이전"
             >
               <img src={listArrowLeft} alt="" />
@@ -205,7 +203,7 @@ function PostList() {
             <button
               type="button"
               className={styles.slidePaperArrowBtnRight}
-              onClick={goNextBest}
+              onClick={handleNextBest}
               aria-label="다음"
             >
               <img src={listArrowRight} alt="" />
@@ -214,7 +212,7 @@ function PostList() {
         </div>
       </div>
 
-      <div className={`${styles.slidePaper} ${styles.slidePaperCurrent}`}>
+      <div className={`${styles.slidePaper} ${styles.slidePaperCurrent} ${styles.dropDown}`}>
         <h2 className={styles.slidePaperTitle}>최근에 만든 롤링 페이퍼 ⭐️</h2>
 
         <div className={styles.slidePaperListHidden}>
@@ -237,7 +235,7 @@ function PostList() {
             <button
               type="button"
               className={styles.slidePaperArrowBtnLeft}
-              onClick={goPrevRecent}
+              onClick={handlePrevRecent}
               aria-label="이전"
             >
               <img src={listArrowLeft} alt="" />
@@ -248,7 +246,7 @@ function PostList() {
             <button
               type="button"
               className={styles.slidePaperArrowBtnRight}
-              onClick={goNextRecent}
+              onClick={handleNextRecent}
               aria-label="다음"
             >
               <img src={listArrowRight} alt="" />
@@ -257,9 +255,9 @@ function PostList() {
         </div>
       </div>
 
-      <div className={styles.btnView}>
+      <div className={`${styles.btnView} ${styles.dropDown}`}>
         <Link to="/post" className={styles.linkButton}>
-        나도 만들어보기
+          나도 만들어보기
         </Link>
       </div>
     </div>
