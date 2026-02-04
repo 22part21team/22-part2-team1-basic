@@ -36,3 +36,64 @@
   width: 100% !important;
   font-weight: 400;
 }
+
+/* 애니메이션 */
+:global(.animated-in) .overlay {
+  animation: fadeIn 0.3s forwards;
+}
+
+:global(.animated-out) .overlay {
+  animation: fadeOut 0.3s forwards;
+}
+
+:global(.animated-in) .confirmContainer {
+  animation: fadeMoveIn 0.3s forwards;
+}
+
+:global(.animated-out) .confirmContainer {
+  animation: fadeMoveOut 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeMoveIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 10px));
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes fadeMoveOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 10px));
+  }
+}

@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import Button, { Outlined } from '../Button';
+import { MountAnimation } from '../MountAnimation/MountAnimation';
 import styles from './ConfirmModal.module.css';
 
 /**
@@ -14,13 +15,11 @@ import styles from './ConfirmModal.module.css';
  * @returns {JSX.Element|null} 삭제 확인창 및 배경 오버레이 UI
  */
 function ConfirmModal({ isOpen, onClose, onConfirm, children }) {
-  if (!isOpen) return null;
-
   const modalRoot = document.getElementById('modal-root');
   if (!modalRoot) return null;
 
   return createPortal(
-    <>
+    <MountAnimation visible={isOpen}>
       <div className={styles.confirmContainer} onClick={(e) => e.stopPropagation()}>
         {children}
         <div className={styles.buttonContainer}>
@@ -33,7 +32,7 @@ function ConfirmModal({ isOpen, onClose, onConfirm, children }) {
         </div>
       </div>
       <div className={styles.overlay} onClick={onClose}></div>
-    </>,
+    </MountAnimation>,
     modalRoot
   );
 }
