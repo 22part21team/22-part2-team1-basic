@@ -1,11 +1,19 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgb(0 0 0 / 60%);
+  z-index: var(--z-modal-backdrop);
+}
+
 .cardModalContainer {
   width: 100%;
   max-width: 600px;
   padding: 0 20px;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: var(--z-modal);
 }
 
 .cardModal {
@@ -17,14 +25,6 @@
   background: #fff;
   box-shadow: 0 2px 12px 0 rgb(0 0 0 / 8%);
   overflow: hidden;
-  z-index: var(--z-modal);
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgb(0 0 0 / 60%);
-  z-index: var(--z-modal-backdrop);
 }
 
 .profile {
@@ -144,6 +144,68 @@
   font-weight: 400;
 }
 
+/* 애니메이션 */
+:global(.animated-in) .overlay {
+  animation: fadeIn 0.3s forwards;
+}
+
+:global(.animated-out) .overlay {
+  animation: fadeOut 0.3s forwards;
+}
+
+:global(.animated-in) .cardModalContainer {
+  animation: fadeMoveIn 0.3s forwards;
+}
+
+:global(.animated-out) .cardModalContainer {
+  animation: fadeMoveOut 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeMoveIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 10px));
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes fadeMoveOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 10px));
+  }
+}
+
+/* 반응형 mobile */
 @media (width <= 767px) {
   .cardModal {
     height: 376px;

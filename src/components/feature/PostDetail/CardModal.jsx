@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom';
 import { DEFAULT_PROFILE_URL } from '@/constants/profileImage';
 import { formatDate } from '@/utils/formatDate';
+import { MountAnimation } from '@/components/common/MountAnimation/MountAnimation';
 import Label from './Label';
 import Button from '@/components/common/Button/Button';
 import styles from './CardModal.module.css';
@@ -41,21 +42,21 @@ function CardModal({
   font,
   createdAt,
 }) {
-  if (!isOpen) return null;
-
   const modalRoot = document.getElementById('modal-root');
   if (!modalRoot) return null;
 
   const data = createdAt ? formatDate(createdAt) : '';
 
   return createPortal(
-    <div className={styles.overlay} onClick={onClose}>
+    <MountAnimation visible={isOpen}>
       <div className={styles.cardModalContainer}>
         {/* 모달 본문 클릭 시 닫히지 않도록 이벤트 전파 방지 */}
         <div className={styles.cardModal} onClick={(e) => e.stopPropagation()}>
           <div className={styles.profile}>
             <div className={styles.user}>
-              {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL && !profileImageURL.includes('default_avatar') ? (
+              {profileImageURL &&
+              profileImageURL !== DEFAULT_PROFILE_URL &&
+              !profileImageURL.includes('default_avatar') ? (
                 <img src={profileImageURL} alt={sender} className={styles.userImg} />
               ) : (
                 <svg
@@ -102,7 +103,8 @@ function CardModal({
           </div>
         </div>
       </div>
-    </div>,
+      <div className={styles.overlay} onClick={onClose}></div>
+    </MountAnimation>,
     modalRoot
   );
 }
