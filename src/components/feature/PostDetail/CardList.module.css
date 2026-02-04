@@ -17,6 +17,15 @@
   height: 80px;
 }
 
+.deleteSender {
+  font-weight: 700;
+}
+
+.deleteMessage {
+  color: var(--color-error);
+  font-weight: 700;
+}
+
 @media (width <= 1023px) {
   .cardList {
     grid-template: 1fr / repeat(2, 1fr);

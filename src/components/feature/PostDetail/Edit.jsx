@@ -20,7 +20,9 @@ function Edit({ isOpen, onRecipientDeleteModal, onRecipientDelete }) {
         </Button>
       </div>
       <ConfirmModal isOpen={isOpen} onClose={onRecipientDeleteModal} onConfirm={onRecipientDelete}>
-        <p>롤링페이퍼를 삭제하시겠습니까?</p>
+        <p>
+          롤링페이퍼를 <span className={styles.deleteMessage}>삭제</span>하시겠습니까?
+        </p>
       </ConfirmModal>
     </>
   );

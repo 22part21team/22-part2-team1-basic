@@ -33,7 +33,8 @@ function PostDetail() {
   // 삭제 관련 state
   const [isDeleteRecipientOpen, setIsDeleteRecipientOpen] = useState(false);
   const [isDeleteMessageOpen, setIsDeleteMessageOpen] = useState(false);
-  const [messageId, setMessageId] = useState(null);
+  const [deleteMessageId, setDeleteMessageId] = useState(null);
+  const [deleteSender, setDeleteSender] = useState(null);
   // 편집 모드 확인 state
   const isEditMode = Boolean(useMatch('/post/:id/edit'));
   const cardListContainerStyle = isEditMode
@@ -97,12 +98,16 @@ function PostDetail() {
     fetchMessageInfo();
   }, [id, isEditMode]);
 
-  // 롤링페이퍼 삭제 이벤트 1 : 모달 토글
+  /**
+   * 롤링페이퍼 삭제 이벤트 1 : 롤링페이퍼 삭제 확인 모달 토글
+   */
   const handleRecipientDeleteModal = () => {
     setIsDeleteRecipientOpen(!isDeleteRecipientOpen);
   };
 
-  // 롤링페이퍼 삭제 이벤트 2 : 모달에서 확인 클릭 시 삭제 실행
+  /**
+   * 롤링페이퍼 삭제 이벤트 2 : 확인 클릭 시, 롤링페이퍼 삭제 실행
+   */
   const handleRecipientDelete = async () => {
     try {
       await fetchApi(`recipients/${id}`, { method: 'DELETE' });
@@ -112,22 +117,32 @@ function PostDetail() {
     }
   };
 
-  // 메시지 삭제 함수 1 : 모달 토글 & 삭제할 메시지 ID 저장
-  const handleMessageDeleteModal = (targetMessageId) => {
+  /**
+   * 메시지 삭제 이벤트 1 : 메시지 삭제 확인 모달 토글 및 메시지 정보 ( ID, 발신자명 ) 저장 함수
+   *
+   * @param {number} [targetMessageId] - 삭제할 메시지의 고유 ID
+   * @param {string} [targetSender] - 삭제할 메시지의 발신자 이름
+   */
+  const handleMessageDeleteModal = (targetMessageId, targetSender) => {
     if (isDeleteMessageOpen) {
       setIsDeleteMessageOpen(false);
-      setMessageId(null);
+      setDeleteMessageId(null);
     } else {
       setIsDeleteMessageOpen(true);
-      setMessageId(targetMessageId);
+      setDeleteMessageId(targetMessageId);
+      setDeleteSender(targetSender);
     }
   };
 
-  // 메시지 삭제 함수 2 : 모달에서 확인 클릭 시 삭제 실행
+  /**
+   * 메시지 삭제 이벤트 2 : 확인 클릭 시, 메시지 삭제 실행
+   */
   const handleMessageDelete = async () => {
     try {
-      await fetchApi(`messages/${messageId}`, { method: 'DELETE' });
-      setMessages((prevMessages) => prevMessages.filter((message) => message.id !== messageId));
+      await fetchApi(`messages/${deleteMessageId}`, { method: 'DELETE' });
+      setMessages((prevMessages) =>
+        prevMessages.filter((message) => message.id !== deleteMessageId)
+      );
       const data = await fetchApi(`recipients/${id}`);
       setRecipient(data);
     } catch (error) {
@@ -138,10 +153,12 @@ function PostDetail() {
     }
   };
 
+  // 로딩 중에는 로딩 화면 출력
   if (isLoading) {
     return <LoadingModal />;
   }
 
+  // 해당 id의 롤링페이퍼 ( recipient ) 가 없으면 빈 화면 출력
   if (!recipient) {
     return null;
   }
@@ -167,6 +184,7 @@ function PostDetail() {
           isDeleteMessageOpen={isDeleteMessageOpen}
           onMessageDeleteModal={handleMessageDeleteModal}
           onMessageDelete={handleMessageDelete}
+          deleteSender={deleteSender}
         />
       </div>
     </>

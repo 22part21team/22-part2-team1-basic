@@ -11,6 +11,11 @@
   font-weight: 400;
 }
 
+.deleteMessage {
+  color: var(--color-error);
+  font-weight: 700;
+}
+
 @media (width <= 1023px) {
   .editContainer {
     position: fixed;

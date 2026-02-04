@@ -20,6 +20,7 @@ import styles from './CardList.module.css';
  * @param {boolean} isDeleteMessageOpen - 메시지 삭제 확인 모달 오픈 상태
  * @param {Function} onMessageDeleteModal - 메시지 삭제 모달 토글 및 ID 저장 함수
  * @param {Function} onMessageDelete - 메시지 삭제 실행 함수
+ * @param {string} deleteSender - 삭제 이벤트 실행 시, 삭제 확인 모달에 표시될 발신자 이름
  * @return 추가 버튼 및 롤링페이퍼 메시지 카드 리스트 UI
  */
 function CardList({
@@ -32,6 +33,7 @@ function CardList({
   isDeleteMessageOpen,
   onMessageDeleteModal,
   onMessageDelete,
+  deleteSender,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState({});
@@ -180,7 +182,7 @@ function CardList({
                 content={content}
                 font={font}
                 createdAt={createdAt}
-                onMessageDeleteModal={() => onMessageDeleteModal(messageId)}
+                onMessageDeleteModal={() => onMessageDeleteModal(messageId, sender)}
               />
             </li>
           );
@@ -198,7 +200,10 @@ function CardList({
         onClose={onMessageDeleteModal}
         onConfirm={() => onMessageDelete()}
       >
-        메시지를 삭제하시겠습니까?
+        <p>
+          <span className={styles.deleteSender}>{deleteSender}</span>님의 메시지를{' '}
+          <span className={styles.deleteMessage}>삭제</span>하시겠습니까?
+        </p>
       </ConfirmModal>
       {/* 카드 상세보기 모달 */}
       <CardModal isOpen={isOpen} onClose={handleClose} {...selectedMessage} />
