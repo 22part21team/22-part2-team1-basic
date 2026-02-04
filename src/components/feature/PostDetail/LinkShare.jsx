@@ -118,6 +118,8 @@ function LinkShare({ recipient }) {
       setShowToast(true);
     } catch (err) {
       console.error('클립보드 복사 실패:', err);
+      setActive(false);
+      alert('URL 복사에 실패했습니다. 주소창에서 URL을 직접 복사해 주세요.');
     }
   };
 
