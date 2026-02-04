@@ -136,7 +136,6 @@ function EmojiReactions({ id }) {
               }
             >
               {reactionData.slice(3).map((reaction) => {
-                console.log(reactionData);
                 return (
                   <li key={reaction.id}>
                     <EmojiButton
