@@ -85,9 +85,9 @@ function SlidePaperCard({ recipient, onClick }) {
     >
       <p className={styles.slidePaperItemTitle}>To. {name}</p>
 
-      <p className={styles.slidePaperItemPhotoCount}>
+      <div className={styles.slidePaperItemPhotoCount}>
         <ProfileList recentMessages={recentMessages} authorCount={messageCount} />
-      </p>
+      </div>
 
       <p className={styles.slidePaperItemTotal}>
         <span>{messageCount}</span>명이 작성했어요!
