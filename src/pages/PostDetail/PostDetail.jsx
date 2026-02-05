@@ -159,14 +159,16 @@ function PostDetail() {
   /**
    * 롤링페이퍼 삭제 실행
    * * '확인' 클릭 시, 서버 API를 호출하여 데이터 삭제
-   * * 성공 시 목록 페이지('/list')로 이동
+   * * 성공 시 목록 페이지('/list')로 이동 후 토스트 알림
    * @throws {NetworkError, 400s, 500s, Other} 토스트 알림
    * @throws {404} 목록 페이지로 이동
    */
   const handleRecipientDelete = async () => {
     try {
       await del(`/recipients/${id}/`, '롤링페이퍼 삭제');
-      navigate('/list');
+      navigate('/list', {
+        state: { message: `${recipient.name}님의 롤링페이퍼가 안전하게 삭제되었습니다.` },
+      });
     } catch (error) {
       console.error('롤링페이퍼 삭제 에러:', error);
       // 네트워크 에러 - 토스트 알림
@@ -176,7 +178,9 @@ function PostDetail() {
       }
       // 404 에러 - 목록 페이지로 이동
       if (error.status === 404) {
-        navigate('/list');
+        navigate('/list', {
+          state: { message: '이미 삭제되었거나 존재하지 않는 페이지입니다.' },
+        });
         return;
       }
       // 400번대 클라이언트 에러 - 토스트 알림
