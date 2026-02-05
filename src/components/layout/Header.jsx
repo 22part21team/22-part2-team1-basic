@@ -14,7 +14,8 @@ const Header = () => {
 
   // / 또는 /list 페이지에서만 버튼 표시
   const showCreateButton = location.pathname === '/' || location.pathname === '/list';
-  const isLocation = location.pathname.startsWith('/post/');
+  // /post 하위 페이지에만 moblieHide 추가
+  const isLocation = location.pathname.startsWith('/post');
   const headerClass = isLocation ? `${styles.header} ${styles.mobileHide}` : `${styles.header}`;
 
   /**

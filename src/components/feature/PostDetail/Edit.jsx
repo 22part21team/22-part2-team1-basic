@@ -14,11 +14,13 @@ import styles from './Edit.module.css';
 function Edit({ isOpen, onRecipientDeleteModal, onRecipientDelete }) {
   return (
     <>
+      {/* 삭제 버튼 컨테이너 */}
       <div className={styles.editContainer}>
         <Button size="40" className={styles.editButton} onClick={onRecipientDeleteModal}>
           삭제하기
         </Button>
       </div>
+      {/* 삭제 확인 모달 */}
       <ConfirmModal isOpen={isOpen} onClose={onRecipientDeleteModal} onConfirm={onRecipientDelete}>
         <p>
           롤링페이퍼를 <span className={styles.deleteMessage}>삭제</span>하시겠습니까?

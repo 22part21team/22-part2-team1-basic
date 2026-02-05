@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import checkIcon from '@/assets/images/common/icon-check.svg';
 import closeIcon from '@/assets/images/common/icon-close.svg';
 import styles from './Toast.module.css';
@@ -14,12 +15,13 @@ const FADE_DURATION_MS = 300;
  * @param {() => void} [props.onClose] - 닫기 버튼 클릭 시 호출되는 콜백
  * @return {JSX.Element} URL 복사 성공 메시지와 닫기 버튼을 포함한 토스트 UI
  */
-function Toast({ onClose }) {
+function Toast({ message, onClose }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const autoCloseTimerRef = useRef(null);
   const exitTimerRef = useRef(null);
   const onCloseRef = useRef(onClose);
+  const modalRoot = document.getElementById('modal-root');
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
@@ -61,18 +63,24 @@ function Toast({ onClose }) {
     .filter(Boolean)
     .join(' ');
 
-  return (
+  return createPortal(
     <div className={containerClass}>
       <div className={styles.toast}>
         <div className={styles.toastText}>
           <img src={checkIcon} alt="" />
-          <p>URL이 복사 되었습니다.</p>
+          <p>{message}</p>
         </div>
-        <button type="button" className={styles.toastCloseButton} onClick={handleClose} aria-label="닫기">
+        <button
+          type="button"
+          className={styles.toastCloseButton}
+          onClick={handleClose}
+          aria-label="닫기"
+        >
           <img src={closeIcon} alt="" />
         </button>
       </div>
-    </div>
+    </div>,
+    modalRoot
   );
 }
 
