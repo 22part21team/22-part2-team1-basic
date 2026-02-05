@@ -9,15 +9,16 @@ import emojiIcon from '@/assets/images/common/icon-smileplus.svg';
 import arrowDown from '@/assets/images/common/icon-arrow-down.svg';
 import styles from './EmojiReactions.module.css';
 
+// ===== 불러올 이모지 리액션 개수 =====
 const TOP_EMOJI_COUNT = 3;
 const DROPDOWN_EMOJI_COUNT = 8;
 const TOTAL_LIMIT = TOP_EMOJI_COUNT + DROPDOWN_EMOJI_COUNT;
 
 /**
- * 게시글 반응(이모지) 관리 및 표시 컨테이너 컴포넌트
+ * 게시글 이모지 리액션 관리 및 표시 컨테이너 컴포넌트
  * 주요 기능 :
  * - 수신자 ID 기반 서버의 이모지 데이터 실시간 동기화
- * - 상위 3개 주요 반응 표시 및 상위 8개 반응 드롭다운 노출
+ * - 가장 많이 받은 이모지 리액션 표시 및 나머지 리액션 목록 드롭다운으로 표시 ( 최대 표시 개수 : DROPDOWN_EMOJI_COUNT )
  * - 이모지 피커 및 기존 이모지 버튼 클릭 시 이모지 반응 추가
  *
  * @param {number} id - 롤링페이퍼 수신자의 고유 식별 ID
@@ -38,7 +39,9 @@ function EmojiReactions({ id }) {
 
   /**
    * Reaction 조회 이벤트
-   * * 상위 이모지 3개와 더보기용 이모지 8개를 로드하여 상태에 저장
+   * * 상위 이모지와 더보기용 이모지를 로드하여 상태에 저장
+   * * 상위 이모지 최대 개수 : TOP_EMOJI_COUNT
+   * * 더보기용 이모지 최대 개수 : DROPDOWN_EMOJI_COUNT
    * @throws {Other} 토스트 알림
    */
   const handleReactionReload = useCallback(async () => {

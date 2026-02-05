@@ -6,7 +6,11 @@ import Label from './Label';
 import Button from '@/components/common/Button/Button';
 import styles from './CardModal.module.css';
 
-// API 폰트 이름을 CSS 폰트 이름으로 변환
+/**
+ * API로부터 전달받은 폰트 이름을 CSS 적용 가능한 이름으로 변환
+ * @param {string} apiFont - API 데이터의 폰트명
+ * @returns {string} 실제 CSS 폰트 패밀리명
+ */
 const getFontFamily = (apiFont) => {
   const fontMap = {
     'Noto Sans': 'Noto Sans KR',
@@ -42,22 +46,28 @@ function CardModal({
   font,
   createdAt,
 }) {
+  // ===== 포탈 타겟 설정 =====
   const modalRoot = document.getElementById('modal-root');
   if (!modalRoot) return null;
-
-  const data = createdAt ? formatDate(createdAt) : '';
+  // ===== 날짜 포매팅 =====
+  const formattedDate = createdAt ? formatDate(createdAt) : '';
 
   return createPortal(
     <MountAnimation visible={isOpen}>
       <div className={styles.cardModalContainer}>
-        {/* 모달 본문 클릭 시 닫히지 않도록 이벤트 전파 방지 */}
+        {/* 모달 본문 : 클릭 시 닫히지 않도록 이벤트 전파 방지 */}
         <div className={styles.cardModal} onClick={(e) => e.stopPropagation()}>
+          {/* 상단 : 프로필 정보 및 작성일 영역 */}
           <div className={styles.profile}>
             <div className={styles.user}>
               {profileImageURL &&
               profileImageURL !== DEFAULT_PROFILE_URL &&
               !profileImageURL.includes('default_avatar') ? (
-                <img src={profileImageURL} alt={sender} className={styles.userImg} />
+                <img
+                  src={profileImageURL}
+                  alt={`${sender}님의 프로필`}
+                  className={styles.userImg}
+                />
               ) : (
                 <svg
                   width="56"
@@ -87,8 +97,9 @@ function CardModal({
                 </p>
               </div>
             </div>
-            <p className={styles.date}>{data}</p>
+            <p className={styles.date}>{formattedDate}</p>
           </div>
+          {/* 하단 : 스크롤 가능한 메시지 본문 영역 */}
           <div className={styles.contentContainer}>
             <div
               className={styles.content}
@@ -103,6 +114,7 @@ function CardModal({
           </div>
         </div>
       </div>
+      {/* 배경 레이어 : 클릭 시 모달 닫힘 */}
       <div className={styles.overlay} onClick={onClose}></div>
     </MountAnimation>,
     modalRoot

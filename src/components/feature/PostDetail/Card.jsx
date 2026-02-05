@@ -7,7 +7,11 @@ import Label from './Label';
 import trashIcon from '@/assets/images/common/icon-trashcan.svg';
 import styles from './Card.module.css';
 
-// API 폰트 이름을 CSS 폰트 이름으로 변환
+/**
+ * API로부터 전달받은 폰트 이름을 CSS 적용 가능한 이름으로 변환
+ * @param {string} apiFont - API 데이터의 폰트명
+ * @returns {string} 실제 CSS 폰트 패밀리명
+ */
 const getFontFamily = (apiFont) => {
   const fontMap = {
     'Noto Sans': 'Noto Sans KR',
@@ -47,25 +51,34 @@ function Card({
   createdAt,
   onMessageDeleteModal,
 }) {
-  const data = createdAt ? formatDate(createdAt) : '';
-
+  // ===== 날짜 포매팅 =====
+  const formattedDate = createdAt ? formatDate(createdAt) : '';
+  // ===== 스타일 설정 =====
   const cardStyle = simple ? `${styles.card} ${styles.simple}` : `${styles.card}`;
 
   return (
     <>
-      {simple ? ( // 추가 버튼 모드
+      {simple ? (
+        /* ===== 추가 버튼 모드 (새 메시지 작성 링크) ===== */
         <div className={cardStyle}>
           <Link to={`/post/${simpleId}/message`} className={styles.linkButton}>
             <AddButton />
           </Link>
         </div>
       ) : (
-        // 메시지 출력 모드
+        /* ===== 메시지 출력 모드 ===== */
         <div className={styles.cardButton}>
           <div className={cardStyle}>
+            {/* 상단: 프로필 정보 및 삭제 버튼 영역 */}
             <div className={styles.profile}>
-              {profileImageURL && profileImageURL !== DEFAULT_PROFILE_URL && !profileImageURL.includes('default_avatar') ? (
-                <img src={profileImageURL} alt={sender} className={styles.profileImg} />
+              {profileImageURL &&
+              profileImageURL !== DEFAULT_PROFILE_URL &&
+              !profileImageURL.includes('default_avatar') ? (
+                <img
+                  src={profileImageURL}
+                  alt={`${sender}님의 프로필`}
+                  className={styles.profileImg}
+                />
               ) : (
                 <svg
                   width="56"
@@ -95,27 +108,28 @@ function Card({
                     <Label relationship={relationship} />
                   </p>
                 </div>
-                {/* 편집 모드 */}
+                {/* 편집 모드 시 삭제 아이콘 노출 */}
                 {isEditMode && (
                   <Outlined
                     size="Trash"
                     onClick={(e) => {
-                      e.stopPropagation();
+                      e.stopPropagation(); // 카드 클릭 이벤트(모달 오픈) 전파 방지
                       onMessageDeleteModal();
                     }}
                   >
-                    <img src={trashIcon} alt="" />
+                    <img src={trashIcon} alt="메시지 삭제" />
                   </Outlined>
                 )}
               </div>
             </div>
+            {/* 하단: 메시지 본문 및 작성일 영역 */}
             <div className={styles.contentContainer}>
               <div
                 className={styles.content}
                 style={{ fontFamily: getFontFamily(font) }}
                 dangerouslySetInnerHTML={{ __html: content }}
               />
-              <p className={styles.date}>{data}</p>
+              <p className={styles.date}>{formattedDate}</p>
             </div>
           </div>
         </div>

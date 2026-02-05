@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import styles from './LinkShare.module.css';
+import { useToast } from '@/hooks/useToast';
 import Toast from '@/components/common/Toast/Toast';
 import { Outlined } from '@/components/common/Button';
 import iconShare from '@/assets/images/common/icon-share.svg';
+import styles from './LinkShare.module.css';
+
 /**
  * 카카오 공유용 기본 이미지 URL
  * - 카카오톡 공유 시 카드 썸네일로 사용됨
@@ -23,18 +25,24 @@ const DEFAULT_SHARE_IMAGE =
  * @return {JSX.Element} 공유 버튼과 드롭다운 메뉴 ( 카카오톡, URL ) 리스트
  */
 function LinkShare({ recipient }) {
+  // ===== 커스텀 훅 =====
+  const { toast, showToast } = useToast();
+  // ===== UI 제어 State =====
   const [active, setActive] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const containerRef = useRef(null); // 컴포넌트 외부 클릭 시 메뉴 닫기
-
+  // ===== DOM 참조 (외부 클릭 감지용) =====
+  const containerRef = useRef(null);
+  // ===== 외부 라이브러리 =====
   // 카카오 JavaScript SDK 초기화에 사용할 앱 키
   // - 카카오 개발자 콘솔(https://developers.kakao.com)에서 애플리케이션 생성 후 발급
   // - .env.local에 VITE_KAKAO_JAVASCRIPT_KEY=발급받은키 형태로 설정
   const kakaoKey = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
 
-  // 카카오 SDK 초기화 effect
-  // - index.html에 로드된 카카오 스크립트(window.Kakao)가 준비된 후 실행
-  // - isInitialized() 체크로 중복 초기화 방지 (SDK 권장사항)
+  /**
+   * 카카오 SDK 초기화 effect
+   * * index.html에 로드된 카카오 스크립트(window.Kakao)가 준비된 후 실행
+   * * isInitialized() 체크로 중복 초기화 방지 (SDK 권장사항)
+   * @param {Object} emojiObject - 전송할 이모지 정보 객체
+   */
   useEffect(() => {
     if (
       kakaoKey &&
@@ -46,7 +54,9 @@ function LinkShare({ recipient }) {
     }
   }, [kakaoKey]);
 
-  // 메뉴 활성화 시, 그 외 화면 클릭 시 메뉴 닫기
+  /**
+   * 드롭다운 외부 영역 클릭 시 메뉴 닫기 처리
+   */
   useEffect(() => {
     if (!active) return;
     const handleClickOutside = (e) => {
@@ -117,31 +127,33 @@ function LinkShare({ recipient }) {
     }
   };
 
+  /**
+   * URL 공유 실행 핸들러 (클립보드 복사)
+   */
   const handleUrlShareClick = async () => {
     const url = window.location.href;
     try {
       await navigator.clipboard.writeText(url);
       setActive(false);
-      setShowToast(true);
-    } catch (err) {
-      console.error('클립보드 복사 실패:', err);
+      showToast('URL이 복사 되었습니다.');
+    } catch (error) {
+      console.error('클립보드 복사 실패:', error);
+      showToast('URL 복사에 실패했습니다. 주소창에서 URL을 직접 복사해 주세요.');
       setActive(false);
-      alert('URL 복사에 실패했습니다. 주소창에서 URL을 직접 복사해 주세요.');
     }
   };
 
-  const handleCloseToast = () => {
-    setShowToast(false);
-  };
-
+  // ===== 스타일 설정 =====
   // active : true 드롭다운 메뉴 활성화 / false 드롭다운 메뉴 비활성화
   const linkMenuClass = active ? `${styles.linkMenu} ${styles.active}` : `${styles.linkMenu}`;
 
   return (
     <div ref={containerRef} className={styles.linkShareContainer}>
+      {/* 공유 버튼 (Trigger) */}
       <Outlined size="36" className={styles.shareButton} onClick={handleClick}>
         <img src={iconShare} alt="" /> <span className={styles.visuallyHidden}>공유</span>
       </Outlined>
+      {/* 공유 옵션 드롭다운 메뉴 */}
       <ul className={linkMenuClass}>
         <li>
           <button type="button" className={styles.linkMenuButton} onClick={handleKakaoShareClick}>
@@ -154,7 +166,8 @@ function LinkShare({ recipient }) {
           </button>
         </li>
       </ul>
-      {showToast && <Toast message={'URL이 복사 되었습니다.'} onClose={handleCloseToast} />}
+      {/* 복사 성공 알림 */}
+      {toast.show && <Toast message={toast.message} />}
     </div>
   );
 }

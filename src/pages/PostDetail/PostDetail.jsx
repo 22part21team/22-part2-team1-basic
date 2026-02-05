@@ -9,6 +9,7 @@ import Edit from '@/components/feature/PostDetail/Edit';
 import Toast from '@/components/common/Toast/Toast';
 import styles from './PostDetail.module.css';
 
+// ===== 백그라운드 컬러 매핑 설정 =====
 const BACKGROUND_COLORS = {
   beige: 'var(--color-beige-200)',
   purple: 'var(--color-purple-200)',
