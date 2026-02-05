@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
+import { Outlined } from '@/components/common/Button';
 import ProfileList from '@/components/common/ProfileList/ProfileList';
 import EmojiReactions from './EmojiReactions';
 import LinkShare from './LinkShare';
+import homeIcon from '@/assets/images/common/icon-home.svg';
 import styles from './PostHeader.module.css';
 
 /**
@@ -26,9 +28,16 @@ function PostHeader({ id, recipient, isEditMode }) {
   return (
     <div className={styles.postHeader}>
       <div className={styles.postHeaderContainer}>
-        <h2 className={styles.h2Title}>
-          <Link to={isEditMode ? `/post/${id}/` : `/post/${id}/edit/`}>To. {name}</Link>
-        </h2>
+        <div className={styles.postHeaderTitle}>
+          <h2 className={styles.h2Title}>
+            <Link to={isEditMode ? `/post/${id}/` : `/post/${id}/edit/`}>To. {name}</Link>
+          </h2>
+          <Outlined size="Trash" className={styles.mobileHomeIcon}>
+            <Link to="/">
+              <img src={homeIcon} alt="" />
+            </Link>
+          </Outlined>
+        </div>
         <div className={styles.postHeaderActions}>
           <div className={styles.postInfo}>
             <ProfileList recentMessages={recentMessages} authorCount={messageCount} />
