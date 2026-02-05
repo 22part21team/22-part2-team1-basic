@@ -14,7 +14,7 @@ const FADE_DURATION_MS = 300;
  * @param {() => void} [props.onClose] - 닫기 버튼 클릭 시 호출되는 콜백
  * @return {JSX.Element} URL 복사 성공 메시지와 닫기 버튼을 포함한 토스트 UI
  */
-function Toast({ onClose }) {
+function Toast({ message, onClose }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const autoCloseTimerRef = useRef(null);
@@ -66,9 +66,14 @@ function Toast({ onClose }) {
       <div className={styles.toast}>
         <div className={styles.toastText}>
           <img src={checkIcon} alt="" />
-          <p>URL이 복사 되었습니다.</p>
+          <p>{message}</p>
         </div>
-        <button type="button" className={styles.toastCloseButton} onClick={handleClose} aria-label="닫기">
+        <button
+          type="button"
+          className={styles.toastCloseButton}
+          onClick={handleClose}
+          aria-label="닫기"
+        >
           <img src={closeIcon} alt="" />
         </button>
       </div>

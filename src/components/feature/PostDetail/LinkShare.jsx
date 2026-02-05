@@ -25,7 +25,7 @@ const DEFAULT_SHARE_IMAGE =
 function LinkShare({ recipient }) {
   const [active, setActive] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const containerRef = useRef(null);  // 컴포넌트 외부 클릭 시 메뉴 닫기
+  const containerRef = useRef(null); // 컴포넌트 외부 클릭 시 메뉴 닫기
 
   // 카카오 JavaScript SDK 초기화에 사용할 앱 키
   // - 카카오 개발자 콘솔(https://developers.kakao.com)에서 애플리케이션 생성 후 발급
@@ -36,7 +36,12 @@ function LinkShare({ recipient }) {
   // - index.html에 로드된 카카오 스크립트(window.Kakao)가 준비된 후 실행
   // - isInitialized() 체크로 중복 초기화 방지 (SDK 권장사항)
   useEffect(() => {
-    if (kakaoKey && typeof window !== 'undefined' && window.Kakao && !window.Kakao.isInitialized()) {
+    if (
+      kakaoKey &&
+      typeof window !== 'undefined' &&
+      window.Kakao &&
+      !window.Kakao.isInitialized()
+    ) {
       window.Kakao.init(kakaoKey);
     }
   }, [kakaoKey]);
@@ -65,7 +70,9 @@ function LinkShare({ recipient }) {
   const handleKakaoShareClick = () => {
     // Share API 미로드 시: SDK 스크립트 로드 실패 또는 앱 키 미설정
     if (!window.Kakao?.Share) {
-      alert('카카오톡 공유를 사용하려면 카카오 개발자 콘솔에서 JavaScript 키를 발급받아 .env.local에 VITE_KAKAO_JAVASCRIPT_KEY를 설정해주세요.');
+      alert(
+        '카카오톡 공유를 사용하려면 카카오 개발자 콘솔에서 JavaScript 키를 발급받아 .env.local에 VITE_KAKAO_JAVASCRIPT_KEY를 설정해주세요.'
+      );
       setActive(false);
       return;
     }
@@ -132,7 +139,6 @@ function LinkShare({ recipient }) {
 
   return (
     <div ref={containerRef} className={styles.linkShareContainer}>
-
       <Outlined size="36" className={styles.shareButton} onClick={handleClick}>
         <img src={iconShare} alt="" /> <span className={styles.visuallyHidden}>공유</span>
       </Outlined>
@@ -148,7 +154,7 @@ function LinkShare({ recipient }) {
           </button>
         </li>
       </ul>
-      {showToast && <Toast onClose={handleCloseToast} />}
+      {showToast && <Toast message={'URL이 복사 되었습니다.'} onClose={handleCloseToast} />}
     </div>
   );
 }
