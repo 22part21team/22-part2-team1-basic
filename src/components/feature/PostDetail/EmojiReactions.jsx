@@ -33,6 +33,8 @@ function EmojiReactions({ id }) {
   const [listActive, setListActive] = useState(false);
   const [emojiActive, setEmojiActive] = useState(false);
   const [emojiPickerActive, setEmojiPickerActive] = useState(false);
+  // ===== 이모지 리액션 중복 클릭 방지 State =====
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // ===== DOM 참조 (외부 클릭 감지용) =====
   const listRef = useRef(null);
   const emojiRef = useRef(null);
@@ -58,7 +60,6 @@ function EmojiReactions({ id }) {
    * 이모지 리액션 데이터 초기 로드
    */
   useEffect(() => {
-    // eslint-disable-next-line
     handleReactionReload();
   }, [handleReactionReload]);
 
@@ -66,10 +67,13 @@ function EmojiReactions({ id }) {
    * 이모지 리액션 추가 이벤트
    * * 클릭 시 서버 API로 이모지 리액션을 전송
    * @param {string} emoji - 전송할 이모지 문자열
-   * @throws {Other} 토스트 알림
+   * @throws {429, Other} 토스트 알림
    */
   const handleEmojiAdd = async (emoji) => {
+    if (isSubmitting) return;
+
     try {
+      setIsSubmitting(true);
       const emojiData = {
         emoji,
         type: 'increase',
@@ -78,7 +82,14 @@ function EmojiReactions({ id }) {
       await handleReactionReload();
     } catch (error) {
       console.error('리액션 전송 오류:', error);
+      // 429 에러 - 토스트 알림
+      if (error.status === 429) {
+        showToast('천천히 눌러주세요! 잠시 후 다시 시도할 수 있습니다.');
+        return;
+      }
       showToast('리액션 전송에 실패했습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -141,13 +152,14 @@ function EmojiReactions({ id }) {
           <ul className={styles.emojiButtonList}>
             {/* reaction 개수가 0개 이상일 경우, 가장 반응 많은 이모지를 최대 3개 출력 */}
             {reactionData.length > 0 &&
-              reactionData.slice(0, 3).map((reaction) => {
+              reactionData.slice(0, TOP_EMOJI_COUNT).map((reaction) => {
                 return (
                   <li key={reaction.id}>
                     <EmojiButton
                       emoji={reaction.emoji}
                       count={reaction.count}
                       onClick={() => handleEmojiAdd(reaction.emoji)}
+                      disabled={isSubmitting}
                     />
                   </li>
                 );
@@ -172,6 +184,7 @@ function EmojiReactions({ id }) {
                         emoji={reaction.emoji}
                         count={reaction.count}
                         onClick={() => handleEmojiAdd(reaction.emoji)}
+                        disabled={isSubmitting}
                       />
                     </li>
                   );
