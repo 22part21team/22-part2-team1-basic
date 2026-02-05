@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import checkIcon from '@/assets/images/common/icon-check.svg';
 import closeIcon from '@/assets/images/common/icon-close.svg';
 import styles from './Toast.module.css';
@@ -20,6 +21,7 @@ function Toast({ message, onClose }) {
   const autoCloseTimerRef = useRef(null);
   const exitTimerRef = useRef(null);
   const onCloseRef = useRef(onClose);
+  const modalRoot = document.getElementById('modal-root');
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
@@ -61,7 +63,7 @@ function Toast({ message, onClose }) {
     .filter(Boolean)
     .join(' ');
 
-  return (
+  return createPortal(
     <div className={containerClass}>
       <div className={styles.toast}>
         <div className={styles.toastText}>
@@ -77,7 +79,8 @@ function Toast({ message, onClose }) {
           <img src={closeIcon} alt="" />
         </button>
       </div>
-    </div>
+    </div>,
+    modalRoot
   );
 }
 

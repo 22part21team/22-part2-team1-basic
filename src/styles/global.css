@@ -50,14 +50,24 @@
   --color-surface: #f6f8ff;
 
   /* Z-index */
-  --z-button: 50;
+
+  /* 1. Page Elements */
+  --z-button: 10;
+
+  /* 2. Navigation & Layout */
   --z-header: 100;
   --z-subHeader: 110;
-  --z-dropdown: 1000;
-  --z-sticky: 1020;
-  --z-toast: 1030;
-  --z-modal-backdrop: 1040;
-  --z-modal: 1050;
+
+  /* 3. Floating UI (주로 헤더보다 위에 위치 ) */
+  --z-dropdown: 500;
+  --z-sticky: 600;
+
+  /* 4. Full-screen Overlays ( 전체 화면을 덮는 요소 ) */
+  --z-modal-backdrop: 1000;
+  --z-modal: 1010;
+
+  /* 5. Notifications ( 최상위 ) */
+  --z-toast: 2000;
 }
 
 /* ===========================
