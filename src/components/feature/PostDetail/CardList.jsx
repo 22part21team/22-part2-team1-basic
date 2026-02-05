@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { get } from '@/utils/apiClient';
+import { useToast } from '@/hooks/useToast';
 import Card from './Card';
 import CardModal from './CardModal';
 import Loading from '@/components/common/Loading/Loading';
 import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
+import Toast from '@/components/common/Toast/Toast';
 import styles from './CardList.module.css';
 
 /**
@@ -35,37 +38,44 @@ function CardList({
   onMessageDelete,
   deleteSender,
 }) {
+  // ===== 커스텀 훅 =====
+  const { toast, showToast } = useToast();
+  // ===== 메시지 상세 모달 State =====
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState({});
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  // ===== 무한 스크롤 (추가 로드) State =====
   const [isAddLoading, setIsAddLoading] = useState(false);
-
+  // ===== DOM 참조 (무한 스크롤용) =====
   const observerRef = useRef(null);
   const loadMoreRef = useRef(null);
 
-  // 추가 데이터 로드 함수
+  /**
+   * 데이터 추가 로드 함수
+   * * 다음 페이지 데이터 로드 시 디자인 UI에 맞게 6개씩 로드하도록 URL 치환 후 호출
+   * * 성공 시 기존 메시지 리스트에 데이터 추가
+   * @throws {Other} 토스트 알림
+   */
   const loadMoreMessages = useCallback(async () => {
     if (isAddLoading || !nextPage) return;
 
     try {
       setIsAddLoading(true);
-      // 첫 데이터 로드 후, 리스트 배열에 따라 짝수로 로드
-      const res = await fetch(nextPage.replace('limit=5', 'limit=6'));
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error('데이터를 불러오는데 실패했습니다.');
-      }
-
+      const endpointUrl = nextPage.replace('limit=5', 'limit=6');
+      const data = await get(endpointUrl, '롤링페이퍼 메시지 조회');
       setMessages((prev) => [...prev, ...data.results]);
       setNextPage(data.next);
     } catch (error) {
-      console.error('롤링페이퍼 정보 조회 오류:', error);
+      console.error('롤링페이퍼 메시지 조회 에러:', error);
+      showToast('롤링페이퍼 메시지를 추가로 불러올 수 없습니다.');
     } finally {
       setIsAddLoading(false);
     }
-  }, [isAddLoading, nextPage, setMessages, setNextPage]);
+  }, [isAddLoading, nextPage, setMessages, setNextPage, showToast]);
 
-  // Intersection Observer 설정
+  /**
+   * 무한 스크롤 ( Intersection Observer ) 설정
+   * * loadMoreRef가 화면에 감지되면 loadMoreMessages 실행
+   */
   useEffect(() => {
     const options = {
       /* 
@@ -139,7 +149,9 @@ function CardList({
     */
   }, [isAddLoading, loadMoreMessages, nextPage]);
 
-  // 모달 여는 이벤트
+  /**
+   * 메시지 상세 모달을 여는 이벤트
+   */
   const handleClick = (e) => {
     const clickedId = Number(e.currentTarget.id);
     const clickedMessage = messages.find((message) => message.id === clickedId);
@@ -149,13 +161,17 @@ function CardList({
     }
   };
 
-  // 모달 닫는 이벤트
+  /**
+   * 메시지 상세 모달을 닫는 이벤트
+   */
   const handleClose = () => {
     setIsOpen(false);
   };
 
   return (
     <>
+      {/* 토스트 */}
+      {toast.show && <Toast message={toast.message} />}
       <ul className={styles.cardList}>
         {!isEditMode && (
           <li>
@@ -194,7 +210,7 @@ function CardList({
           {isAddLoading && <Loading />}
         </div>
       )}
-      {/* confirm 모달 호출 */}
+      {/* 삭제 확인 모달 호출 */}
       <ConfirmModal
         isOpen={isDeleteMessageOpen}
         onClose={onMessageDeleteModal}
@@ -205,7 +221,7 @@ function CardList({
           <span className={styles.deleteMessage}>삭제</span>하시겠습니까?
         </p>
       </ConfirmModal>
-      {/* 카드 상세보기 모달 */}
+      {/* 메시지 상세보기 모달 */}
       <CardModal isOpen={isOpen} onClose={handleClose} {...selectedMessage} />
     </>
   );

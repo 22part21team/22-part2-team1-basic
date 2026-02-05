@@ -48,13 +48,16 @@ export const apiRequest = async (endpoint, options = {}) => {
 
     // 성공 응답
     if (response.ok) {
+      // 204 No Content, 응답에 본문이 없는 경우 바로 return
+      if (response.status === 204) return null;
+
       return await response.json();
     }
 
     // 에러 응답
     const status = response.status;
     let errorData = {};
-    
+
     try {
       errorData = await response.json();
     } catch {
@@ -72,7 +75,7 @@ export const apiRequest = async (endpoint, options = {}) => {
       // 위에서 throw한 에러는 그대로 전달
       throw error;
     }
-    
+
     // 기타 네트워크 에러
     throw {
       status: null,
