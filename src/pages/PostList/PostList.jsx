@@ -1,9 +1,10 @@
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchApi } from '@/api/api';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { get } from '@/utils/apiClient';
+import { useToast } from '@/hooks/useToast';
+import Toast from '@/components/common/Toast/Toast';
+import LoadingModal from '@/components/common/LoadingModal/LoadingModal';
 import styles from './PostList.module.css';
 
 import ProfileList from '@/components/common/ProfileList/ProfileList';
@@ -40,7 +41,7 @@ const BACKGROUND_COLORS = {
 const CARDS_PER_PAGE = 4;
 const CARD_WIDTH = 275;
 const GAP = 20;
-const SLIDE_OFFSET_PER_PAGE = CARD_WIDTH * CARDS_PER_PAGE + GAP * (CARDS_PER_PAGE - 1); // 1160px
+const SLIDE_OFFSET_PER_PAGE = (CARD_WIDTH + GAP) * CARDS_PER_PAGE; // 1180px
 
 async function getRecipients({ sort, limit = 8, offset = 0 }) {
   const params = new URLSearchParams();
@@ -48,7 +49,7 @@ async function getRecipients({ sort, limit = 8, offset = 0 }) {
   params.append('offset', String(offset));
   if (sort) params.append('sort', sort);
 
-  return fetchApi('recipients', {}, `?${params.toString()}`);
+  return get(`/recipients/?${params.toString()}`, '롤링페이퍼 리스트 조회');
 }
 
 function SlidePaperCard({ recipient, onClick }) {
@@ -71,8 +72,7 @@ function SlidePaperCard({ recipient, onClick }) {
     : { backgroundColor: BACKGROUND_COLORS[backgroundColor] ?? BACKGROUND_COLORS.beige, };
 
   return (
-
-    //* 카드 배경이 이미지일 경우 hasimageBg 클래스 추가
+    // 카드 배경이 이미지일 경우 hasimageBg 클래스 추가
     <div
       className={`${styles.slidePaperItem} ${backgroundImageURL ? styles.hasImageBg : ''}`}
       style={backgroundStyle}
@@ -80,7 +80,10 @@ function SlidePaperCard({ recipient, onClick }) {
       tabIndex={0}
       onClick={() => onClick(id)}
       onKeyDown={(e) => {
-        if (e.key === 'Enter') onClick(id);
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick(id);
+        }
       }}
     >
       <p className={styles.slidePaperItemTitle}>To. {name}</p>
@@ -93,17 +96,18 @@ function SlidePaperCard({ recipient, onClick }) {
         <span>{messageCount}</span>명이 작성했어요!
       </p>
 
-      <p className={styles.slidePaperItemBadge}>
+      <div className={styles.slidePaperItemBadge}>
         {topReactions.slice(0, 3).map((r) => (
           <EmojiButton key={r.id} emoji={r.emoji} count={r.count} />
         ))}
-      </p>
+      </div>
     </div>
   );
 }
 
 function PostList() {
   const navigate = useNavigate();
+  const { toast, showToast } = useToast();
 
   const [bestPaperItems, setBestPaperItems] = useState([]);
   const [recentPaperItems, setRecentPaperItems] = useState([]);
@@ -126,20 +130,44 @@ function PostList() {
           getRecipients({ limit: 8, offset: 0 }),
         ]);
 
-        setBestPaperItems(bestRes.results ?? []);
-        setRecentPaperItems(recentRes.results ?? []);
+        setBestPaperItems(bestRes?.results ?? []);
+        setRecentPaperItems(recentRes?.results ?? []);
         setBestSlideIndex(0);
         setRecentSlideIndex(0);
 
         setStatus('ok');
-      } catch (e) {
-        console.error(e);
-        setStatus('error');
+      } catch (error) {
+        console.error('롤링 페이퍼 리스트 조회 에러: ', error);
+        
+        // 네트워크 에러: 에러 페이지 이동
+        if (error?.isNetworkError) {
+          navigate('/error', {
+            state: { 
+              type: 'network', 
+              message: error.message },
+          });
+          return;
+        }
+
+        // 500번대 서버 에러: 에러 페이지 이동
+        if (error?.status >= 500) {
+          navigate('/error', {
+            state: { 
+              type: 'server', 
+              message: '서버에 일시적인 문제가 발생했습니다.' },
+          });
+          return;
+        }
+
+        // 400번대, 기타 에러: 에러 페이지 이동
+        showToast(error?.message || '목록을 불러오는 중 문제가 발생했습니다.');
+       
+        setStatus('ok'); // 빈 화면 처리 위해 ok로 변경
       }
     };
 
     fetchAll();
-  }, []);
+  }, [navigate, showToast]);
 
   const handleCardClick = (id) => navigate(`/post/${id}`); // 요구사항 4
 
@@ -164,103 +192,106 @@ function PostList() {
   const handlePrevRecent = () => setRecentSlideIndex((i) => Math.max(0, i - 1));
   const handleNextRecent = () => setRecentSlideIndex((i) => Math.min(recentTotalPages - 1, i + 1));
 
-  if (status === 'loading') return <div className={styles.contents}>불러오는 중...</div>;
-  if (status === 'error') return <div className={styles.contents}>목록을 불러오지 못했어요.</div>;
+  if (status === 'loading') return <LoadingModal />;
 
   return (
-    <div className={styles.contents}>
-      <div className={`${styles.slidePaper} ${styles.slidePaperBest} ${styles.dropDown}`}>
-        <h2 className={styles.slidePaperTitle}>인기 롤링 페이퍼 🔥</h2>
+    <>
+      {toast.show && <Toast message={toast.message} />}
 
-        <div className={styles.slidePaperListHidden}>
-          <div
-            className={styles.slidePaperList}
-            style={{ '--slide-offset': `${bestSlideOffsetPx}px` }}
-          >
-            {bestPaperItems.map((recipient) => (
-              <SlidePaperCard
-                key={recipient.id}
-                recipient={recipient}
-                onClick={handleCardClick}
-              />
-            ))}
+      <div className={styles.contents}>
+        <div className={`${styles.slidePaper} ${styles.slidePaperBest} ${styles.dropDown}`}>
+          <h2 className={styles.slidePaperTitle}>인기 롤링 페이퍼 🔥</h2>
+
+          <div className={styles.slidePaperListHidden}>
+            <div
+              className={styles.slidePaperList}
+              style={{ '--slide-offset': `${bestSlideOffsetPx}px` }}
+            >
+              {bestPaperItems.map((recipient) => (
+                <SlidePaperCard
+                  key={recipient.id}
+                  recipient={recipient}
+                  onClick={handleCardClick}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.slidePaperArrow}>
+            {bestShowLeftButton && (
+              <button
+                type="button"
+                className={styles.slidePaperArrowBtnLeft}
+                onClick={handlePrevBest}
+                aria-label="이전"
+              >
+                <img src={listArrowLeft} alt="" />
+              </button>
+            )}
+
+            {bestShowRightButton && (
+              <button
+                type="button"
+                className={styles.slidePaperArrowBtnRight}
+                onClick={handleNextBest}
+                aria-label="다음"
+              >
+                <img src={listArrowRight} alt="" />
+              </button>
+            )}
           </div>
         </div>
 
-        <div className={styles.slidePaperArrow}>
-          {bestShowLeftButton && (
-            <button
-              type="button"
-              className={styles.slidePaperArrowBtnLeft}
-              onClick={handlePrevBest}
-              aria-label="이전"
+        <div className={`${styles.slidePaper} ${styles.slidePaperCurrent} ${styles.dropDown}`}>
+          <h2 className={styles.slidePaperTitle}>최근에 만든 롤링 페이퍼 ⭐️</h2>
+
+          <div className={styles.slidePaperListHidden}>
+            <div
+              className={styles.slidePaperList}
+              style={{ '--slide-offset': `${recentSlideOffsetPx}px` }}
             >
-              <img src={listArrowLeft} alt="" />
-            </button>
-          )}
+              {recentPaperItems.map((recipient) => (
+                <SlidePaperCard
+                  key={recipient.id}
+                  recipient={recipient}
+                  onClick={handleCardClick}
+                />
+              ))}
+            </div>
+          </div>
 
-          {bestShowRightButton && (
-            <button
-              type="button"
-              className={styles.slidePaperArrowBtnRight}
-              onClick={handleNextBest}
-              aria-label="다음"
-            >
-              <img src={listArrowRight} alt="" />
-            </button>
-          )}
-        </div>
-      </div>
+          <div className={styles.slidePaperArrow}>
+            {recentShowLeftButton && (
+              <button
+                type="button"
+                className={styles.slidePaperArrowBtnLeft}
+                onClick={handlePrevRecent}
+                aria-label="이전"
+              >
+                <img src={listArrowLeft} alt="" />
+              </button>
+            )}
 
-      <div className={`${styles.slidePaper} ${styles.slidePaperCurrent} ${styles.dropDown}`}>
-        <h2 className={styles.slidePaperTitle}>최근에 만든 롤링 페이퍼 ⭐️</h2>
-
-        <div className={styles.slidePaperListHidden}>
-          <div
-            className={styles.slidePaperList}
-            style={{ '--slide-offset': `${recentSlideOffsetPx}px` }}
-          >
-            {recentPaperItems.map((recipient) => (
-              <SlidePaperCard
-                key={recipient.id}
-                recipient={recipient}
-                onClick={handleCardClick}
-              />
-            ))}
+            {recentShowRightButton && (
+              <button
+                type="button"
+                className={styles.slidePaperArrowBtnRight}
+                onClick={handleNextRecent}
+                aria-label="다음"
+              >
+                <img src={listArrowRight} alt="" />
+              </button>
+            )}
           </div>
         </div>
 
-        <div className={styles.slidePaperArrow}>
-          {recentShowLeftButton && (
-            <button
-              type="button"
-              className={styles.slidePaperArrowBtnLeft}
-              onClick={handlePrevRecent}
-              aria-label="이전"
-            >
-              <img src={listArrowLeft} alt="" />
-            </button>
-          )}
-
-          {recentShowRightButton && (
-            <button
-              type="button"
-              className={styles.slidePaperArrowBtnRight}
-              onClick={handleNextRecent}
-              aria-label="다음"
-            >
-              <img src={listArrowRight} alt="" />
-            </button>
-          )}
+        <div className={`${styles.btnView} ${styles.dropDown}`}>
+          <Link to="/post" className={styles.linkButton}>
+            나도 만들어보기
+          </Link>
         </div>
       </div>
-
-      <div className={`${styles.btnView} ${styles.dropDown}`}>
-        <Link to="/post" className={styles.linkButton}>
-          나도 만들어보기
-        </Link>
-      </div>
-    </div>
+    </>
   );
 }
 
