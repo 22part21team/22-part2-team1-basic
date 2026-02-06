@@ -70,6 +70,7 @@ function EmojiReactions({ id }) {
    * @throws {429, Other} 토스트 알림
    */
   const handleEmojiAdd = async (emoji) => {
+    showToast(`${emoji} 전송 완료!`);
     if (isSubmitting) return;
 
     try {
@@ -84,7 +85,7 @@ function EmojiReactions({ id }) {
       console.error('리액션 전송 오류:', error);
       // 429 에러 - 토스트 알림
       if (error.status === 429) {
-        showToast('천천히 눌러주세요! 잠시 후 다시 시도할 수 있습니다.');
+        showToast('천천히 눌러주세요!');
         return;
       }
       showToast('리액션 전송에 실패했습니다.');

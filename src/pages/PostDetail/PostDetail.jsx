@@ -294,7 +294,6 @@ function PostDetail() {
           />
         )}
         <CardList
-          id={id}
           isEditMode={isEditMode}
           messages={messages}
           setMessages={setMessages}

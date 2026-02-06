@@ -16,7 +16,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 100px;
+  min-width: 200px;
   padding: 30px;
   border-radius: 20px;
   background: #fff;
@@ -95,5 +95,13 @@
   to {
     opacity: 0;
     transform: translate(-50%, calc(-50% - 10px));
+  }
+}
+
+@media (width <= 767px) {
+  .confirmContainer {
+    width: calc(100% - 40px);
+    max-width: 282px;
+    padding: 28px;
   }
 }
