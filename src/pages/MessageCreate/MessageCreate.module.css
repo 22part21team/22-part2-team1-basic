@@ -294,7 +294,7 @@
 /* 모바일 */
 @media (width <= 767px) {
   .container {
-    padding:50px 20px 20px;
+    padding: 50px 20px 20px;
   }
 
   .content {
@@ -323,6 +323,7 @@
   .textarea {
     min-height: 200px;
   }
+
   .buttonWrapper {
     position: fixed;
     bottom: 24px;
@@ -334,10 +335,10 @@
     box-sizing: border-box;
     z-index: 10;
   }
+
   .buttonWrapper button {
-    max-width:none !important;
+    max-width: none !important;
   }
-}
 }
 
 /* 모바일 소형 */
