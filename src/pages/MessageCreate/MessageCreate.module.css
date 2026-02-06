@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: column;
   gap: 50px;
+  padding-bottom: 160px; /* fixed 버튼 영역 확보 */
 }
 
 .loadingContainer {
@@ -293,7 +294,7 @@
 /* 모바일 */
 @media (width <= 767px) {
   .container {
-    padding: 24px;
+    padding:50px 20px 20px;
   }
 
   .content {
@@ -322,6 +323,21 @@
   .textarea {
     min-height: 200px;
   }
+  .buttonWrapper {
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 10;
+  }
+  .buttonWrapper button {
+    max-width:none !important;
+  }
+}
 }
 
 /* 모바일 소형 */

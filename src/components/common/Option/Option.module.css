@@ -19,6 +19,8 @@
   position: relative;
   overflow: hidden;
   padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
 }
 
 .optionButton:hover:not(.selected) {
@@ -38,7 +40,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0);
   border-radius: 16px;
   animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }

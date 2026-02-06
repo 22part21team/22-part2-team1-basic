@@ -12,7 +12,7 @@ import styles from './LinkShare.module.css';
  * - mud-kage: 카카오 CDN 이미지 호스팅 서비스
  */
 const DEFAULT_SHARE_IMAGE =
-  'https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg';
+  'https://22-part2-team1-basic.vercel.app/img-kakao-open.png';
 
 /**
  * 카카오톡 / URL 공유 드롭다운 컴포넌트
