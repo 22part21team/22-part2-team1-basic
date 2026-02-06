@@ -1,4 +1,5 @@
 import { Link, matchPath, useLocation, useNavigate } from 'react-router-dom';
+import { Outlined } from '../common/Button';
 import logoMain from '/src/assets/images/common/logo-main.svg';
 import styles from './Header.module.css';
 
@@ -48,13 +49,13 @@ const Header = () => {
         </Link>
 
         {showCreateButton && (
-          <button className={styles.headerButton} onClick={handleCreateClick}>
+          <Outlined className={styles.headerButton} size="40" onClick={handleCreateClick}>
             롤링 페이퍼 만들기
-          </button>
+          </Outlined>
         )}
 
         {showPrevButton && (
-          <button className={styles.headerButton} onClick={handlePrevClick}>
+          <Outlined className={styles.headerButton} size="40" onClick={handlePrevClick}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -71,7 +72,7 @@ const Header = () => {
               />
             </svg>
             <span className={styles.headerSpan}>이전으로</span>
-          </button>
+          </Outlined>
         )}
       </div>
     </header>
