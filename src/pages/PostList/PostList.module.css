@@ -1,16 +1,4 @@
-/**
- * PostList 페이지 레이아웃 스타일
- * 전체 페이지의 레이아웃과 섹션 간의 간격을 정의
- 
-
- .container {
-  max-width: 1200px;
-  margin: 0 auto;
- }
-
-  */
-
-  /* ===========================
+/* ===========================
  PostList.module.css
 =========================== */
 
@@ -43,19 +31,28 @@
   gap: 20px;
   transition: transform 0.3s ease;
   transform: translateX(var(--slide-offset, 0px));
+  padding-right: 2px;
+  box-sizing: border-box;
+  pointer-events: auto; /* 스크롤 막기(transform 유지) */
 }
 
 .slidePaperListHidden {
   width: 100%;
   max-width: 1160px;
-  overflow: hidden;
+  overflow-x: auto;  
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.slidePaperListHidden::-webkit-scrollbar {
+  display: none;
 }
 
 .slidePaperItem {
   overflow: hidden;
-  width: auto;
+  width: 275px;
   min-width: 275px;
-  max-width: none;
+  max-width: 275px;
   height: 260px;
   padding: 30px 24px 20px;
   border-radius: 16px;
@@ -67,6 +64,7 @@
   flex-grow: 0;
   box-sizing: border-box;
   cursor: pointer;
+  pointer-events: auto; /* 스크롤 막기(transform 유지) */
 }
 
 .slidePaperItemTitle {
@@ -247,10 +245,9 @@ desktop:  1024 px 이상 ~
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x proximity;
     scrollbar-width: none;
     padding-bottom: 8px;
-    touch-action: pan-x;
   }
 
   .slidePaperList::-webkit-scrollbar {
@@ -271,10 +268,10 @@ desktop:  1024 px 이상 ~
 @media (max-width: 767px) {
 
   .slidePaperItem {
-    width: 208px;
+    width: auto;
     height: 232px;
     min-width: 208px;
-    max-width: 208px;
+    max-width: none;
     padding: 30px 22px 20px 24px;
   }
 

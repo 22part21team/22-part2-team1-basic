@@ -51,6 +51,10 @@ async function getRecipients({ sort, limit = 8, offset = 0 }) {
   return get(`/recipients/?${params.toString()}`, '롤링페이퍼 리스트 조회');
 }
 
+async function getByNextUrl(nextUrl) {
+  return get(nextUrl, '롤링페이퍼 리스트 조회');
+}
+
 function SlidePaperCard({ recipient, onClick }) {
   const {
     id,
@@ -106,36 +110,52 @@ function SlidePaperCard({ recipient, onClick }) {
 
 function PostList() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast, showToast } = useToast();
 
   const [bestPaperItems, setBestPaperItems] = useState([]);
+  const [bestNext, setBestNext] = useState(null);
+  const [isBestLoadingMore, setIsBestLoadingMore] = useState(false);
+
   const [recentPaperItems, setRecentPaperItems] = useState([]);
+  const [recentNext, setRecentNext] = useState(null);
+  const [isRecentLoadingMore, setIsRecentLoadingMore] = useState(false);
 
   const [bestSlideIndex, setBestSlideIndex] = useState(0);
   const [recentSlideIndex, setRecentSlideIndex] = useState(0);
 
-  const [status, setStatus] = useState('loading'); // loading | ok | error
-  const location = useLocation();
+  const [status, setStatus] = useState('loading'); // loading | ok
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
         setStatus('loading');
 
-        const [bestRes, recentRes] = await Promise.all([
-          // sort=like 지원 안 하면 여기서 error 날 수 있음 → 그때는 catch로 recent를 재사용
-          getRecipients({ sort: 'like', limit: 8, offset: 0 }).catch(() =>
-            getRecipients({ limit: 8, offset: 0 })
-          ),
-          getRecipients({ limit: 8, offset: 0 }),
-        ]);
+    // like 정렬 실패(주로 4xx)만 fallback, 그 외는 진짜 에러로 처리
+    let bestRes;
+      try {
+        bestRes = await getRecipients({ sort: 'like', limit: 8, offset: 0 });
+      } catch (e) {
+        // sort 미지원(보통 4xx)만 fallback
+        if (e?.status >= 400 && e?.status < 500) {
+          bestRes = await getRecipients({ limit: 8, offset: 0 });
+        } else {
+          throw e;
+        }
+      }
 
-        setBestPaperItems(bestRes?.results ?? []);
-        setRecentPaperItems(recentRes?.results ?? []);
-        setBestSlideIndex(0);
-        setRecentSlideIndex(0);
+      // recent: 전체 가져오기
+      const recentRes = await getRecipients({ limit: 8, offset: 0 });
 
-        setStatus('ok');
+      setBestPaperItems(bestRes?.results ?? []);
+      setBestNext(bestRes?.next ?? null);
+      setBestSlideIndex(0);
+
+      setRecentPaperItems(recentRes?.results ?? []);
+      setRecentNext(recentRes?.next ?? null);
+      setRecentSlideIndex(0);
+
+      setStatus('ok');
       } catch (error) {
         console.error('롤링 페이퍼 리스트 조회 에러: ', error);
 
@@ -180,26 +200,113 @@ function PostList() {
 
   const handleCardClick = (id) => navigate(`/post/${id}`); // 요구사항 4
 
-  // ===== PC 슬라이드 계산 (Best)
+  // ===== Best 슬라이드 계산
   const bestTotalCards = bestPaperItems.length;
-  const bestTotalPages = Math.ceil(bestTotalCards / CARDS_PER_PAGE);
-  const bestShowArrows = bestTotalCards > CARDS_PER_PAGE; // 요구사항 8
-  const bestShowLeftButton = bestShowArrows && bestSlideIndex > 0; // 요구사항 7
-  const bestShowRightButton = bestShowArrows && bestSlideIndex < bestTotalPages - 1; // 요구사항 7
-  const bestSlideOffsetPx = -bestSlideIndex * SLIDE_OFFSET_PER_PAGE; // 요구사항 6
+  const bestTotalPages = Math.ceil(bestTotalCards / CARDS_PER_PAGE) || 1;
+  const bestHasMoreSlides = bestSlideIndex < bestTotalPages - 1;
+  const bestShowLeftButton = bestSlideIndex > 0;
+  // next가 있으면 "마지막 페이지여도" 우측 버튼 보여야 함
+  const bestShowRightButton = bestHasMoreSlides || !!bestNext;
+  const bestSlideOffsetPx = -bestSlideIndex * SLIDE_OFFSET_PER_PAGE;
 
-  // ===== PC 슬라이드 계산 (Recent)
+  // ===== Recent 슬라이드 계산
   const recentTotalCards = recentPaperItems.length;
-  const recentTotalPages = Math.ceil(recentTotalCards / CARDS_PER_PAGE);
-  const recentShowArrows = recentTotalCards > CARDS_PER_PAGE; // 요구사항 8
-  const recentShowLeftButton = recentShowArrows && recentSlideIndex > 0; // 요구사항 7
-  const recentShowRightButton = recentShowArrows && recentSlideIndex < recentTotalPages - 1; // 요구사항 7
-  const recentSlideOffsetPx = -recentSlideIndex * SLIDE_OFFSET_PER_PAGE; // 요구사항 6
+  const recentTotalPages = Math.ceil(recentTotalCards / CARDS_PER_PAGE) || 1;
+  const recentHasMoreSlides = recentSlideIndex < recentTotalPages - 1;
+  const recentShowLeftButton = recentSlideIndex > 0;
+  const recentShowRightButton = recentHasMoreSlides || !!recentNext;
+  const recentSlideOffsetPx = -recentSlideIndex * SLIDE_OFFSET_PER_PAGE;
 
   const handlePrevBest = () => setBestSlideIndex((i) => Math.max(0, i - 1));
-  const handleNextBest = () => setBestSlideIndex((i) => Math.min(bestTotalPages - 1, i + 1));
+  
+  const handleNextBest = async () => {
+    if (isBestLoadingMore) return;
+
+    // 1) 로드된 카드 내에서 이동 가능하면 이동만
+    if (bestHasMoreSlides) {
+      setBestSlideIndex((i) => i + 1);
+      return;
+    }
+
+    // 2) 마지막인데 next 있으면 추가 로드 후 이동
+    if (!bestNext) return;
+
+    try {
+      setIsBestLoadingMore(true);
+      const res = await getByNextUrl(bestNext);
+      const newItems = res?.results ?? [];
+
+      setBestPaperItems((prev) => [...prev, ...newItems]);
+      setBestNext(res?.next ?? null);
+
+      // 새 데이터가 실제로 들어왔을 때만 다음 페이지로
+      if (newItems.length > 0) {
+        setBestSlideIndex((i) => i + 1);
+      }
+    } catch (error) {
+      console.error('Best 추가 로드 에러:', error);
+
+      if (error?.isNetworkError) {
+        navigate('/error', { state: { type: 'network', message: error.message } });
+        return;
+      }
+
+      if (error?.status >= 500) {
+        navigate('/error', {
+          state: { type: 'server', message: '서버에 일시적인 문제가 발생했습니다.' },
+        });
+        return;
+      }
+      
+      showToast(error?.message || '목록을 더 불러오는 중 문제가 발생했습니다.');
+    } finally {
+      setIsBestLoadingMore(false);
+    }
+  };    
+
   const handlePrevRecent = () => setRecentSlideIndex((i) => Math.max(0, i - 1));
-  const handleNextRecent = () => setRecentSlideIndex((i) => Math.min(recentTotalPages - 1, i + 1));
+  
+const handleNextRecent = async () => {
+    if (isRecentLoadingMore) return;
+
+    if (recentHasMoreSlides) {
+      setRecentSlideIndex((i) => i + 1);
+      return;
+    }
+
+    if (!recentNext) return;
+
+    try {
+      setIsRecentLoadingMore(true);
+      const res = await getByNextUrl(recentNext);
+      const newItems = res?.results ?? [];
+
+      setRecentPaperItems((prev) => [...prev, ...newItems]);
+      setRecentNext(res?.next ?? null);
+
+      if (newItems.length > 0) {
+        setRecentSlideIndex((i) => i + 1);
+      }
+       } catch (error) {
+      console.error('Recent 추가 로드 에러:', error);
+
+      if (error?.isNetworkError) {
+        navigate('/error', { state: { type: 'network', message: error.message } });
+        return;
+      }
+
+      if (error?.status >= 500) {
+        navigate('/error', {
+          state: { type: 'server', message: '서버에 일시적인 문제가 발생했습니다.' },
+        });
+        return;
+      }
+
+      showToast(error?.message || '목록을 더 불러오는 중 문제가 발생했습니다.');
+    } finally {
+      setIsRecentLoadingMore(false);
+    }
+  };
 
   if (status === 'loading') return <LoadingModal />;
 
