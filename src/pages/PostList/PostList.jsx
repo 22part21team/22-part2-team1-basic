@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { get } from '@/utils/apiClient';
 import { useToast } from '@/hooks/useToast';
 import Toast from '@/components/common/Toast/Toast';
@@ -26,8 +25,8 @@ const BACKGROUND_COLORS = {
  * 인기 롤링 페이퍼와 최근에 생성된 롤링 페이퍼를
  * 가로 슬라이드 형태의 카드 리스트로 보여주며,
  * 좌우 화살표 버튼을 통해 페이지 단위로 이동할 수 있습니다.
- * 
- * 
+ *
+ *
  * @param {string} patternClass - 카드 배경에 적용될 패턴 클래스명
  * @param {string} title - 카드 상단에 표시될 제목 텍스트
  * @param {Function} onClick - 카드 클릭 시 실행되는 이벤트 핸들러
@@ -69,7 +68,7 @@ function SlidePaperCard({ recipient, onClick }) {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }
-    : { backgroundColor: BACKGROUND_COLORS[backgroundColor] ?? BACKGROUND_COLORS.beige, };
+    : { backgroundColor: BACKGROUND_COLORS[backgroundColor] ?? BACKGROUND_COLORS.beige };
 
   return (
     // 카드 배경이 이미지일 경우 hasimageBg 클래스 추가
@@ -116,6 +115,7 @@ function PostList() {
   const [recentSlideIndex, setRecentSlideIndex] = useState(0);
 
   const [status, setStatus] = useState('loading'); // loading | ok | error
+  const location = useLocation();
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -138,13 +138,14 @@ function PostList() {
         setStatus('ok');
       } catch (error) {
         console.error('롤링 페이퍼 리스트 조회 에러: ', error);
-        
+
         // 네트워크 에러: 에러 페이지 이동
         if (error?.isNetworkError) {
           navigate('/error', {
-            state: { 
-              type: 'network', 
-              message: error.message },
+            state: {
+              type: 'network',
+              message: error.message,
+            },
           });
           return;
         }
@@ -152,22 +153,30 @@ function PostList() {
         // 500번대 서버 에러: 에러 페이지 이동
         if (error?.status >= 500) {
           navigate('/error', {
-            state: { 
-              type: 'server', 
-              message: '서버에 일시적인 문제가 발생했습니다.' },
+            state: {
+              type: 'server',
+              message: '서버에 일시적인 문제가 발생했습니다.',
+            },
           });
           return;
         }
 
         // 400번대, 기타 에러: 에러 페이지 이동
         showToast(error?.message || '목록을 불러오는 중 문제가 발생했습니다.');
-       
+
         setStatus('ok'); // 빈 화면 처리 위해 ok로 변경
       }
     };
 
     fetchAll();
   }, [navigate, showToast]);
+
+  useEffect(() => {
+    if (location.state?.message) {
+      showToast(location.state.message);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location, showToast]);
 
   const handleCardClick = (id) => navigate(`/post/${id}`); // 요구사항 4
 
