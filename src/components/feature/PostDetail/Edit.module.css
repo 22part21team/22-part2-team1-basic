@@ -35,3 +35,9 @@
     font-weight: 700;
   }
 }
+
+@media (width <= 767px) {
+  .editContainer {
+    padding: 0 20px;
+  }
+}
