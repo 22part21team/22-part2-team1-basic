@@ -3,7 +3,6 @@ import { Outlined } from '@/components/common/Button';
 import ProfileList from '@/components/common/ProfileList/ProfileList';
 import EmojiReactions from './EmojiReactions';
 import LinkShare from './LinkShare';
-import homeIcon from '@/assets/images/common/icon-home.svg';
 import styles from './PostHeader.module.css';
 
 /**
@@ -27,21 +26,20 @@ function PostHeader({ id, recipient, isEditMode }) {
   const { name, messageCount, recentMessages } = recipient;
 
   return (
-    <div className={styles.postHeader}>
+    <header className={styles.postHeader}>
       <div className={styles.postHeaderContainer}>
         {/* 좌측 영역: 수신자 이름 및 홈 이동 버튼(모바일) */}
         <div className={styles.postHeaderTitle}>
           <h2 className={styles.h2Title}>
             <Link to={isEditMode ? `/post/${id}/` : `/post/${id}/edit/`}>To. {name}</Link>
           </h2>
-          <Outlined size="Trash" className={styles.mobileHomeIcon}>
-            <Link to="/">
-              <img src={homeIcon} alt="" />
-            </Link>
+          <Outlined size="36" className={styles.prevButton}>
+            <Link to="/list">이전으로</Link>
           </Outlined>
         </div>
+
         {/* 우측 영역: 리액션 통계 및 인터랙션 액션 바 */}
-        <div className={styles.postHeaderActions}>
+        <nav className={styles.postHeaderActions}>
           {/* 작성자 통계 및 프로필 목록 */}
           <div className={styles.postInfo}>
             <ProfileList recentMessages={recentMessages} authorCount={messageCount} />
@@ -49,17 +47,21 @@ function PostHeader({ id, recipient, isEditMode }) {
               <span>{messageCount}</span>명이 작성했어요!
             </p>
           </div>
-          {/* 이모지 리액션 */}
-          <div className={styles.postEmoji}>
-            <EmojiReactions id={id} />
+          <hr className={styles.dividerLine}></hr>
+          <div className={styles.reactionGroup}>
+            {/* 이모지 리액션 */}
+            <div className={styles.postEmoji}>
+              <EmojiReactions id={id} />
+            </div>
+            <hr className={styles.dividerLine}></hr>
+            {/* 카카오톡 / URL 공유 드롭다운 */}
+            <div className={styles.postShare}>
+              <LinkShare recipient={recipient} />
+            </div>
           </div>
-          {/* 카카오톡 / URL 공유 드롭다운 */}
-          <div className={styles.postShare}>
-            <LinkShare recipient={recipient} />
-          </div>
-        </div>
+        </nav>
       </div>
-    </div>
+    </header>
   );
 }
 

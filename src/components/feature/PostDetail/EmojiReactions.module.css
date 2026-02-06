@@ -142,3 +142,10 @@
     height: 450px;
   }
 }
+
+/* 모바일 소형 */
+@media (width <= 390px) {
+  .emojiContainer {
+    gap: 5px;
+  }
+}
