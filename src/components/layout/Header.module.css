@@ -15,19 +15,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: content-box;
 }
 
 .logoLink {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  cursor: pointer;
+  padding: 5px;
 }
 
 .logo {
-  width: 105px;
-  height: 105px;
+  width: 106px;
 }
 
 .logoText {
@@ -37,7 +36,7 @@
   line-height: 30px;
 }
 
-.createButton {
+.headerButton {
   width: auto; /* 컨테이너 대비 20% */
   max-width: 157px; /* PC 기준 최대폭 */
   min-width: 0; /* 작은 화면에서 텍스트 overflow 방지 */
@@ -56,13 +55,17 @@
   transition: all 0.2s ease;
 }
 
-.createButton:hover {
+.headerButton:hover {
   background-color: #f8f9fa;
   border-color: #999;
 }
 
-.createButton:active {
+.headerButton:active {
   background-color: #e9ecef;
+}
+
+.headerSpan {
+  margin-left: 0.25em;
 }
 
 /* tablet + mobile */
@@ -75,15 +78,10 @@
 /* mobile */
 @media (width <= 767px) {
   .container {
-    height: 56px;
+    padding: 0 20px;
   }
 
-  .logo {
-    width: 53px;
-    height: 53px;
-  }
-
-  .createButton {
+  .headerButton {
     width: 122px;
     font-size: 14px;
   }
