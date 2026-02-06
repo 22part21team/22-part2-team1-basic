@@ -28,10 +28,10 @@ const Option = ({ type = 'color', options = [], selected, onSelect }) => {
    */
   const getColorValue = (colorName) => {
     const colorMap = {
-      beige: '#FFF0D3',
+      beige: '#FFE2AD',
       purple: '#ECD9FF',
-      blue: '#D0E9FF',
-      green: '#D0F5DC',
+      blue: '#B1E4FF',
+      green: '#D0F5C3',
     };
     return colorMap[colorName] || colorName;
   };

@@ -50,7 +50,7 @@ function Home() {
                 <figcaption className={styles.fromCadeName}>
                   <span>From.&nbsp;</span>
                   <span>박대영</span>
-                  <span className={`${styles.fromCadeBadge} ${styles.type}`}>친구</span>
+                  <span className={`${styles.fromCadeBadge} ${styles.type}`}>동료</span>
                 </figcaption>
               </figure>
               <p className={styles.fromCadeText}>일교차가 큰 시기입니다. 새벽에는 겨울, 한낮에는 여름, 아침저녁으로는 가을을 느껴보는 것도 좋을 것 같아요. 일교차가 큰 시기입니다. 새벽에는 겨울, 한낮에는 여름, 아침저녁으로는 가을을 느껴보는 것도 좋을 것 같아요.</p>
