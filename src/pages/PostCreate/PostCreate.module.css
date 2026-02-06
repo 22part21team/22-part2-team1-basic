@@ -11,12 +11,17 @@
   display: flex;
   flex-direction: column;
   gap: 50px;
+  padding-bottom: 160px; /* fixed 버튼 영역 확보 */
 }
 
 .backgroundSection {
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.backgroundSection > :first-child {
+  margin-bottom: -20px;
 }
 
 .sectionTitle {
@@ -74,11 +79,12 @@
 /* mobile */
 @media (max-width: 767px) {
   .container {
-    padding: 24px 0;
+    padding: 50px 20px 24px;
   }
 
   .content {
-    gap: 40px;
+    gap: 48px;
+    padding: 0;
   }
 
   .sectionTitle {
@@ -89,5 +95,19 @@
   .sectionDescription {
     font-size: 14px;
     line-height: 22px;
+  }
+  .buttonWrapper {
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 10;
+  }
+  .buttonWrapper button {
+    max-width:none !important;
   }
 }
