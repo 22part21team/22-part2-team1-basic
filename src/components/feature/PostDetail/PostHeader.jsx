@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Outlined } from '@/components/common/Button';
 import ProfileList from '@/components/common/ProfileList/ProfileList';
 import EmojiReactions from './EmojiReactions';
@@ -22,8 +22,17 @@ import styles from './PostHeader.module.css';
  * @return {JSX.Element} 상단 헤더 UI
  */
 function PostHeader({ id, recipient, isEditMode }) {
+  // ===== 페이지 이동 Hook =====
+  const navigate = useNavigate();
   // ===== 데이터 구조 분해 할당 =====
   const { name, messageCount, recentMessages } = recipient;
+
+  /**
+   * 목록 페이지로 이동하는 이벤트 핸들러
+   */
+  const handlePrevLink = () => {
+    navigate('/list');
+  };
 
   return (
     <header className={styles.postHeader}>
@@ -31,10 +40,10 @@ function PostHeader({ id, recipient, isEditMode }) {
         {/* 좌측 영역: 수신자 이름 및 홈 이동 버튼(모바일) */}
         <div className={styles.postHeaderTitle}>
           <h2 className={styles.h2Title}>
-            <Link to={isEditMode ? `/post/${id}/` : `/post/${id}/edit/`}>To. {name}</Link>
+            <Link to={isEditMode ? `/post/${id}` : `/post/${id}/edit`}>To. {name}</Link>
           </h2>
-          <Outlined size="36" className={styles.prevButton}>
-            <Link to="/list">이전으로</Link>
+          <Outlined size="36" className={styles.prevButton} onClick={handlePrevLink}>
+            이전으로
           </Outlined>
         </div>
 

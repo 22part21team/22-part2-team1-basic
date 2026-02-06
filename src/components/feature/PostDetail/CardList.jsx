@@ -14,7 +14,6 @@ import styles from './CardList.module.css';
  * - 편집 모드 : 롤링페이퍼 6개 데이터 구성으로 시작
  * - 무한 스크롤을 통한 메시지 추가 로드 처리
  *
- * @param {number} id - 롤링페이퍼 수신자의 고유 식별 ID
  * @param {boolean} isEditMode - 편집 모드 활성화 여부
  * @param {Array} messages - 렌더링할 메시지 리스트 데이터
  * @param {Function} setMessages - 메시지 리스트 상태 업데이트 함수
@@ -27,7 +26,6 @@ import styles from './CardList.module.css';
  * @return 추가 버튼 및 롤링페이퍼 메시지 카드 리스트 UI
  */
 function CardList({
-  id,
   isEditMode,
   messages,
   setMessages,
@@ -175,7 +173,7 @@ function CardList({
       <ul className={styles.cardList}>
         {!isEditMode && (
           <li>
-            <Card simple simpleId={id} />
+            <Card simple />
           </li>
         )}
         {messages.map((message) => {

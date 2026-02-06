@@ -19,7 +19,7 @@
 @media (width <= 1023px) {
   .editContainer {
     position: fixed;
-    bottom: 10px;
+    bottom: 24px;
     left: 0;
     width: 100%;
     margin-bottom: 0;
