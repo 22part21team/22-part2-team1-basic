@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 47px 24px 24px;
 }
 
@@ -19,7 +19,7 @@
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  color: #555555;
+  color: #555;
 }
 
 .fieldGroup {
@@ -37,7 +37,7 @@
 
 .description {
   font-size: 16px;
-  color: #555555;
+  color: #555;
   margin: 0;
   line-height: 26px;
 }
@@ -82,7 +82,7 @@
 .profileImageButton {
   width: 56px;
   height: 56px;
-  border: 1px solid #eeeeee;
+  border: 1px solid #eee;
   border-radius: 100px;
   overflow: hidden;
   cursor: pointer;
@@ -116,8 +116,8 @@
   font-size: 16px;
   line-height: 26px;
   color: #181818;
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
+  background-color: #fff;
+  border: 1px solid #ccc;
   border-radius: 8px;
   outline: none;
   cursor: pointer;
@@ -130,25 +130,25 @@
 }
 
 .select:hover {
-  border-color: #555555;
+  border-color: #555;
 }
 
 .select:focus {
-  border-color: #555555;
+  border-color: #555;
 }
 
 /* 에디터 컨테이너 */
 .editorContainer {
   width: 100%;
-  border: 1px solid #cccccc;
+  border: 1px solid #ccc;
   border-radius: 8px;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #fff;
   transition: all 0.2s ease;
 }
 
 .editorContainer:hover {
-  border-color: #555555;
+  border-color: #555;
 }
 
 /* 에디터 툴바 */
@@ -192,7 +192,7 @@
 .toolbarDivider {
   width: 1px;
   height: 24px;
-  background-color: #cccccc;
+  background-color: #ccc;
   margin: 0 4px;
 }
 
@@ -203,7 +203,7 @@
   font-size: 16px;
   line-height: 26px;
   color: #181818;
-  background-color: #ffffff;
+  background-color: #fff;
   border: none;
   outline: none;
   font-family: var(--editor-font-family, 'Noto Sans KR', sans-serif);
@@ -216,7 +216,7 @@
   min-height: 260px;
   outline: none;
   white-space: pre-wrap;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   font-family: inherit;
 }
 
@@ -281,7 +281,7 @@
 }
 
 /* 태블릿 + 모바일 */
-@media (max-width: 1023px) {
+@media (width <= 1023px) {
   .container {
     padding: 40px 24px 24px;
   }
@@ -292,7 +292,7 @@
 }
 
 /* 모바일 */
-@media (max-width: 767px) {
+@media (width <= 767px) {
   .container {
     padding:50px 20px 20px;
   }
@@ -336,5 +336,20 @@
   }
   .buttonWrapper button {
     max-width:none !important;
+  }
+}
+}
+
+/* 모바일 소형 */
+@media (width <= 390px) {
+  .profileImageGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px 4%;
+  }
+
+  .profileImageButton {
+    width: auto;
+    height: auto;
   }
 }

@@ -25,7 +25,7 @@
   font-weight: 700;
 }
 
-.mobileHomeIcon {
+.prevButton {
   display: none;
 }
 
@@ -53,37 +53,35 @@
   font-weight: 700;
 }
 
+/* reactionGroup */
+.reactionGroup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
 /* postEmoji */
 .postEmoji {
   position: relative;
-  padding: 0 13px 0 28px;
-}
-
-/* postShare */
-.postShare {
-  padding-left: 13px;
+  padding-left: 28px;
 }
 
 /* 회색 라인 */
-.postInfo::after,
-.postEmoji::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
+.dividerLine {
   height: 28px;
-  background-color: var(--color-gray-200);
+  margin: 0;
+  border: 1px solid var(--color-gray-200);
 }
 
 @media (width <= 1023px) {
-  .postInfo {
+  .postInfo,
+  .postInfo + .dividerLine {
     display: none;
   }
 
   .postEmoji {
-    padding: 0 13px 0 0;
+    padding-left: 0;
   }
 }
 
@@ -106,7 +104,8 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 8px 20px;
+    height: 52px;
+    padding: 0 20px;
     border-bottom: 1px solid #ededed;
   }
 
@@ -116,10 +115,8 @@
     font-size: 18px;
   }
 
-  .mobileHomeIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .prevButton {
+    display: block;
   }
 
   .postHeaderActions {
@@ -128,13 +125,14 @@
     padding: 8px 0;
   }
 
-  /* postEmoji */
-  .postEmoji {
-    padding: 0 15px 0 0;
+  .reactionGroup {
+    gap: 15px;
   }
+}
 
-  /* postShare */
-  .postShare {
-    padding-left: 15px;
+/* 모바일 소형 */
+@media (width <= 390px) {
+  .reactionGroup {
+    gap: 8px;
   }
 }

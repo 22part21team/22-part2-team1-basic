@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { DEFAULT_PROFILE_URL } from '@/constants/profileImage';
 import { formatDate } from '@/utils/formatDate';
 import { Outlined } from '@/components/common/Button';
@@ -28,7 +28,6 @@ const getFontFamily = (apiFont) => {
  * - 전달받은 작성자 정보, 관계 ( Label ), 메시지 내용 및 날짜를 포맷팅하여 표시
  *
  * @param {boolean} simple - 추가 버튼 모드 활성화 여부 ( 기본값 : false )
- * @param {number} simpleId - 추가 버튼 모드에서 사용할 롤링페이퍼 id
  * @param {boolean} isEditMode - 편집 모드 활성화 여부
  * @param {string} profileImageURL - 작성자 프로필 이미지 URL
  * @param {string} sender - 작성자 이름
@@ -41,7 +40,6 @@ const getFontFamily = (apiFont) => {
  */
 function Card({
   simple = false,
-  simpleId,
   isEditMode,
   profileImageURL,
   sender,
@@ -51,24 +49,29 @@ function Card({
   createdAt,
   onMessageDeleteModal,
 }) {
+  // ===== 페이지 이동 Hook =====
+  const navigate = useNavigate();
   // ===== 날짜 포매팅 =====
   const formattedDate = createdAt ? formatDate(createdAt) : '';
-  // ===== 스타일 설정 =====
-  const cardStyle = simple ? `${styles.card} ${styles.simple}` : `${styles.card}`;
+
+  /**
+   * 롤링페이퍼에 메시지 보내기 페이지로 이동하는 이벤트 핸들러
+   */
+  const handleMessageLink = () => {
+    navigate(`message`);
+  };
 
   return (
     <>
       {simple ? (
         /* ===== 추가 버튼 모드 (새 메시지 작성 링크) ===== */
-        <div className={cardStyle}>
-          <Link to={`/post/${simpleId}/message`} className={styles.linkButton}>
-            <AddButton />
-          </Link>
+        <div className={`${styles.card} ${styles.simple}`} onClick={handleMessageLink}>
+          <AddButton />
         </div>
       ) : (
         /* ===== 메시지 출력 모드 ===== */
         <div className={styles.cardButton}>
-          <div className={cardStyle}>
+          <div className={styles.card}>
             {/* 상단: 프로필 정보 및 삭제 버튼 영역 */}
             <div className={styles.profile}>
               {profileImageURL &&

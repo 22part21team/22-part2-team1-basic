@@ -19,7 +19,7 @@
 @media (width <= 1023px) {
   .editContainer {
     position: fixed;
-    bottom: 10px;
+    bottom: 24px;
     left: 0;
     width: 100%;
     margin-bottom: 0;
@@ -33,5 +33,11 @@
     border-radius: 12px;
     font-size: 18px;
     font-weight: 700;
+  }
+}
+
+@media (width <= 767px) {
+  .editContainer {
+    padding: 0 20px;
   }
 }

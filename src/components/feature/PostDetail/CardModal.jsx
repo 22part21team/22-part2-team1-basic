@@ -106,8 +106,8 @@ function CardModal({
               style={{ fontFamily: getFontFamily(font) }}
               dangerouslySetInnerHTML={{ __html: content }}
             />
-            <div className={styles.closeButton}>
-              <Button size="40" onClick={onClose}>
+            <div className={styles.closeButtonContainer}>
+              <Button size="40" onClick={onClose} className={styles.closeButton}>
                 확인
               </Button>
             </div>

@@ -78,7 +78,6 @@
   padding-right: 20px;
   font-size: 18px;
   overflow-y: scroll;
-
   transform: rotate(0.03deg);
 }
 
@@ -133,9 +132,13 @@
   text-decoration: line-through;
 }
 
-.closeButton {
+.closeButtonContainer {
   display: flex;
   justify-content: center;
+}
+
+.closeButton {
+  font-weight: 400;
 }
 
 .date {
@@ -209,6 +212,14 @@
 @media (width <= 767px) {
   .cardModal {
     height: 376px;
-    padding: 30px;
+    padding: 28px;
+  }
+
+  .userText {
+    font-size: 18px;
+  }
+
+  .content {
+    font-size: 16px;
   }
 }

@@ -20,3 +20,10 @@
     line-height: 1.48;
   }
 }
+
+/* 모바일 소형 */
+@media (width <= 390px) {
+  .emoji {
+    gap: 3px;
+  }
+}
