@@ -62,6 +62,13 @@ function Card({
     navigate(`message`);
   };
 
+  /**
+   * DOMPurify 옵션
+   */
+  const sanitizedContent = DOMPurify.sanitize(content, {
+    FORBID_TAGS: ['a'],
+  });
+
   return (
     <>
       {simple ? (
@@ -131,7 +138,7 @@ function Card({
               <div
                 className={styles.content}
                 style={{ fontFamily: getFontFamily(font) }}
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
+                dangerouslySetInnerHTML={{ __html: sanitizedContent }}
               />
               <p className={styles.date}>{formattedDate}</p>
             </div>

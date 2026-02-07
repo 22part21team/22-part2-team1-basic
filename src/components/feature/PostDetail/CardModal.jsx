@@ -53,6 +53,13 @@ function CardModal({
   // ===== 날짜 포매팅 =====
   const formattedDate = createdAt ? formatDate(createdAt) : '';
 
+  /**
+   * DOMPurify 옵션
+   */
+  const sanitizedContent = DOMPurify.sanitize(content, {
+    FORBID_TAGS: ['a'],
+  });
+
   return createPortal(
     <MountAnimation visible={isOpen}>
       <div className={styles.cardModalContainer}>
@@ -105,7 +112,7 @@ function CardModal({
             <div
               className={styles.content}
               style={{ fontFamily: getFontFamily(font) }}
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
+              dangerouslySetInnerHTML={{ __html: sanitizedContent }}
             />
             <div className={styles.closeButtonContainer}>
               <Button size="40" onClick={onClose} className={styles.closeButton}>

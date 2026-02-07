@@ -1,6 +1,6 @@
 .cardList {
   display: grid;
-  grid-template: 1fr / repeat(3, 1fr);
+  grid-template: 1fr / repeat(3, minmax(0, 1fr));
   gap: 28px 24px;
 }
 

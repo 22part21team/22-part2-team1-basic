@@ -83,6 +83,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   transform: rotate(0.03deg);
+  word-break: break-all;
 }
 
 /* HTML 콘텐츠 스타일 */
