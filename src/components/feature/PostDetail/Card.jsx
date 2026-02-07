@@ -4,6 +4,7 @@ import { formatDate } from '@/utils/formatDate';
 import { Outlined } from '@/components/common/Button';
 import AddButton from '@/components/common/AddButton/AddButton';
 import Label from './Label';
+import DOMPurify from 'dompurify';
 import trashIcon from '@/assets/images/common/icon-trashcan.svg';
 import styles from './Card.module.css';
 
@@ -60,6 +61,13 @@ function Card({
   const handleMessageLink = () => {
     navigate(`message`);
   };
+
+  /**
+   * DOMPurify 옵션
+   */
+  const sanitizedContent = DOMPurify.sanitize(content, {
+    FORBID_TAGS: ['a'],
+  });
 
   return (
     <>
@@ -130,7 +138,7 @@ function Card({
               <div
                 className={styles.content}
                 style={{ fontFamily: getFontFamily(font) }}
-                dangerouslySetInnerHTML={{ __html: content }}
+                dangerouslySetInnerHTML={{ __html: sanitizedContent }}
               />
               <p className={styles.date}>{formattedDate}</p>
             </div>

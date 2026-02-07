@@ -79,6 +79,7 @@
   font-size: 18px;
   overflow-y: scroll;
   transform: rotate(0.03deg);
+  word-break: break-all;
 }
 
 .content::-webkit-scrollbar {
