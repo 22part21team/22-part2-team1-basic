@@ -3,6 +3,7 @@ import { DEFAULT_PROFILE_URL } from '@/constants/profileImage';
 import { formatDate } from '@/utils/formatDate';
 import { MountAnimation } from '@/components/common/MountAnimation/MountAnimation';
 import Label from './Label';
+import DOMPurify from 'dompurify';
 import Button from '@/components/common/Button/Button';
 import styles from './CardModal.module.css';
 
@@ -104,7 +105,7 @@ function CardModal({
             <div
               className={styles.content}
               style={{ fontFamily: getFontFamily(font) }}
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
             />
             <div className={styles.closeButtonContainer}>
               <Button size="40" onClick={onClose} className={styles.closeButton}>
