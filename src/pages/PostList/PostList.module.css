@@ -59,6 +59,7 @@
   background-color: #ECD9FF;
   border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
+  flex: 0 0 275px;
   flex-direction: column;
   flex-shrink: 0;
   flex-grow: 0;
@@ -109,6 +110,10 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 150px;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: pointFadeIn 0.6s ease-out forwards;
+  animation-delay: 0.7s;
 }
 
 .linkButton {
@@ -206,10 +211,22 @@
   border-top: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-.dropDown {
+.dropDown1, .dropDown2, .dropDown3  {
   opacity: 0;
   transform: translateY(-20px);
   animation: dropDown 0.6s ease-out forwards;
+}
+
+.dropDown1 {
+  animation-delay: 0.1s;
+}
+
+.dropDown2 {
+  animation-delay: 0.4s;
+}
+
+.dropDown3 {
+  animation-delay: 0.7s;
 }
 
 @keyframes dropDown {
@@ -227,30 +244,21 @@
 mobile:   360 ~ 767 px
 tablet:   768 ~ 1023 px
 desktop:  1024 px 이상 ~ 
+작은 PC 화면 ~ 태블릿: 1025 ~ 1260 px
 */
-
-@media (max-width: 1023px) {
-  .slidePaper {
-    margin-left: 20px;
-  }
-
+@media (max-width: 1260px) {
   .slidePaperListHidden {
-    overflow: visible;
-  }
-
-  .slidePaperList {
-    width: 100%;
-    max-width: 100%;
-    transform: none;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x proximity;
     scrollbar-width: none;
-    padding-bottom: 8px;
   }
 
-  .slidePaperList::-webkit-scrollbar {
+  .slidePaperListHidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slidePaperArrow {
     display: none;
   }
 
@@ -258,11 +266,12 @@ desktop:  1024 px 이상 ~
     scroll-snap-align: start;
     scroll-snap-stop: normal;
   }
+}
 
-  .slidePaperArrow {
-    display: none;
+@media (max-width: 1023px) {
+  .slidePaper {
+    margin-left: 20px;
   }
-
 }
 
 @media (max-width: 767px) {
@@ -270,12 +279,32 @@ desktop:  1024 px 이상 ~
   .slidePaperItem {
     width: auto;
     height: 232px;
+    flex: 0 0 auto;
     min-width: 208px;
     max-width: none;
     padding: 30px 22px 20px 24px;
   }
 
+  .slidePaperItemTitle {
+    font-size: 20px;
+  }
+
   .slidePaperItemBadge {
     gap: 4px;
+  }
+  
+  .btnView {
+   bottom: 0;
+   position: fixed;
+   left: 20px;
+   right: 0;
+   width:calc(100% - 40px);
+   margin-bottom: 0;
+   padding: 0;
+   box-sizing: border-box;  
+  }
+
+  .linkButton {
+    width: 100%;
   }
 }
