@@ -299,6 +299,7 @@
 
   .content {
     gap: 32px;
+    padding-bottom: 115px;
   }
 
   .label {
