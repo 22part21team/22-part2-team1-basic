@@ -15,9 +15,9 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 82px 40px 82px 40px;
+  padding: 82px 40px;
   border-radius: 16px;
-  background: #F6F8FF;
+  background: #f6f8ff;
   margin-bottom: 30px;
   opacity: 0;
   transform: translateY(-20px);
@@ -57,8 +57,8 @@
 .pointBadge span {
   border-radius: 50px;
   padding: 6px 12px;
-  color: #ffffff;
-  background: #9935FF;
+  color: #fff;
+  background: #9935ff;
   font-size: 14px;
 }
 
@@ -66,9 +66,8 @@
   display: flex;
   flex-direction: column;
   font-size: 18px;
-  color: #555555;
+  color: #555;
 }
-
 
 .pointText h2 {
   color: #181818;
@@ -78,8 +77,7 @@
 
 .fromCades {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  flex-flow: row nowrap;
   gap: 12px;
 }
 
@@ -87,11 +85,11 @@
   display: flex;
   flex-wrap: wrap;
   width: 205px;
-  padding: 18px 12px 12px 12px;
+  padding: 18px 12px 12px;
   border-radius: 12px;
-  border: 0.99px solid #DBD9E9;
-  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
+  border: 0.99px solid #dbd9e9;
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 8%);
+  background-color: #fff;
 }
 
 .point02Box:nth-child(2) {
@@ -104,7 +102,7 @@
   flex-wrap: wrap;
   width: 100%;
   height: 46px;
-  border-bottom: 1px solid #E1E1E1;
+  border-bottom: 1px solid #e1e1e1;
   margin-bottom: 7px;
 }
 
@@ -131,18 +129,18 @@
   padding-left: 5px;
   margin-top: 2px;
   font-size: 10px;
-  color: #00A2FE;
-  background: #E2F5FF;
+  color: #00a2fe;
+  background: #e2f5ff;
 }
 
 .fromCadeBadge.type {
-  color: #861DEE;
-  background: #ECD9FF;
+  color: #861dee;
+  background: #ecd9ff;
 }
 
 .fromCadeText {
   font-size: 12px;
-  color: #555555;
+  color: #555;
   margin-bottom: 9px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -158,7 +156,7 @@
   display: flex;
   align-items: flex-end;
   font-size: 10px;
-  color: #777777;
+  color: #777;
   line-height: 13px;
 }
 
@@ -193,17 +191,16 @@
   animation-delay: 0.7s;
 }
 
-
 .linkButton {
   width: 280px;
-  font-family: 'Pretendard', sans-serif;
+  font-family: Pretendard, sans-serif;
   font-weight: 700;
   border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   background-color: #9935ff;
-  color: #ffffff;
+  color: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -228,7 +225,7 @@ mobile:   360 ~ 767 px
 tablet:   768 ~ 1023 px
 desktop:  1024 px 이상 ~ 
 */
-@media (max-width: 1248px) {
+@media (width <= 1248px) {
   .contents {
     max-width: 100%;
   }
@@ -239,8 +236,7 @@ desktop:  1024 px 이상 ~
   }
 }
 
-@media (max-width: 1023px) {
-
+@media (width <= 1023px) {
   /* tablet + mobile */
   .fromCade {
     width: calc((100% - 24px) / 3);
@@ -275,20 +271,21 @@ desktop:  1024 px 이상 ~
     margin: 0 auto;
     padding: 0 20px;
   }
-
-
 }
 
-@media (max-width: 767px) {
-
+@media (width <= 767px) {
   /* mobile */
   .container {
     padding-left: 20px;
     padding-right: 20px;
   }
 
+  .contents {
+    padding-bottom: 130px;
+  }
+
   .point {
-    padding: 0 0 60px 0;
+    padding: 0 0 60px;
     overflow: hidden;
   }
 
@@ -307,15 +304,16 @@ desktop:  1024 px 이상 ~
   }
 
   .pointImg {
-    width: 100%
+    width: 100%;
   }
 
   .point02Box br {
     display: block;
   }
+
   .point02Box:nth-child(2) {
-    padding-top:0;
-    padding-bottom:50px;
+    padding-top: 0;
+    padding-bottom: 50px;
     margin-bottom: 0;
   }
 
@@ -355,7 +353,7 @@ desktop:  1024 px 이상 ~
   }
 
   .fromCadeIcon img {
-    width: 21px
+    width: 21px;
   }
 
   .fromCadeDate {
@@ -367,11 +365,12 @@ desktop:  1024 px 이상 ~
     position: fixed;
     left: 20px;
     right: 0;
-    width:calc(100% - 40px);
+    width: calc(100% - 40px);
     margin-bottom: 0;
     padding: 0;
     box-sizing: border-box;
   }
+
   .linkButton {
     width: 100%;
   }

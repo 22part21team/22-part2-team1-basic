@@ -30,7 +30,7 @@
   flex-wrap: nowrap;
   gap: 20px;
   transition: transform 0.3s ease;
-  transform: translateX(var(--slide-offset, 0px));
+  transform: translateX(var(--slide-offset, 0));
   padding-right: 2px;
   box-sizing: border-box;
   pointer-events: auto; /* 스크롤 막기(transform 유지) */
@@ -39,8 +39,7 @@
 .slidePaperListHidden {
   width: 100%;
   max-width: 1160px;
-  overflow-x: auto;  
-  overflow-y: hidden;
+  overflow: auto hidden;
   scrollbar-width: none;
 }
 
@@ -56,8 +55,8 @@
   height: 260px;
   padding: 30px 24px 20px;
   border-radius: 16px;
-  background-color: #ECD9FF;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #ecd9ff;
+  border: 1px solid rgb(0 0 0 / 10%);
   display: flex;
   flex: 0 0 275px;
   flex-direction: column;
@@ -98,9 +97,8 @@
   flex-wrap: nowrap;
   white-space: nowrap;
   gap: 8px;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: 1px solid rgb(0 0 0 / 12%);
   padding-top: 16px;
-
 }
 
 .btnView {
@@ -118,14 +116,14 @@
 
 .linkButton {
   width: 280px;
-  font-family: 'Pretendard', sans-serif;
+  font-family: Pretendard, sans-serif;
   font-weight: 700;
   border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   background-color: #9935ff;
-  color: #ffffff;
+  color: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -187,14 +185,14 @@
 
 .hasImageBg {
   position: relative;
-  color: #ffffff;
+  color: #fff;
 }
 
 .hasImageBg::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45); /* 0.35~0.55 사이로 취향 조절 */
+  background: rgb(0 0 0 / 45%); /* 0.35~0.55 사이로 취향 조절 */
   z-index: 0;
 }
 
@@ -204,14 +202,16 @@
 }
 
 .hasImageBg .slidePaperItemTitle {
-  color: #ffffff;
+  color: #fff;
 }
 
 .hasImageBg .slidePaperItemBadge {
-  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-top: 1px solid rgb(255 255 255 / 35%);
 }
 
-.dropDown1, .dropDown2, .dropDown3  {
+.dropDown1,
+.dropDown2,
+.dropDown3 {
   opacity: 0;
   transform: translateY(-20px);
   animation: dropDown 0.6s ease-out forwards;
@@ -234,6 +234,7 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -246,10 +247,9 @@ tablet:   768 ~ 1023 px
 desktop:  1024 px 이상 ~ 
 작은 PC 화면 ~ 태블릿: 1025 ~ 1260 px
 */
-@media (max-width: 1260px) {
+@media (width <= 1260px) {
   .slidePaperListHidden {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
@@ -268,13 +268,16 @@ desktop:  1024 px 이상 ~
   }
 }
 
-@media (max-width: 1023px) {
+@media (width <= 1023px) {
   .slidePaper {
     margin-left: 20px;
   }
 }
 
-@media (max-width: 767px) {
+@media (width <= 767px) {
+  .contents {
+    padding-bottom: 90px;
+  }
 
   .slidePaperItem {
     width: auto;
@@ -292,16 +295,16 @@ desktop:  1024 px 이상 ~
   .slidePaperItemBadge {
     gap: 4px;
   }
-  
+
   .btnView {
-   bottom: 0;
-   position: fixed;
-   left: 20px;
-   right: 0;
-   width:calc(100% - 40px);
-   margin-bottom: 0;
-   padding: 0;
-   box-sizing: border-box;  
+    bottom: 0;
+    position: fixed;
+    left: 20px;
+    right: 0;
+    width: calc(100% - 40px);
+    margin-bottom: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   .linkButton {

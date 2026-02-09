@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 47px 0 24px;
 }
 
@@ -34,7 +34,7 @@
 
 .sectionDescription {
   font-size: 16px;
-  color: #555555;
+  color: #555;
   margin: 0;
   line-height: 26px;
 }
@@ -53,6 +53,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -66,7 +67,7 @@
 }
 
 /* tablet + mobile */
-@media (max-width: 1023px) {
+@media (width <= 1023px) {
   .container {
     padding: 40px 0 24px;
   }
@@ -77,9 +78,9 @@
 }
 
 /* mobile */
-@media (max-width: 767px) {
+@media (width <= 767px) {
   .container {
-    padding: 50px 20px 24px;
+    padding: 50px 20px 130px;
   }
 
   .content {
@@ -96,6 +97,7 @@
     font-size: 14px;
     line-height: 22px;
   }
+
   .buttonWrapper {
     position: fixed;
     bottom: 24px;
@@ -107,7 +109,8 @@
     box-sizing: border-box;
     z-index: 10;
   }
+
   .buttonWrapper button {
-    max-width:none !important;
+    max-width: none !important;
   }
 }
