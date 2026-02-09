@@ -12,11 +12,24 @@ import EmojiButton from '@/components/common/EmojiButton/EmojiButton';
 import listArrowLeft from '@/assets/images/list/list-arrow-left.svg';
 import listArrowRight from '@/assets/images/list/list-arrow-right.svg';
 
+import patternBeige from '@/assets/images/list/list-pattern-02.svg';
+import patternPurple from '@/assets/images/list/list-pattern-01.svg';
+import patternBlue from '@/assets/images/list/list-pattern-03.svg';
+import patternGreen from '@/assets/images/list/list-pattern-04.svg';
+
+
 const BACKGROUND_COLORS = {
   beige: 'var(--color-beige-200)',
   purple: 'var(--color-purple-200)',
   blue: 'var(--color-blue-200)',
   green: 'var(--color-green-200)',
+};
+
+const PATTERN_BY_COLOR = {
+  beige: patternBeige,
+  purple: patternPurple,
+  blue: patternBlue,
+  green: patternGreen,
 };
 
 /**
@@ -84,19 +97,33 @@ function SlidePaperCard({ recipient, onClick }) {
     backgroundImageURL,
   } = recipient;
 
+  const colorKey = (backgroundColor || 'beige').trim().toLowerCase();
+
+  const patternUrl = !backgroundImageURL
+  ? (PATTERN_BY_COLOR[colorKey] ?? PATTERN_BY_COLOR.beige)
+  : null;
+
   const backgroundStyle = backgroundImageURL
     ? {
         backgroundImage: `url(${backgroundImageURL})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }
-    : { backgroundColor: BACKGROUND_COLORS[backgroundColor] ?? BACKGROUND_COLORS.beige };
+    : {
+        backgroundColor: BACKGROUND_COLORS[backgroundColor] ?? BACKGROUND_COLORS.beige,
+      };
 
   return (
     // 카드 배경이 이미지일 경우 hasimageBg 클래스 추가
     <div
-      className={`${styles.slidePaperItem} ${backgroundImageURL ? styles.hasImageBg : ''}`}
-      style={backgroundStyle}
+      className={[
+        styles.slidePaperItem,
+        backgroundImageURL ? styles.hasImageBg : styles.patternBase,
+      ].join(' ')}
+      style={{
+        ...backgroundStyle,
+        ...(patternUrl ? { '--pattern-url': `url("${patternUrl}")` } : {}),
+      }}
       role="button"
       tabIndex={0}
       onClick={() => onClick(id)}
@@ -259,7 +286,7 @@ function PostList() {
   const recentTotalPages = Math.ceil(recentTotalCards / CARDS_PER_PAGE) || 1;
   const recentHasMoreSlides = recentSlideIndex < recentTotalPages - 1; // "이미 로드된 카드" 안에서 더 넘길 페이지가 있는지 
   const recentShowLeftButton = recentSlideIndex > 0;
-  const recentShowRightButton = recentHasMoreSlides || !!recentNext; // nexyt가 있으면 마지막 페이지여도 우측 버튼 보여야 함
+  const recentShowRightButton = recentHasMoreSlides || !!recentNext; // next가 있으면 마지막 페이지여도 우측 버튼 보여야 함
   const recentSlideOffsetPx = -recentSlideIndex * SLIDE_OFFSET_PER_PAGE;
 
   /**
