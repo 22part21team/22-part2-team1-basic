@@ -293,7 +293,7 @@ desktop:  1024 px 이상 ~
   }
 }
 
-@media (max-width: 1023px) {
+@media (max-width <= 1023px) {
   .slidePaperlist {
     width: 100%;
     max-width: 100%;
