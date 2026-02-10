@@ -1,0 +1,138 @@
+.postHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 64px;
+  padding: 13px 24px;
+  height: 68px;
+  border-bottom: 1px solid #ededed;
+  background: #fff;
+  z-index: var(--z-subHeader);
+}
+
+.postHeaderContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-basis: 1200px;
+  padding: 3px 0;
+}
+
+.h2Title {
+  color: var(--color-gray-700);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.prevButton {
+  display: none;
+}
+
+.postHeaderActions {
+  display: flex;
+  align-items: center;
+}
+
+/* postInfo */
+.postInfo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  position: relative;
+  padding-right: 28px;
+}
+
+.postInfo p {
+  color: var(--color-gray-900);
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.postInfo p span {
+  font-weight: 700;
+}
+
+/* reactionGroup */
+.reactionGroup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+/* postEmoji */
+.postEmoji {
+  position: relative;
+  padding-left: 28px;
+}
+
+/* 회색 라인 */
+.dividerLine {
+  height: 28px;
+  margin: 0;
+  border: 1px solid var(--color-gray-200);
+}
+
+@media (width <= 1023px) {
+  .postInfo,
+  .postInfo + .dividerLine {
+    display: none;
+  }
+
+  .postEmoji {
+    padding-left: 0;
+  }
+}
+
+@media (width <= 767px) {
+  .postHeader {
+    height: auto;
+    padding: 0;
+    top: 0;
+  }
+
+  .postHeaderContainer {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+  }
+
+  .postHeaderTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 52px;
+    padding: 0 20px;
+    border-bottom: 1px solid #ededed;
+  }
+
+  .h2Title {
+    width: 100%;
+    padding: 0;
+    font-size: 18px;
+  }
+
+  .prevButton {
+    display: block;
+  }
+
+  .postHeaderActions {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 0;
+  }
+
+  .reactionGroup {
+    gap: 15px;
+  }
+}
+
+/* 모바일 소형 */
+@media (width <= 390px) {
+  .reactionGroup {
+    gap: 8px;
+  }
+}

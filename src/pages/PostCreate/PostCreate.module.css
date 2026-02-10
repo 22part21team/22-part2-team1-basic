@@ -1,0 +1,116 @@
+.container {
+  min-height: 100vh;
+  background-color: #fff;
+  padding: 47px 0 24px;
+}
+
+.content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  padding-bottom: 160px; /* fixed 버튼 영역 확보 */
+}
+
+.backgroundSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.backgroundSection > :first-child {
+  margin-bottom: -20px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #181818;
+  margin: 0;
+  line-height: 36px;
+}
+
+.sectionDescription {
+  font-size: 16px;
+  color: #555;
+  margin: 0;
+  line-height: 26px;
+}
+
+.toggleWrapper {
+  display: flex;
+}
+
+.optionWrapper {
+  margin-top: 0;
+  animation: fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* tablet + mobile */
+@media (width <= 1023px) {
+  .container {
+    padding: 40px 0 24px;
+  }
+
+  .content {
+    gap: 40px;
+  }
+}
+
+/* mobile */
+@media (width <= 767px) {
+  .container {
+    padding: 50px 20px 130px;
+  }
+
+  .content {
+    gap: 48px;
+    padding: 0;
+  }
+
+  .sectionTitle {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  .sectionDescription {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .buttonWrapper {
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 10;
+  }
+
+  .buttonWrapper button {
+    max-width: none !important;
+  }
+}

@@ -1,0 +1,76 @@
+/* 스크린 리더 전용: 시각적으로 숨기되 읽기는 가능 */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.linkShareContainer {
+  position: relative;
+}
+
+.linkMenu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 0;
+  position: absolute;
+  top: calc(32px + 7px);
+  right: 0;
+  width: 140px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 8px;
+  background-color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out,
+    visibility 0.2s;
+  pointer-events: none;
+}
+
+.linkMenu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.linkMenu .linkMenuButton {
+  width: 100%;
+  padding: 12px 16px;
+  color: var(--color-gray-900);
+  font-size: 16px;
+  text-align: left;
+  line-height: 1.625;
+}
+
+.linkMenu .linkMenuButton:hover {
+  background-color: var(--color-gray-100);
+}
+
+
+.shareButton {
+  width: 56px !important;
+}
+
+@media (max-width: 767px) {
+  .shareButton {
+    width: 36px !important;
+    height: 32px !important;
+  }
+
+  .shareButton img {
+    width: 15px;
+    height: 19px;
+    max-width: none;
+  }
+}

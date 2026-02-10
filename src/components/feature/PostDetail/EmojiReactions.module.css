@@ -1,0 +1,151 @@
+.emojiContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.emojiButtonContainer {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.emojiButtonList {
+  display: flex;
+  gap: 8px;
+}
+
+.emojiArrowDown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+/* 이모지 8개 리스트 */
+.emojiDetailContainer {
+  position: relative;
+}
+
+.emojiDetailList {
+  display: grid;
+  grid-template: 1fr / repeat(4, 1fr);
+  gap: 10px 8px;
+  padding: 24px;
+  position: absolute;
+  top: calc(36px + 7px);
+  right: 0;
+  border: 1px solid #b6b6b6;
+  border-radius: 8px;
+  background-color: #fff;
+  z-index: var(--z-modal);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out,
+    visibility 0.2s;
+  pointer-events: none;
+}
+
+.emojiDetailList.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* 이모지 추가 버튼 */
+.addButtonContainer {
+  position: relative;
+}
+
+.addButton {
+  width: 86px !important;
+  gap: 4px;
+  padding: 0 !important;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* 이모지 피커 */
+.emojiPickerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 42px;
+  right: 18px;
+  width: 350px;
+  height: 450px;
+  background: #fff;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: var(--z-dropdown);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out,
+    visibility 0.2s;
+  pointer-events: none;
+}
+
+.emojiPickerContainer.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.emojiPicker {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (width <= 1023px) {
+  .emojiDetailList {
+    grid-template: 1fr / repeat(3, 1fr);
+  }
+}
+
+@media (width <= 767px) {
+  .emojiDetailList {
+    padding: 16px;
+  }
+
+  .addButton {
+    width: 36px !important;
+    height: 32px !important;
+    padding: 6px 8px !important;
+  }
+
+  .addButtonText {
+    display: none;
+  }
+
+  .addButtonContainer {
+    position: static;
+  }
+
+  .emojiPickerContainer {
+    position: fixed;
+    top: 102px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%) !important;
+    width: 310px;
+    height: 450px;
+  }
+}
+
+/* 모바일 소형 */
+@media (width <= 390px) {
+  .emojiContainer {
+    gap: 5px;
+  }
+}

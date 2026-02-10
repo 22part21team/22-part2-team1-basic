@@ -1,0 +1,48 @@
+.loading {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.backgroundImg {
+  min-height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.cardListContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 113px 24px;
+  box-sizing: content-box;
+}
+
+.cardListContainer.editMode {
+  padding: 63px 24px;
+}
+
+@media (width <= 1023px) {
+  .cardListContainer {
+    padding: 93px 24px;
+  }
+
+  .cardListContainer.editMode {
+    padding: 49px 24px 135px;
+  }
+}
+
+@media (width <= 767px) {
+  .cardListContainer {
+    padding: 32px 20px;
+  }
+
+  .cardListContainer.editMode {
+    padding: 24px 20px 130px;
+  }
+}

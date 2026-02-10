@@ -1,0 +1,99 @@
+/* ===========================
+  CSS Variables
+=========================== */
+:root {
+  /* Colors - Purple */
+  --color-purple-100: #f8f0ff;
+  --color-purple-200: #ecd9ff;
+  --color-purple-300: #dcb9ff;
+  --color-purple-400: #c894fd;
+  --color-purple-500: #ab57ff;
+  --color-purple-600: #9935ff;
+  --color-purple-700: #861dee;
+  --color-purple-800: #6e0ad1;
+  --color-purple-900: #5603a7;
+
+  /* Colors - Beige */
+  --color-beige-100: #fff0d6;
+  --color-beige-200: #ffe2ad;
+  --color-beige-300: #ffc583;
+  --color-beige-400: #ffae65;
+  --color-beige-500: #ff8832;
+
+  /* Colors - Blue */
+  --color-blue-100: #e2f5ff;
+  --color-blue-200: #b1e4ff;
+  --color-blue-300: #7cd2ff;
+  --color-blue-400: #34b9ff;
+  --color-blue-500: #00a2fe;
+
+  /* Colors - Green */
+  --color-green-100: #e4fbdc;
+  --color-green-200: #d0f5c3;
+  --color-green-300: #9be282;
+  --color-green-400: #60cf37;
+  --color-green-500: #2ba600;
+
+  /* Colors - Grayscale */
+  --color-gray-100: #f6f6f6;
+  --color-gray-200: #eee;
+  --color-gray-300: #ccc;
+  --color-gray-400: #999;
+  --color-gray-500: #555;
+  --color-gray-600: #4a4a4a;
+  --color-gray-700: #3a3a3a;
+  --color-gray-800: #2b2b2b;
+  --color-gray-900: #181818;
+
+  /* Colors - Semantic */
+  --color-error: #dc3a3a;
+  --color-surface: #f6f8ff;
+
+  /* Z-index */
+
+  /* 1. Page Elements */
+  --z-button: 10;
+
+  /* 2. Navigation & Layout */
+  --z-header: 100;
+  --z-subHeader: 110;
+
+  /* 3. Floating UI (주로 헤더보다 위에 위치 ) */
+  --z-dropdown: 500;
+  --z-sticky: 600;
+
+  /* 4. Full-screen Overlays ( 전체 화면을 덮는 요소 ) */
+  --z-modal-backdrop: 1000;
+  --z-modal: 1010;
+
+  /* 5. Notifications ( 최상위 ) */
+  --z-toast: 2000;
+}
+
+/* ===========================
+  Global Styles
+=========================== */
+
+/* Body defaults */
+body {
+  color: #000;
+  font-family:
+    'Pretendard Variable',
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    'Helvetica Neue',
+    'Segoe UI',
+    'Apple SD Gothic Neo',
+    'Noto Sans KR',
+    'Malgun Gothic',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}

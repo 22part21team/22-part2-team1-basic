@@ -1,0 +1,357 @@
+.container {
+  min-height: 100vh;
+  background-color: #fff;
+  padding: 47px 24px 24px;
+}
+
+.content {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  padding-bottom: 160px; /* fixed 버튼 영역 확보 */
+}
+
+.loadingContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #555;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.label {
+  font-size: 24px;
+  font-weight: 700;
+  color: #181818;
+  line-height: 36px;
+}
+
+.description {
+  font-size: 16px;
+  color: #555;
+  margin: 0;
+  line-height: 26px;
+}
+
+.profileSection {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.defaultProfileIcon {
+  width: 80px;
+  height: 80px;
+  background-color: #e5e5e5;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.defaultProfileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profileContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profileImageGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.profileImageButton {
+  width: 56px;
+  height: 56px;
+  border: 1px solid #eee;
+  border-radius: 100px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  background: transparent;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.profileImageButton:hover {
+  transform: scale(1.05);
+}
+
+.profileImageButton.selected {
+  outline: 2px solid #9935ff;
+  outline-offset: 2px;
+}
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.select {
+  width: 100%;
+  max-width: 320px;
+  padding: 12px 16px;
+  font-size: 16px;
+  line-height: 26px;
+  color: #181818;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%23181818' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.select:hover {
+  border-color: #555;
+}
+
+.select:focus {
+  border-color: #555;
+}
+
+/* 에디터 컨테이너 */
+.editorContainer {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.editorContainer:hover {
+  border-color: #555;
+}
+
+/* 에디터 툴바 */
+.editorToolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.toolbarButton {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #181818;
+  transition: all 0.2s ease;
+}
+
+.toolbarButton:hover {
+  background-color: #e5e5e5;
+}
+
+.toolbarButton.isActive {
+  background-color: #e5e5e5;
+  color: #181818;
+}
+
+.toolbarButton.isActive:hover {
+  background-color: #d0d0d0;
+}
+
+.toolbarDivider {
+  width: 1px;
+  height: 24px;
+  background-color: #ccc;
+  margin: 0 4px;
+}
+
+/* Textarea / Editor Content */
+.textarea {
+  width: 100%;
+  min-height: 260px;
+  font-size: 16px;
+  line-height: 26px;
+  color: #181818;
+  background-color: #fff;
+  border: none;
+  outline: none;
+  font-family: var(--editor-font-family, 'Noto Sans KR', sans-serif);
+  box-sizing: border-box;
+}
+
+/* Tiptap 에디터 스타일 */
+.textarea :global(.ProseMirror) {
+  padding: 16px;
+  min-height: 260px;
+  outline: none;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  font-family: inherit;
+}
+
+.textarea :global(.ProseMirror:focus) {
+  outline: none;
+}
+
+.textarea :global(.ProseMirror p.is-editor-empty:first-child::before) {
+  content: 'I am your rich text editor.';
+  color: #b8b8b8;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Tiptap 에디터 내부 요소 스타일 */
+.textarea :global(.ProseMirror p) {
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.textarea :global(.ProseMirror p:last-child) {
+  margin-bottom: 0;
+}
+
+.textarea :global(.ProseMirror ul),
+.textarea :global(.ProseMirror ol) {
+  padding-left: 24px;
+  margin: 8px 0;
+  list-style-position: outside;
+}
+
+.textarea :global(.ProseMirror ul) {
+  list-style-type: disc;
+}
+
+.textarea :global(.ProseMirror ol) {
+  list-style-type: decimal;
+}
+
+.textarea :global(.ProseMirror li) {
+  margin: 4px 0;
+  display: list-item;
+}
+
+.textarea :global(.ProseMirror strong) {
+  font-weight: 700;
+}
+
+.textarea :global(.ProseMirror em) {
+  font-style: italic;
+}
+
+.textarea :global(.ProseMirror s) {
+  text-decoration: line-through;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* 태블릿 + 모바일 */
+@media (width <= 1023px) {
+  .container {
+    padding: 40px 24px 24px;
+  }
+
+  .content {
+    gap: 40px;
+  }
+}
+
+/* 모바일 */
+@media (width <= 767px) {
+  .container {
+    padding: 50px 20px 20px;
+  }
+
+  .content {
+    gap: 32px;
+    padding-bottom: 115px;
+  }
+
+  .label {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  .description {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .profileSection {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .select {
+    max-width: 100%;
+  }
+
+  .textarea {
+    min-height: 200px;
+  }
+
+  .buttonWrapper {
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 10;
+  }
+
+  .buttonWrapper button {
+    max-width: none !important;
+  }
+}
+
+/* 모바일 소형 */
+@media (width <= 390px) {
+  .profileImageGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px 4%;
+  }
+
+  .profileImageButton {
+    width: auto;
+    height: auto;
+  }
+}

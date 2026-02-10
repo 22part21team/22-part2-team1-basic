@@ -1,0 +1,161 @@
+.cardButton {
+  width: 100%;
+  cursor: pointer;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px 24px;
+  height: 280px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 8%);
+  text-align: left;
+  overflow: hidden;
+}
+
+.card.simple {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.profileImg {
+  width: 56px;
+  height: 56px;
+}
+
+/* img 태그에만 border와 border-radius 적용 */
+.profileImg[src] {
+  border-radius: 9999px;
+  border: 1px solid var(--color-gray-200);
+  object-fit: cover;
+}
+
+.profileContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.proflieTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profileText {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.profileText span {
+  font-weight: 700;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.content {
+  padding-top: 16px;
+  font-size: 18px;
+  font-weight: 400;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  transform: rotate(0.03deg);
+  word-break: break-all;
+}
+
+/* HTML 콘텐츠 스타일 */
+.content p {
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.content p:last-child {
+  margin-bottom: 0;
+}
+
+.content ul,
+.content ol {
+  padding-left: 20px;
+  margin: 8px 0;
+  list-style-position: outside;
+}
+
+.content ul {
+  list-style-type: disc;
+}
+
+.content ol {
+  list-style-type: decimal;
+}
+
+.content li {
+  margin: 4px 0;
+  display: list-item;
+}
+
+.content strong {
+  font-weight: 700;
+}
+
+.content em {
+  font-style: italic;
+}
+
+.content s {
+  text-decoration: line-through;
+}
+
+.date {
+  color: var(--color-gray-400);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+@media (width <= 1023px) {
+  .card {
+    height: 284px;
+  }
+}
+
+@media (width <= 767px) {
+  .card {
+    height: 230px;
+  }
+
+  .profileText {
+    font-size: 18px;
+  }
+
+  .profileText span {
+    font-size: 16px;
+  }
+
+  .content {
+    font-size: 15px;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+  }
+}

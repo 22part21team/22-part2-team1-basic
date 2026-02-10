@@ -1,0 +1,40 @@
+.cardList {
+  display: grid;
+  grid-template: 1fr / repeat(3, minmax(0, 1fr));
+  gap: 28px 24px;
+}
+
+.loadMoreTrigger {
+  /*
+    Intersection Observer 감지용 최소 높이 부여
+    - height: 0 → Observer가 요소를 감지하지 못할 수 있음
+    - height: 1px 이상 → Observer가 확실하게 감지 가능
+    
+    높이 선택 기준:
+    - 1px~10px: 사용자 눈에 안 보이지만 Observer는 감지 (트리거 역할만)
+    - 50px 이상: 로딩 인디케이터가 보일 공간 확보
+  */
+  height: 80px;
+}
+
+.deleteSender {
+  font-weight: 700;
+}
+
+.deleteMessage {
+  color: var(--color-error);
+  font-weight: 700;
+}
+
+@media (width <= 1023px) {
+  .cardList {
+    grid-template: 1fr / repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (width <= 767px) {
+  .cardList {
+    grid-template: 1fr / repeat(1, 1fr);
+  }
+}

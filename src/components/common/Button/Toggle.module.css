@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  width: 244px;
+  height: 40px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 0;
+  gap: 0;
+}
+
+.option {
+  flex: 1;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  color: #555555;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 26px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 6px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option:hover:not(.selected) {
+  background-color: #e9ecef;
+  transform: scale(1.02);
+}
+
+.option:active {
+  transform: scale(0.98);
+}
+
+.option.selected {
+  background-color: #ffffff;
+  color: #9935ff;
+  border: 2px solid #9935ff;
+  padding: 7px 16px;
+  box-shadow: 0 2px 8px rgba(153, 53, 255, 0.15);
+}
